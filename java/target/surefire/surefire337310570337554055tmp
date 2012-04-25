@@ -1,0 +1,37 @@
+#surefire
+#Wed Apr 25 00:50:50 BST 2012
+testClassesDirectory=/home/thomas/Kode/workspace/trainbox/java/target/test-classes
+classPathUrl.4=/home/thomas/.m2/repository/com/samskivert/pythagoras/1.1/pythagoras-1.1.jar
+classPathUrl.3=/home/thomas/.m2/repository/com/googlecode/playn/playn-core/1.2/playn-core-1.2.jar
+classPathUrl.2=/home/thomas/Kode/workspace/trainbox/core/target/classes
+useManifestOnlyJar=true
+classPathUrl.1=/home/thomas/Kode/workspace/trainbox/java/target/classes
+reportsDirectory=/home/thomas/Kode/workspace/trainbox/java/target/surefire-reports
+classPathUrl.0=/home/thomas/Kode/workspace/trainbox/java/target/test-classes
+dirscanner.0=directoryScannerOptions
+providerConfiguration=org.apache.maven.surefire.junit4.JUnit4Provider
+testSuiteDefinitionTestSourceDirectory=/home/thomas/Kode/workspace/trainbox/java/src/test/java
+surefireClassPathUrl.1=/home/thomas/.m2/repository/org/apache/maven/surefire/surefire-api/2.7.1/surefire-api-2.7.1.jar
+surefireClassPathUrl.0=/home/thomas/.m2/repository/org/apache/maven/surefire/surefire-junit4/2.7.1/surefire-junit4-2.7.1.jar
+report.2=org.apache.maven.surefire.report.XMLReporter
+useSystemClassLoader=true
+report.1=org.apache.maven.surefire.report.BriefFileReporter
+report.0=org.apache.maven.surefire.report.ForkingConsoleReporter
+excludes0=**/*$*
+isTrimStackTrace=true
+dirscanner.0.params=/home/thomas/Kode/workspace/trainbox/java/target/test-classes|[**/Test*.java, **/*Test.java, **/*TestCase.java]|[**/*$*]
+includes2=**/*TestCase.java
+enableAssertions=true
+includes1=**/*Test.java
+failIfNoTests=false
+includes0=**/Test*.java
+classPathUrl.12=/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/../lib/tools.jar
+dirscanner.0.types=java.io.File|java.util.ArrayList|java.util.ArrayList
+classPathUrl.11=/home/thomas/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar
+classPathUrl.10=/home/thomas/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar
+classPathUrl.9=/home/thomas/.m2/repository/com/google/guava/guava/11.0.2/guava-11.0.2.jar
+classPathUrl.8=/home/thomas/.m2/repository/jlayer/tritonus_share/1.0/tritonus_share-1.0.jar
+classPathUrl.7=/home/thomas/.m2/repository/jlayer/jlayer/1.0.1/jlayer-1.0.1.jar
+childDelegation=false
+classPathUrl.6=/home/thomas/.m2/repository/jlayer/mp3spi/1.9.5/mp3spi-1.9.5.jar
+classPathUrl.5=/home/thomas/.m2/repository/com/googlecode/playn/playn-java/1.2/playn-java-1.2.jar
