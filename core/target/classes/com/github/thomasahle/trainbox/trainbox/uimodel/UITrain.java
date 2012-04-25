@@ -1,16 +1,23 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import playn.core.Layer;
+import static playn.core.PlayN.graphics;
+import playn.core.*;
 
 import com.github.thomasahle.trainbox.trainbox.model.Train;
 
 public class UITrain {
+	
+	public final static float SPEED = 1.f; // pixels/s
+	
 	private Layer mLayer;
 	private Train mTrain;
 	private UITrain mNext;
 	private float mLastUpdate;
 	
-	public final static float SPEED = 1.f; // pixels/s
+	public UITrain(Train train) {
+		mTrain = train;
+		mLayer = graphics().createImageLayer(graphics().createImage(50, 30));
+	}
 	
 	public float getLastUpdate() {
 		return mLastUpdate;

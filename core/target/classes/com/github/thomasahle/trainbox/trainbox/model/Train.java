@@ -13,6 +13,9 @@ public class Train {
 	public int getCargo() {
 		return mCargo;
 	}
+	/**
+	 * The 'next train' is the one that arrives at a component after this one.
+	 */
 	public Train getNext() {
 		return mNext;
 	}
