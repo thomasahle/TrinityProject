@@ -5,7 +5,6 @@ import static playn.core.PlayN.*;
 import playn.core.CanvasImage;
 import playn.core.Game;
 import playn.core.Canvas;
-import playn.core.Image;
 import playn.core.ImageLayer;
 
 
