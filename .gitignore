@@ -4,4 +4,10 @@ core/.settings
 html/.settings
 ios/.settings
 java/.settings
+android/classes
 
+core/classes
+html/classes
+ios/classes
+java/classes
+android/classes
