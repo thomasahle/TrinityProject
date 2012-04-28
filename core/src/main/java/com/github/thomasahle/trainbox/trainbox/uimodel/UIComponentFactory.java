@@ -36,7 +36,7 @@ public final class UIComponentFactory {
 	public static List<UITrain> trainsFromCargos(List<Integer> cargos) {
 		List<UITrain> trains = new ArrayList<UITrain>();
 		for (Integer cargo : cargos) {
-			trains.add(new UITrain(new Train(cargo, Train.NULL)));
+			trains.add(new UITrain(new Train(cargo, Train.EMPTY)));
 		}
 		return trains;
 	}

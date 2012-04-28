@@ -1,16 +1,9 @@
 package com.github.thomasahle.trainbox.trainbox.model;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
-public class SplitComponent implements Composite {
+public class SplitComponent implements Component {
 	
-	private final static int SIZE = 2;
-	private Component[] mComponents = new Component[2];
-	private boolean mTwist;
-	
-	private int mNextInput, mNextOutput;
+	private Component fst, snd, nextPull;
 	
 	/**
 	 * @param fst The 'top' component
@@ -18,46 +11,22 @@ public class SplitComponent implements Composite {
 	 * @param twist If `twist` is true, the bottom component will be made to
 	 *  	  output before the top one.
 	 */
-	public SplitComponent(Component fst, Component snd, boolean twist) {
-		mComponents[0] = fst;
-		mComponents[1] = snd;
-		mNextInput = 0;
-		mNextOutput = mTwist ? 1 : 0;
+	public SplitComponent(Component top, Component bottom, boolean twist) {
+		// StartingComponent c = new StartingComponent();
+		// 	new SplitComponent(
+		// 		new DupComponent(c),
+		// 		new DupComponent(c))
+		fst = top;
+		snd = bottom;
+		nextPull = twist ? fst : snd;
 	}
 	
 	@Override
-	public boolean canEnter() {
-		return mComponents[mNextInput].canEnter();
-	}
-
-	@Override
-	public void enter(Train train) {
-		mComponents[mNextInput].enter(train);
-		mNextInput = (mNextInput + 1) % SIZE;
-	}
-
-	@Override
-	public boolean canLeave() {
-		return mComponents[mNextOutput].canLeave();
-	}
-
-	@Override
-	public Train leave() {
-		Train train = mComponents[mNextOutput].leave();
-		mNextOutput = (mNextOutput + 1) % SIZE;
-		return train;
-	}
-
-	@Override
-	public List<Component> getChildren() {
-		return Collections.unmodifiableList(Arrays.asList(mComponents));
-	}
-
-	@Override
-	public boolean isEmpty() {
-		for (Component comp : mComponents)
-			if (!comp.isEmpty())
-				return false;
-		return true;
+	public Train pull() {
+		Train t = nextPull.pull();
+		if (t.length() != 0) {
+			nextPull = nextPull==fst ? snd : fst;
+		}
+		return t;
 	}
 }

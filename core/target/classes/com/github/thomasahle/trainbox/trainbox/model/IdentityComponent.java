@@ -1,35 +1,14 @@
 package com.github.thomasahle.trainbox.trainbox.model;
 
 public class IdentityComponent implements Component {
-
-	@Override
-	public boolean canEnter() {
-		// TODO Auto-generated method stub
-		return false;
+	private final Component prev;
+	
+	public IdentityComponent(Component prev) {
+		this.prev = prev;
 	}
-
+	
 	@Override
-	public void enter(Train train) {
-		// TODO Auto-generated method stub
-		
+	public Train pull() {
+		return prev.pull();
 	}
-
-	@Override
-	public boolean canLeave() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Train leave() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
