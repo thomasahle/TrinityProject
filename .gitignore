@@ -4,4 +4,8 @@ core/.settings
 html/.settings
 ios/.settings
 java/.settings
-
+android/target
+core/target
+html/target
+ios/target
+java/target
