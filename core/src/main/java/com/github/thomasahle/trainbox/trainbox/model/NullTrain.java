@@ -22,4 +22,9 @@ public class NullTrain implements Train {
 	public Train next() {
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return "[Null>";
+	}
 }

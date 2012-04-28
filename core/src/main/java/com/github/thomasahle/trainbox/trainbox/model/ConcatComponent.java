@@ -8,7 +8,7 @@ public class ConcatComponent implements Component {
 		this.prev = prev;
 	}
 	
-	private Train mTrain;
+	private Train mTrain = Train.EMPTY;
 	
 	@Override
 	public Train pull() {

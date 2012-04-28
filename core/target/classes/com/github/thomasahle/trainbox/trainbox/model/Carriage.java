@@ -56,4 +56,12 @@ public class Carriage implements Train {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		String str = "["+cargo()+">";
+		if (length() > 1)
+			return next().toString()+"-"+str;
+		return str;
+	}
 }
