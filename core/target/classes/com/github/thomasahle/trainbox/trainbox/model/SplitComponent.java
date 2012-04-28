@@ -11,6 +11,8 @@ public class SplitComponent implements Composite {
 	private final static boolean PRI_DOWN = false;
 	
 	private Component[] mComponents = new Component[2];
+	// Is an array really needed here? I think just having topComponent and bottomComponent would be better - Matt
+	
 	private boolean outPriority;
 	private boolean inPriority;
 	
