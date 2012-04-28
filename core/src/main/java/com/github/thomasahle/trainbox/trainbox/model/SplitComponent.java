@@ -7,22 +7,38 @@ import java.util.List;
 public class SplitComponent implements Composite {
 	
 	private final static int SIZE = 2;
+	private final static boolean PRI_UP = true;
+	private final static boolean PRI_DOWN = false;
+	
 	private Component[] mComponents = new Component[2];
-	private boolean mTwist;
+	private boolean outPriority;
+	private boolean inPriority;
 	
 	private int mNextInput, mNextOutput;
 	
 	/**
-	 * @param fst The 'top' component
-	 * @param snd The 'bottom' component
-	 * @param twist If `twist` is true, the bottom component will be made to
-	 *  	  output before the top one.
+	 * @param top The 'top' component
+	 * @param bottom The 'bottom' component
+	 * @param outPriority Which train should be output first initially?
+	 * @param inPriority Which train should be input first initially?
 	 */
-	public SplitComponent(Component fst, Component snd, boolean twist) {
-		mComponents[0] = fst;
-		mComponents[1] = snd;
-		mNextInput = 0;
-		mNextOutput = mTwist ? 1 : 0;
+	public SplitComponent(Component top, Component bottom, boolean inPriority, boolean outPriority) {
+		mComponents[0] = top;
+		mComponents[1] = bottom;
+		this.inPriority = inPriority;
+		this.outPriority = outPriority;
+		mNextInput = inPriority ? 0 : 1;
+		mNextOutput = outPriority ? 0 : 1;
+	}
+	
+	public void flipInPriority(){
+		inPriority = !inPriority;
+		mNextInput = inPriority ? 0 : 1;
+	}
+	
+	public void flipOutPriority(){
+		outPriority = !outPriority;
+		mNextOutput = outPriority ? 0 : 1;
 	}
 	
 	@Override
@@ -33,7 +49,7 @@ public class SplitComponent implements Composite {
 	@Override
 	public void enter(Train train) {
 		mComponents[mNextInput].enter(train);
-		mNextInput = (mNextInput + 1) % SIZE;
+		flipInPriority();
 	}
 
 	@Override
@@ -44,7 +60,7 @@ public class SplitComponent implements Composite {
 	@Override
 	public Train leave() {
 		Train train = mComponents[mNextOutput].leave();
-		mNextOutput = (mNextOutput + 1) % SIZE;
+		flipOutPriority();
 		return train;
 	}
 
