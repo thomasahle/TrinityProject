@@ -2,34 +2,34 @@ package com.github.thomasahle.trainbox.trainbox.model;
 
 public class IdentityComponent implements Component {
 
+	private Train mTrain = Train.NULL;
+	
 	@Override
+	/* Each ID component can hold only one train and outputs the same train, unchanged. */
 	public boolean canEnter() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.isEmpty();
 	}
 
 	@Override
 	public void enter(Train train) {
-		// TODO Auto-generated method stub
-		
+		mTrain = train;
 	}
 
 	@Override
 	public boolean canLeave() {
-		// TODO Auto-generated method stub
-		return false;
+		return mTrain != Train.NULL;
 	}
 
 	@Override
 	public Train leave() {
-		// TODO Auto-generated method stub
-		return null;
+		Train outTrain = mTrain;
+		mTrain = Train.NULL;
+		return outTrain;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return mTrain == Train.NULL;
 	}
 
 }
