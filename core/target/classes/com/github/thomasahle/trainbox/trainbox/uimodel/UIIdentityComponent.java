@@ -5,12 +5,16 @@ import java.util.List;
 
 import playn.core.Layer;
 
-/**
- * The main component. The thing that trains are always a part of.
- */
-public class Track extends AbstractComposite {
+public class UIIdentityComponent implements UIComponent {
+
+	private UIComponent mNext;
+
+	public UIIdentityComponent(UIComponent next) {
+		mNext = next;
+	}
+	
 	@Override
-	public List<UIComponent> getChildren() {
+	public List<UITrain> getCarriages() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,4 +42,5 @@ public class Track extends AbstractComposite {
 		// TODO Auto-generated method stub
 		
 	}
+	
 }

@@ -1,0 +1,21 @@
+.settings
+android/.settings
+core/.settings
+html/.settings
+ios/.settings
+java/.settings
+<<<<<<< HEAD
+android/classes
+
+core/classes
+html/classes
+ios/classes
+java/classes
+android/classes
+=======
+android/target
+core/target
+html/target
+ios/target
+java/target
+>>>>>>> 5d3a8dc48feb567c91906c768be61b961f5912c6
