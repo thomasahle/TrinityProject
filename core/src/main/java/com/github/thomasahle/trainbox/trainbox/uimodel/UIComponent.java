@@ -36,7 +36,19 @@ public interface UIComponent extends TrainTaker {
 	 * @param delta
 	 */
 	public void update(float delta);
+	/**
+	 * The train taker is the thing that takes over a train when the component is done with it.
+	 * @param listener
+	 */
 	void setTrainTaker(TrainTaker listener);
+	/**
+	 * The position is the location of the component inside its parent.
+	 * @param position
+	 */
 	void setPosition(Point position);
+	/**
+	 * The position is the location of the component inside its parent.
+	 * @return
+	 */
 	Point getPosition();
 }

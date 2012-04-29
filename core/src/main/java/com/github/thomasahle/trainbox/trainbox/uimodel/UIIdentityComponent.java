@@ -34,10 +34,7 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 		CanvasImage image = graphics().createImage(width, HEIGHT);
 		image.canvas().setFillColor(0xaaaa0000);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		System.out.println("X"+width+" "+HEIGHT);
-		System.out.println("Ca");
 		mLayer = graphics().createImageLayer(image);
-		System.out.println("Cb");
 	}
 
 	@Override
@@ -62,7 +59,6 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void update(float delta) {
-		//System.out.println("Taker: "+mTrainTaker);
 		float rightBorder = mTrainTaker.leftBlock();
 		for (Iterator<UITrain> it = mTrains.descendingIterator(); it.hasNext(); ) {
 			UITrain train = it.next();
@@ -81,13 +77,9 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 				continue;
 			}
 			// See how far we can move it
-			//System.out.println(rightBorder+" "+UITrain.SPEED*delta);
 			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
 			float newLeft = newRight-train.getSize().width;
-			train.getLayer().setTranslation(newLeft, train.getPosition().y);
 			train.setPosition(new Point(newLeft, train.getPosition().y));
-			//System.out.println("Was "+trainLeft+" "+trainRight+"; "+compLeft+" "+compRight);
-			//System.out.println("Moving train "+train+" to "+newLeft);
 			// If it is now out in the right side, give it away
 			if (newRight > compRight) {
 				System.out.println("Giving a train to "+mTrainTaker);
@@ -108,11 +100,12 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 	public float leftBlock() {
 		if (mTrains.isEmpty())
 			return Integer.MAX_VALUE;
-		return mTrains.peekLast().getLayer().originX() - UITrain.PADDING;
+		return mTrains.peekLast().getPosition().x - UITrain.PADDING;
 	}
 
 	@Override
 	public void setPosition(Point position) {
+		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
 	}
 
@@ -120,5 +113,4 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 	public Point getPosition() {
 		return mPosition;
 	}
-	
 }
