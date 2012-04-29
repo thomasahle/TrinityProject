@@ -62,12 +62,12 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void update(float delta) {
-		System.out.println("Taker: "+mTrainTaker);
+		//System.out.println("Taker: "+mTrainTaker);
 		float rightBorder = mTrainTaker.leftBlock();
 		for (Iterator<UITrain> it = mTrains.descendingIterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
-			float compLeft = mLayer.originX();
+			float compLeft = getPosition().x;
 			float trainRight = trainLeft + train.getSize().width;
 			float compRight = compLeft + getSize().width;
 			
@@ -90,6 +90,7 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 			//System.out.println("Moving train "+train+" to "+newLeft);
 			// If it is now out in the right side, give it away
 			if (newRight > compRight) {
+				System.out.println("Giving a train to "+mTrainTaker);
 				mTrainTaker.takeTrain(train);
 			}
 			// Update our working right border
