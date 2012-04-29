@@ -42,7 +42,6 @@ public class UIHorizontalComponent extends AbstractComposite {
 		
 		Dimension oldSize = getSize();
 		mLayer.add(comp.getLayer());
-		comp.getLayer().setTranslation(oldSize.width, 0);
 		comp.setPosition(new Point(oldSize.width, 0));
 		mComponents.add(comp);
 		
@@ -101,12 +100,13 @@ public class UIHorizontalComponent extends AbstractComposite {
 
 	@Override
 	public void setPosition(Point position) {
+		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
-		float x = mPosition.x;
+		/*float x = mPosition.x;
 		for (UIComponent comp : mComponents) {
 			comp.setPosition(new Point(x, position.y));
 			x += comp.getSize().width;
-		}
+		}*/
 	}
 
 	@Override
