@@ -3,7 +3,6 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import java.util.List;
 
 import playn.core.Layer;
-import pythagoras.f.Point;
 
 /**
  * An interesting component that trains can go into and maybe come out.
@@ -37,6 +36,4 @@ public interface UIComponent extends TrainTaker {
 	 */
 	public void update(float delta);
 	void setTrainTaker(TrainTaker listener);
-	void setPosition(Point position);
-	Point getPosition();
 }
