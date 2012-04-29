@@ -11,6 +11,7 @@ import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.MenuScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
+import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
 
 
 public class TrainBox implements Game{
@@ -19,7 +20,7 @@ public class TrainBox implements Game{
 	
 	@Override
 	public void init() {
-		currentScene = new MoveScene();
+		currentScene = new StartScene();
 		currentScene.onAttach();
 	}
 

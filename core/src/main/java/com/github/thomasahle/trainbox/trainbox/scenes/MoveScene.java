@@ -19,14 +19,18 @@ import playn.core.Pointer;
  */
 public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 
-	Image cloudImage = assets().getImage("images/cloud.png");
-    ImageLayer cloudLayer = graphics().createImageLayer(cloudImage);
+	
     int width = 640;
 	int height = 480;
 	CanvasImage bgImage = graphics().createImage(width, height);
     float x = 0.0f;
     float y = 0.0f;
     float vy = 0.0f;
+    
+	
+	ImageLayer trainLayer = createTrain();
+	ImageLayer doubleWall = createComponent();
+    
     CanvasImage statsImage = graphics().createImage(640, 50);
     ImageLayer statsLayer = graphics().createImageLayer(statsImage);
     ImageLayer compMenu;
@@ -40,8 +44,7 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		canvas.setFillColor(0xff87ceeb);
 		canvas.fillRect(0, 0, width, height);
 		bgLayer = graphics().createImageLayer(bgImage);
-		
-	    cloudLayer.setTranslation(x, y);
+
 	    
 	    CanvasImage textImage = graphics().createImage(640, 50);
 	    textLayer = graphics().createImageLayer(textImage);
@@ -61,10 +64,37 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	    compMenu.setVisible(false);*/
 	}
 	
+	
+	public ImageLayer createTrain() {
+		Image trainImage = assets().getImage("images/emptyTrain.png");
+		CanvasImage cImage = graphics().createImage(trainImage.width()/2, trainImage.height()/2);
+		Canvas c = cImage.canvas();
+		c.drawImage(trainImage, 0, 0, trainImage.width()/2, trainImage.height()/2);
+	    ImageLayer trainLayer = graphics().createImageLayer(cImage);
+	    trainLayer.setTranslation(x, y);
+		return trainLayer;
+	}
+	
+	
+	public ImageLayer createComponent() {
+		CanvasImage textImage = graphics().createImage(10, 100);
+	    textLayer = graphics().createImageLayer(textImage);
+	    textImage.canvas().setFillColor(0xff000000);
+	    textImage.canvas().fillRect(0, 0, width, height);
+	    textImage.canvas().drawText("Fill me", 20, 30);
+	    
+	    	
+	    textLayer.setTranslation(200, 200);
+		return textLayer;
+	}
+	
+	
+	
 	@Override
 	public void onAttach() {
 		graphics().rootLayer().add(bgLayer);
-		graphics().rootLayer().add(cloudLayer);
+		graphics().rootLayer().add(trainLayer);
+		graphics().rootLayer().add(doubleWall);
 		graphics().rootLayer().add(textLayer);
 	    graphics().rootLayer().add(statsLayer);
 	    pointer().setListener(this);
@@ -74,7 +104,7 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
-		graphics().rootLayer().remove(cloudLayer);
+		graphics().rootLayer().remove(trainLayer);
 		graphics().rootLayer().remove(textLayer);
 		graphics().rootLayer().remove(statsLayer);
 	}
@@ -82,37 +112,50 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void update(float delta) {
 		//x+=0.08*delta;
-		if(x>bgImage.width() + cloudImage.width()){
-			x=-cloudImage.width();
+		if(x>bgImage.width() + trainLayer.image().width()){
+			x=-trainLayer.image().width();
 		}
 		y+=0.01*vy*delta;
 		
-		if(y>bgImage.height()+ cloudImage.height()){
+		if(y>bgImage.height()+ trainLayer.image().height()){
 			y=0;
 		}
-		if(y< -cloudImage.height()){
-			y=bgImage.height()+cloudImage.height();
+		if(y< -trainLayer.image().height()){
+			y=bgImage.height()+trainLayer.image().height();
 		}
 		
-		cloudLayer.setTranslation(x, y);
+		trainLayer.setTranslation(x, y);
 		statsImage.canvas().clear();
 		statsImage.canvas().drawText("VEL: "+vy, 20, 30);
 	}
+	
+	// checks whether the new position is still within the box of the canvas
+	public boolean checkGoodPosition(float x, float y) {
+		if ((0 <=x & x< bgImage.width()) & ((0 <=y & y< bgImage.height()))) 
+			return true;
+		else
+			return false;
+	}
+	
 	
 	@Override
 	public void onKeyDown(Event event) {
 		System.out.println(event.key() + " Typed");
 		if(event.key() == Key.DOWN){
-			y= y+10;
+			if (checkGoodPosition(x, y+trainLayer.image().height()+10))
+				y= y+10;
 		}
 		if(event.key() == Key.UP){
-			y= y-10;
+			if (checkGoodPosition(x, y-10))
+				y= y-10;
 		}
 		if(event.key() == Key.LEFT){
-			x = x-10;
+			if (checkGoodPosition(x-10, y))
+				x = x-10;
 		}
 		if(event.key() == Key.RIGHT){
-			x = x+10;
+			if (checkGoodPosition(x+trainLayer.image().width()+10, y))
+				x= x+10;
 		}
 		if(event.key() == Key.C){
 			menuVisible = !menuVisible;
@@ -136,7 +179,7 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	public void onPointerEnd(playn.core.Pointer.Event event) {
 		x = event.x();
 		y = event.y();
-		cloudLayer.setTranslation(x-(cloudImage.width()/2), y-(cloudImage.height()/2));
+		trainLayer.setTranslation(x-(trainLayer.image().width()/2), y-(trainLayer.image().height()/2));
 	}
 
 	@Override
