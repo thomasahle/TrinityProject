@@ -1,4 +1,4 @@
-package com.github.thomasahle.trainbox.trainbox.model.test;
+package com.github.thomasahle.trainbox.trainbox.model;
 
 import static org.junit.Assert.assertEquals;
 

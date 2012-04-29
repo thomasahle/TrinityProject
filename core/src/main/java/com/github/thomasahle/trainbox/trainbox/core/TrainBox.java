@@ -44,7 +44,8 @@ public class TrainBox implements Game, Keyboard.Listener,Pointer.Listener{
 	    CanvasImage textImage = graphics().createImage(640, 50);
 	    ImageLayer textLayer = graphics().createImageLayer(textImage);
 	    textImage.canvas().setFillColor(0xff000000);
-	    textImage.canvas().drawText("Try clicking and using the UP and DOWN arrows, press C to toggle component menu.", 20, 30);
+	    textImage.canvas().drawText("Try clicking 11and using the UP and DOWN arrows, press C to toggle component menu.", 20, 30);
+	    
 	    
 	    statsLayer.setTranslation(0, 50);
 
