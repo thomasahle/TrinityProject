@@ -11,12 +11,15 @@ import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
+import pythagoras.f.Point;
 
 public class UIHorizontalComponent extends AbstractComposite {
 	
 	private List<UIComponent> mComponents = new ArrayList<UIComponent>();
 	private GroupLayer mLayer = graphics().createGroupLayer();
 	private ImageLayer bg;
+	private TrainTaker mTrainTaker = new NullTrainTaker();
+	private Point mPosition;
 	
 	public UIHorizontalComponent() {
 		CanvasImage bgImage = graphics().createImage(1000, 1000);
@@ -32,10 +35,11 @@ public class UIHorizontalComponent extends AbstractComposite {
 	
 	public void add(UIComponent comp) {
 		System.out.println("Da");
-		if (mComponents.size() > 0)
+		if (mComponents.size() > 0) {
 			mComponents.get(mComponents.size()-1).setTrainTaker(comp);
+		}
 		System.out.println("Db");
-		comp.setTrainTaker(new NullTrainTaker());
+		comp.setTrainTaker(mTrainTaker);
 		System.out.println("Dc");
 		
 		
@@ -82,19 +86,27 @@ public class UIHorizontalComponent extends AbstractComposite {
 
 	@Override
 	public void setTrainTaker(TrainTaker listener) {
-		// TODO Auto-generated method stub
-		
+		mTrainTaker = listener;
+		mComponents.get(mComponents.size()-1).setTrainTaker(listener);
 	}
 
 	@Override
 	public void takeTrain(UITrain train) {
-		// TODO Auto-generated method stub
-		
+		mComponents.get(0).takeTrain(train);
 	}
 
 	@Override
 	public float leftBlock() {
-		// TODO Auto-generated method stub
-		return 0;
+		return mComponents.get(0).leftBlock();
+	}
+
+	@Override
+	public void setPosition(Point position) {
+		mPosition = position;
+	}
+
+	@Override
+	public Point getPosition() {
+		return mPosition;
 	}
 }
