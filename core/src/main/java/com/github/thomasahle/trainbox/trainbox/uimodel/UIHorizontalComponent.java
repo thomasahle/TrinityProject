@@ -30,6 +30,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 		mLayer.add(bg);
 		System.out.println("Ba");
 		add(new UIIdentityComponent(100));
+		add(new UIIdentityComponent(100));
 		System.out.println("Bc");
 	}
 	
@@ -45,7 +46,10 @@ public class UIHorizontalComponent extends AbstractComposite {
 		comp.setPosition(new Point(oldSize.width, 0));
 		mComponents.add(comp);
 		
-		// TODO: Update background
+		CanvasImage bgImage = graphics().createImage(1000, 1000);
+		bgImage.canvas().setFillColor(0xaa00ff00);
+		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
+		bg.setImage(bgImage);
 	}
 	
 	@Override
@@ -56,7 +60,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public Dimension getSize() {
 		int width = 0;
-		float height = Float.MAX_VALUE;
+		float height = Float.MIN_VALUE;
 		for (UIComponent child : getChildren()) {
 			width += child.getSize().width;
 			height = Math.max(height, child.getSize().height);
