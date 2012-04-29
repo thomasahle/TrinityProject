@@ -5,4 +5,22 @@ package com.github.thomasahle.trainbox.trainbox.scenes;
  */
 public class MenuScene implements Scene {
 
+	@Override
+	public void update(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAttach() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

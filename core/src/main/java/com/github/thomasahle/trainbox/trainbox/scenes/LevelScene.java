@@ -8,4 +8,22 @@ package com.github.thomasahle.trainbox.trainbox.scenes;
  */
 public class LevelScene implements Scene {
 
+	@Override
+	public void update(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAttach() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
