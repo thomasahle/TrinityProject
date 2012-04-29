@@ -22,17 +22,11 @@ public class LevelScene implements Scene {
 	private UIComponent mTrack;
 	public LevelScene() {
 		mTrack = UIComponentFactory.demo();
-		//mTrack = new UIIdentityComponent(400);
-		System.out.println("A");
-		System.out.println("B");
 		trains = mTrack.getCarriages();
-		// TODO: Somehow add trains
-		// Use mTrack.enterTrain of course
 	}
 	
 	@Override
 	public void update(float delta) {
-		System.out.println("C");
 		mTrack.update(delta);
 	}
 
