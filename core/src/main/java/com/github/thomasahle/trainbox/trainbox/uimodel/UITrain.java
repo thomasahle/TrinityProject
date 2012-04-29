@@ -10,23 +10,24 @@ import com.github.thomasahle.trainbox.trainbox.model.Train;
 
 public class UITrain {
 	
+	private static final int HEIGHT = 30;
+	private static final int WIDTH = 50;
 	public final static float SPEED = 0.05f; // pixels/s
 	public final static float PADDING = 5.f;
 	
 	private Layer mLayer;
 	private UITrain mNext;
 	private float mLastUpdate;
-	private Dimension mSize;
 	private Point mPosition;
 	
-	public UITrain() {
+	public UITrain(int cargo) {
 		mPosition = new Point(0,0);
-		int width = 50;
-		int height = 30;
-		mSize = new Dimension(width, height);
-		CanvasImage image = graphics().createImage(width, height);
+		
+		CanvasImage image = graphics().createImage(WIDTH, HEIGHT);
 		image.canvas().setFillColor(0xff0000ff);
-		image.canvas().fillRect(0, 0, width, height);
+		image.canvas().fillRect(0, 0, WIDTH, HEIGHT);
+		image.canvas().setFillColor(0xffffffff);
+		image.canvas().drawText(""+cargo, 2, HEIGHT-2);
 		mLayer = graphics().createImageLayer(image);
 	}
 	
@@ -34,10 +35,11 @@ public class UITrain {
 		return mPosition;
 	}
 	public void setPosition(Point position) {
+		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
 	}
 	public Dimension getSize() {
-		return mSize;
+		return new Dimension(WIDTH, HEIGHT);
 	}
 	public float getLastUpdate() {
 		return mLastUpdate;
