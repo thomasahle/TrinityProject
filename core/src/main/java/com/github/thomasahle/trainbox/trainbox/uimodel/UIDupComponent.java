@@ -14,7 +14,7 @@ import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIDupComponent implements UIComponent, TrainTaker {
+public class UIDupComponent extends AbstractComponent implements UIComponent, TrainTaker {
 
 	private final static int HEIGHT = 100;
 	private int mWidth;
@@ -22,7 +22,6 @@ public class UIDupComponent implements UIComponent, TrainTaker {
 	private Layer mLayer;
 	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
 	private TrainTaker mTrainTaker;
-	private Point mPosition;
 	
 	@Override
 	public void setTrainTaker(TrainTaker listener) {
@@ -56,7 +55,7 @@ public class UIDupComponent implements UIComponent, TrainTaker {
 	public void update(float delta) {
 		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
-			float compLeft = getPosition().x;
+			float compLeft = getDeepPosition().x;
 			float compRight = compLeft + getSize().width;
 			
 			if (compRight < mTrainTaker.leftBlock()) {
@@ -87,18 +86,7 @@ public class UIDupComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public float leftBlock() {
-		// We never block on the left side.
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public void setPosition(Point position) {
-		getLayer().setTranslation(position.x, position.y);
-		mPosition = position;
-	}
-
-	@Override
-	public Point getPosition() {
-		return mPosition;
+		// We never block
+		return Float.MAX_VALUE;
 	}
 }

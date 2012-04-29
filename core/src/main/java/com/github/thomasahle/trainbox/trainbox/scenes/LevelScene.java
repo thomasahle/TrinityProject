@@ -2,11 +2,9 @@ package com.github.thomasahle.trainbox.trainbox.scenes;
 
 import static playn.core.PlayN.graphics;
 
-import java.util.List;
-
-import com.github.thomasahle.trainbox.trainbox.uimodel.NullTrainTaker;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponent;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIDupComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIHorizontalComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UITrain;
 
 
@@ -18,11 +16,19 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UITrain;
  */
 public class LevelScene implements Scene {
 	
-	private List<UITrain> trains;
 	private UIComponent mTrack;
+	
 	public LevelScene() {
-		mTrack = UIComponentFactory.demo();
-		trains = mTrack.getCarriages();
+		UIHorizontalComponent track = new UIHorizontalComponent(100);
+		track.add(new UIDupComponent(100));
+			UIHorizontalComponent nested = new UIHorizontalComponent(100);
+			nested.add(new UIDupComponent(100));
+		track.add(nested);
+		
+		track.takeTrain(new UITrain(1));
+		track.takeTrain(new UITrain(2));
+		
+		mTrack = track;
 	}
 	
 	@Override
@@ -33,14 +39,15 @@ public class LevelScene implements Scene {
 	@Override
 	public void onAttach() {
 		graphics().rootLayer().add(mTrack.getLayer());
-		for (UITrain train : trains)
+		for (UITrain train : mTrack.getCarriages())
 			graphics().rootLayer().add(train.getLayer());
 	}
 
 	@Override
 	public void onDetach() {
 		graphics().rootLayer().remove(mTrack.getLayer());
-		// remove trains
+		for (UITrain train : mTrack.getCarriages())
+			graphics().rootLayer().remove(train.getLayer());
 	}
 
 }

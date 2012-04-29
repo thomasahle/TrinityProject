@@ -15,37 +15,46 @@ import pythagoras.f.Point;
 
 public class UIHorizontalComponent extends AbstractComposite {
 	
+	public final int padding;
+	
+	// Invariant: |mComponents| > 0
 	private List<UIComponent> mComponents = new ArrayList<UIComponent>();
 	private GroupLayer mLayer = graphics().createGroupLayer();
 	private ImageLayer bg;
-	private TrainTaker mTrainTaker = new NullTrainTaker();
-	private Point mPosition;
 	
-	public UIHorizontalComponent() {
+	public UIHorizontalComponent(int padding) {
+		this.padding = padding;
+		
 		CanvasImage bgImage = graphics().createImage(1000, 1000);
 		bgImage.canvas().setFillColor(0xaa00ff00);
 		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
 		bgImage.canvas().fillRect(0, 0, 50, 50);
 		bg = graphics().createImageLayer(bgImage);
 		mLayer.add(bg);
-		System.out.println("Ba");
-		add(new UIIdentityComponent(200));
-		add(new UIDupComponent(100));
-		add(new UIIdentityComponent(200));
-		System.out.println("Bc");
+		
+		addReal(new UIIdentityComponent(padding));
 	}
 	
 	public void add(UIComponent comp) {
+		addReal(comp);
+		addReal(new UIIdentityComponent(padding));
+	}
+	
+	private void addReal(UIComponent comp) {
 		if (mComponents.size() > 0) {
 			mComponents.get(mComponents.size()-1).setTrainTaker(comp);
 		}
-		comp.setTrainTaker(mTrainTaker);
+		// The new component is the last, so it should have the HorizontalComponent's tracker
+		comp.setTrainTaker(getTrainTaker());
 		
+		// Add the component and its layer, setting its position at the end of our current width
 		Dimension oldSize = getSize();
 		mLayer.add(comp.getLayer());
 		comp.setPosition(new Point(oldSize.width, 0));
 		mComponents.add(comp);
+		comp.onAdded(this);
 		
+		// We have now resized, so we need to redraw
 		CanvasImage bgImage = graphics().createImage(1000, 1000);
 		bgImage.canvas().setFillColor(0xaa00ff00);
 		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
@@ -80,34 +89,18 @@ public class UIHorizontalComponent extends AbstractComposite {
 
 	@Override
 	public void setTrainTaker(TrainTaker listener) {
-		mTrainTaker = listener;
+		super.setTrainTaker(listener);
 		mComponents.get(mComponents.size()-1).setTrainTaker(listener);
 	}
 
 	@Override
 	public void takeTrain(UITrain train) {
+		System.out.println("Passing train down from "+this+" to "+mComponents.get(0));
 		mComponents.get(0).takeTrain(train);
 	}
 
 	@Override
 	public float leftBlock() {
 		return mComponents.get(0).leftBlock();
-	}
-
-	@Override
-	public void setPosition(Point position) {
-		getLayer().setTranslation(position.x, position.y);
-		mPosition = position;
-		// This should not be needed, as the layer should translate its children
-		/*float x = mPosition.x;
-		for (UIComponent comp : mComponents) {
-			comp.setPosition(new Point(x, position.y));
-			x += comp.getSize().width;
-		}*/
-	}
-
-	@Override
-	public Point getPosition() {
-		return mPosition;
 	}
 }

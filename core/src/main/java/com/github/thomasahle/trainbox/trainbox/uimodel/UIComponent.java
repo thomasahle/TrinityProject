@@ -35,15 +35,28 @@ public interface UIComponent extends TrainTaker {
 	 * The train taker is the thing that takes over a train when the component is done with it.
 	 * @param listener
 	 */
-	void setTrainTaker(TrainTaker listener);
+	public void setTrainTaker(TrainTaker listener);
+	public TrainTaker getTrainTaker();
 	/**
 	 * The position is the location of the component inside its parent.
 	 * @param position
 	 */
-	void setPosition(Point position);
+	public void setPosition(Point position);
 	/**
 	 * The position is the location of the component inside its parent.
 	 * @return
 	 */
-	Point getPosition();
+	public Point getPosition();
+	/**
+	 * Called when the component is added to another one.
+	 */
+	public void onAdded(UIComposite parent);
+	/**
+	 * Called when the component is removed from another one.
+	 */
+	public void onRemoved(UIComposite parent);
+	/**
+	 * Returns the parent of the component or null if there is no parent
+	 */
+	public UIComposite getParent();
 }

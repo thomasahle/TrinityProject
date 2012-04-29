@@ -6,8 +6,6 @@ import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
 
-import com.github.thomasahle.trainbox.trainbox.model.Train;
-
 public class UITrain {
 	
 	private static final int HEIGHT = 30;

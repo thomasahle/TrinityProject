@@ -2,12 +2,11 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * This is just a helper abstract.
  */
-public abstract class AbstractComposite implements UIComposite {
+public abstract class AbstractComposite extends AbstractComponent implements UIComposite {
 	@Override
 	public List<UITrain> getCarriages() {
 		List<UITrain> carriages = new ArrayList<UITrain>();

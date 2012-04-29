@@ -14,20 +14,13 @@ import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIIdentityComponent implements UIComponent, TrainTaker {
+public class UIIdentityComponent extends AbstractComponent implements UIComponent, TrainTaker {
 
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
 	private Layer mLayer;
 	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
-	private TrainTaker mTrainTaker;
-	private Point mPosition;
-	
-	@Override
-	public void setTrainTaker(TrainTaker listener) {
-		mTrainTaker = listener;
-	}
 	
 	public UIIdentityComponent(int width) {
 		mWidth = width;
@@ -54,11 +47,11 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void update(float delta) {
-		float rightBorder = mTrainTaker.leftBlock();
+		float rightBorder = getTrainTaker().leftBlock();
 		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
-			float compLeft = getPosition().x;
+			float compLeft = getDeepPosition().x;
 			float trainRight = trainLeft + train.getSize().width;
 			float compRight = compLeft + getSize().width;
 			
@@ -77,8 +70,8 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 			train.setPosition(new Point(newLeft, train.getPosition().y));
 			// If it is now out in the right side, give it away
 			if (newRight > compRight) {
-				System.out.println("Giving a train to "+mTrainTaker);
-				mTrainTaker.takeTrain(train);
+				System.out.println("Giving a train to "+getTrainTaker());
+				getTrainTaker().takeTrain(train);
 			}
 			// Update our working right border
 			assert rightBorder >= newLeft - UITrain.PADDING;
@@ -96,16 +89,5 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 		if (mTrains.isEmpty())
 			return Integer.MAX_VALUE;
 		return mTrains.peekLast().getPosition().x - UITrain.PADDING;
-	}
-
-	@Override
-	public void setPosition(Point position) {
-		getLayer().setTranslation(position.x, position.y);
-		mPosition = position;
-	}
-
-	@Override
-	public Point getPosition() {
-		return mPosition;
 	}
 }
