@@ -8,6 +8,8 @@ import playn.core.Keyboard.TypedEvent;
 import playn.core.Pointer;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.MenuScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 
 
@@ -17,7 +19,7 @@ public class TrainBox implements Game{
 	
 	@Override
 	public void init() {
-		currentScene = new DemoScene();
+		currentScene = new MoveScene();
 		currentScene.onAttach();
 	}
 

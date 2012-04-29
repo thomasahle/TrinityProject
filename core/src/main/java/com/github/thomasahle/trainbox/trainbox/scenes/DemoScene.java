@@ -12,7 +12,6 @@ import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
 import playn.core.Keyboard.TypedEvent;
-import playn.core.Layer;
 import playn.core.Pointer;
 
 /**
@@ -47,7 +46,7 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	    CanvasImage textImage = graphics().createImage(640, 50);
 	    textLayer = graphics().createImageLayer(textImage);
 	    textImage.canvas().setFillColor(0xff000000);
-	    textImage.canvas().drawText("Try clicking 11and using the UP and DOWN arrows, press C to toggle component menu.", 20, 30);
+	    textImage.canvas().drawText("Try clicking and using the UP and DOWN arrows, press C to toggle component menu.", 20, 30);
 	    
 	    
 	    statsLayer.setTranslation(0, 50);
