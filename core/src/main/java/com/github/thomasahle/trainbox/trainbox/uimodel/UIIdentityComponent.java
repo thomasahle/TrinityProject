@@ -22,6 +22,7 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 	private Layer mLayer;
 	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
 	private TrainTaker mTrainTaker;
+	private Point mPosition;
 	
 	@Override
 	public void setTrainTaker(TrainTaker listener) {
@@ -57,8 +58,6 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 	@Override
 	public void enterTrain(UITrain train) {
 		mTrains.add(train);
-		mLayer.originX();
-		train.getLayer().originX();
 	}
 
 	@Override
@@ -82,13 +81,13 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 				continue;
 			}
 			// See how far we can move it
-			System.out.println(rightBorder+" "+UITrain.SPEED*delta);
+			//System.out.println(rightBorder+" "+UITrain.SPEED*delta);
 			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
 			float newLeft = newRight-train.getSize().width;
 			train.getLayer().setTranslation(newLeft, train.getPosition().y);
 			train.setPosition(new Point(newLeft, train.getPosition().y));
-			System.out.println("Was "+trainLeft+" "+trainRight+"; "+compLeft+" "+compRight);
-			System.out.println("Moving train "+train+" to "+newLeft);
+			//System.out.println("Was "+trainLeft+" "+trainRight+"; "+compLeft+" "+compRight);
+			//System.out.println("Moving train "+train+" to "+newLeft);
 			// If it is now out in the right side, give it away
 			if (newRight > compRight) {
 				mTrainTaker.takeTrain(train);
@@ -109,6 +108,16 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 		if (mTrains.isEmpty())
 			return Integer.MAX_VALUE;
 		return mTrains.peekLast().getLayer().originX() - UITrain.PADDING;
+	}
+
+	@Override
+	public void setPosition(Point position) {
+		mPosition = position;
+	}
+
+	@Override
+	public Point getPosition() {
+		return mPosition;
 	}
 	
 }
