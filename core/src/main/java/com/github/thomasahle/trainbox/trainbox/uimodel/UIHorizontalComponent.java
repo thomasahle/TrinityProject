@@ -34,21 +34,16 @@ public class UIHorizontalComponent extends AbstractComposite {
 	}
 	
 	public void add(UIComponent comp) {
-		System.out.println("Da");
 		if (mComponents.size() > 0) {
 			mComponents.get(mComponents.size()-1).setTrainTaker(comp);
 		}
-		System.out.println("Db");
 		comp.setTrainTaker(mTrainTaker);
-		System.out.println("Dc");
-		
 		
 		Dimension oldSize = getSize();
 		mLayer.add(comp.getLayer());
 		comp.getLayer().setTranslation(oldSize.width, 0);
+		comp.setPosition(new Point(oldSize.width, 0));
 		mComponents.add(comp);
-		
-		System.out.println("De");
 		
 		// TODO: Update background
 	}
@@ -103,6 +98,11 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public void setPosition(Point position) {
 		mPosition = position;
+		float x = mPosition.x;
+		for (UIComponent comp : mComponents) {
+			comp.setPosition(new Point(x, position.y));
+			x += comp.getSize().width;
+		}
 	}
 
 	@Override
