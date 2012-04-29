@@ -1,14 +1,14 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.awt.Dimension;
 import java.util.List;
 
 import playn.core.Layer;
+import pythagoras.f.Point;
 
 /**
  * An interesting component that trains can go into and maybe come out.
  */
-public interface UIComponent {
+public interface UIComponent extends TrainTaker {
 	/**
 	 * We need a way to get hold of the trains from the top level.
 	 * And as the components can create more trains as we go along,
@@ -16,9 +16,10 @@ public interface UIComponent {
 	 */
 	public List<UITrain> getCarriages();
 	/**
-	 * @deprecated Return a layer of the right size instead. Right?
+	 * Change: Return a layer of the right size instead. Right?
+	 * No: you cant get the size of a layer
 	 */
-	public Dimension getSize();
+	public pythagoras.f.Dimension getSize();
 	/**
 	 * This layer will be added by the parent Composite somewhere nice.
 	 * Later we may draw our stuff on it.
@@ -35,4 +36,7 @@ public interface UIComponent {
 	 * @param delta
 	 */
 	public void update(float delta);
+	void setTrainTaker(TrainTaker listener);
+	void setPosition(Point position);
+	Point getPosition();
 }

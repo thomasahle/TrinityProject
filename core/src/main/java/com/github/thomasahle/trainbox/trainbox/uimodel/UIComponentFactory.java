@@ -21,12 +21,18 @@ public final class UIComponentFactory {
 	 * 				 in the middle, which would be deactivated by the 'play' button.
 	 */
 	public static UIComponent demo() {
-		List<UITrain> trains = trainsFromCargos(Arrays.asList(1, 2, 3, 4));
-		UIComponent track = new UIIdentityComponent(
-				new UIShedComponent(
-						Arrays.asList(1, 2, 3, 4)));
-		for (UITrain train : trains)
+		System.out.println("Aa");
+		List<UITrain> trains = trainsFromCargos(Arrays.asList(1));
+		System.out.println("Ab");
+		UIHorizontalComponent track = new UIHorizontalComponent();
+		track.setTrainTaker(new NullTrainTaker());
+		System.out.println("Ac");
+		int x = 0;
+		for (UITrain train : trains) {
+			train.getLayer().setTranslation(x--, 0);
 			track.enterTrain(train);
+		}
+		System.out.println("Ae");
 		return track;
 	}
 	
@@ -37,7 +43,7 @@ public final class UIComponentFactory {
 	public static List<UITrain> trainsFromCargos(List<Integer> cargos) {
 		List<UITrain> trains = new ArrayList<UITrain>();
 		for (Integer cargo : cargos) {
-			trains.add(new UITrain(new Carriage(cargo, Train.EMPTY)));
+			trains.add(new UITrain());
 		}
 		return trains;
 	}
