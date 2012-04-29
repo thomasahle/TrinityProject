@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="1" time="0.049" errors="0" skipped="0" tests="3" name="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest">
+<testsuite failures="0" time="0.046" errors="0" skipped="0" tests="6" name="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/amd64"/>
@@ -19,7 +19,7 @@
     <property name="basedir" value="/home/thomas/Kode/workspace/trainbox/core"/>
     <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/endorsed"/>
     <property name="os.arch" value="amd64"/>
-    <property name="surefire.real.class.path" value="/tmp/surefirebooter7692367561860654111.jar"/>
+    <property name="surefire.real.class.path" value="/tmp/surefirebooter3375550597770578678.jar"/>
     <property name="java.io.tmpdir" value="/tmp"/>
     <property name="line.separator" value="
 "/>
@@ -42,7 +42,7 @@
     <property name="java.vm.specification.version" value="1.0"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre"/>
-    <property name="sun.java.command" value="/tmp/surefirebooter7692367561860654111.jar /tmp/surefire1710353959255757980tmp /tmp/surefire7050723982557833493tmp"/>
+    <property name="sun.java.command" value="/tmp/surefirebooter3375550597770578678.jar /tmp/surefire5906329521836680624tmp /tmp/surefire353233821746367439tmp"/>
     <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
     <property name="user.language" value="en"/>
     <property name="java.vm.info" value="mixed mode"/>
@@ -59,40 +59,9 @@
     <property name="sun.cpu.isalist" value=""/>
   </properties>
   <testcase time="0.006" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testSimple"/>
-  <testcase time="0.005" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testStart"/>
-  <testcase time="0.009" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testReverse">
-    <failure message="expected:&lt;[[1&gt;, [2&gt;, [3&gt;, [4&gt;]&gt; but was:&lt;[[1&gt;, [3&gt;]&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;[[1&gt;, [2&gt;, [3&gt;, [4&gt;]&gt; but was:&lt;[[1&gt;, [3&gt;]&gt;
-	at org.junit.Assert.fail(Assert.java:91)
-	at org.junit.Assert.failNotEquals(Assert.java:645)
-	at org.junit.Assert.assertEquals(Assert.java:126)
-	at org.junit.Assert.assertEquals(Assert.java:145)
-	at com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest.testReverse(ComponentTest.java:56)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:616)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
-	at org.apache.maven.surefire.junit4.JUnit4TestSet.execute(JUnit4TestSet.java:62)
-	at org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.executeTestSet(AbstractDirectoryTestSuite.java:140)
-	at org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.execute(AbstractDirectoryTestSuite.java:127)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:177)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:616)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:345)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1009)
-</failure>
-  </testcase>
+  <testcase time="0.006" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testStart"/>
+  <testcase time="0.004" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testFlip"/>
+  <testcase time="0.001" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testBox"/>
+  <testcase time="0.002" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testConcat"/>
+  <testcase time="0.001" classname="com.github.thomasahle.trainbox.trainbox.model.test.ComponentTest" name="testReverse"/>
 </testsuite>

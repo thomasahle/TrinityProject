@@ -52,7 +52,9 @@ public class Carriage implements Train {
 		if (other instanceof Train) {
 			if (this == other) return true;
 			Train t = (Train)other;
-			return cargo() == t.cargo() && next().equals(t.next());
+			return length() == t.length()
+					&& cargo() == t.cargo()
+					&& next().equals(t.next());
 		}
 		return false;
 	}

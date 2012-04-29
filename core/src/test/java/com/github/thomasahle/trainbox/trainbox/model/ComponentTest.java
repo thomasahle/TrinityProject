@@ -44,9 +44,39 @@ public class ComponentTest {
 	}
 	
 	@Test
+	public void testFlip() {
+		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
+		List<Train> output = ComponentFactory.parseTrains("2 1 4 3");
+		StartComponent start = new StartComponent();
+		start.addAllLast(input);
+		Component comp = new FlipComponent(start);
+		assertEquals(output, pullAll(comp));
+	}
+	
+	@Test
+	public void testBox() {
+		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
+		List<Train> output = ComponentFactory.parseTrains("1-2 3-4");
+		StartComponent start = new StartComponent();
+		start.addAllLast(input);
+		Component comp = new BoxComponent(start);
+		assertEquals(output, pullAll(comp));
+	}
+	
+	@Test
+	public void testConcat() {
+		List<Train> input = ComponentFactory.parseTrains("1-2 3-4");
+		List<Train> output = ComponentFactory.parseTrains("1 2 3 4");
+		StartComponent start = new StartComponent();
+		start.addAllLast(input);
+		Component comp = new ConcatComponent(start);
+		assertEquals(output, pullAll(comp));
+	}
+	
+	@Test
 	public void testReverse() {
 		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
-		List<Train> output = ComponentFactory.parseTrains("1 2 3 4");
+		List<Train> output = ComponentFactory.parseTrains("4 3 2 1");
 		StartComponent start = new StartComponent();
 		start.addAllLast(input);
 		Component comp = new ConcatComponent(

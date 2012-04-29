@@ -19,7 +19,7 @@ public class DupComponent implements Component {
 			mTrain = prev.pull();
 			mDupsMade = 1;
 			return mTrain;
-		}	
+		}
 		mDupsMade += 1;
 		return mTrain;
 	}
