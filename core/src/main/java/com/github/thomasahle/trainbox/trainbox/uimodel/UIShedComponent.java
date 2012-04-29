@@ -1,6 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.awt.Dimension;
+import pythagoras.f.Dimension;
 import java.util.List;
 
 import playn.core.Layer;
@@ -41,6 +41,24 @@ public class UIShedComponent implements UIComponent {
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setTrainTaker(TrainTaker listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void takeTrain(UITrain train) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public float leftBlock() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

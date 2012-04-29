@@ -1,15 +1,8 @@
 package com.github.thomasahle.trainbox.trainbox.core;
 
 import playn.core.Game;
-import playn.core.Key;
-import playn.core.Keyboard;
-import playn.core.Keyboard.Event;
-import playn.core.Keyboard.TypedEvent;
-import playn.core.Pointer;
 
-import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.MenuScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 
 
@@ -19,7 +12,7 @@ public class TrainBox implements Game{
 	
 	@Override
 	public void init() {
-		currentScene = new MoveScene();
+		currentScene = new LevelScene();
 		currentScene.onAttach();
 	}
 

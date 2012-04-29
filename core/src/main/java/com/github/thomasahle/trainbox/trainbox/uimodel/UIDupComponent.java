@@ -2,7 +2,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
 
-import java.awt.Dimension;
+import pythagoras.f.Dimension;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class UIDupComponent implements UIComponent {
 	}
 
 	@Override
-	public Dimension getSize() {
+	public pythagoras.f.Dimension getSize() {
 		return new Dimension(WIDTH, HEIGHT);
 	}
 
@@ -75,5 +75,23 @@ public class UIDupComponent implements UIComponent {
 		// 		 mNext.enterTrain(train)
 		//		 mNext.enterTrain(train)
 		//		 and delete it from our own list.
+	}
+
+	@Override
+	public void setTrainTaker(TrainTaker listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void takeTrain(UITrain train) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public float leftBlock() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
