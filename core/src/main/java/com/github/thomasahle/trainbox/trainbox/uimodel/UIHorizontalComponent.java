@@ -30,27 +30,26 @@ public class UIHorizontalComponent extends AbstractComposite {
 		mLayer.add(bg);
 		System.out.println("Ba");
 		add(new UIIdentityComponent(100));
+		add(new UIIdentityComponent(100));
 		System.out.println("Bc");
 	}
 	
 	public void add(UIComponent comp) {
-		System.out.println("Da");
 		if (mComponents.size() > 0) {
 			mComponents.get(mComponents.size()-1).setTrainTaker(comp);
 		}
-		System.out.println("Db");
 		comp.setTrainTaker(mTrainTaker);
-		System.out.println("Dc");
-		
 		
 		Dimension oldSize = getSize();
 		mLayer.add(comp.getLayer());
 		comp.getLayer().setTranslation(oldSize.width, 0);
+		comp.setPosition(new Point(oldSize.width, 0));
 		mComponents.add(comp);
 		
-		System.out.println("De");
-		
-		// TODO: Update background
+		CanvasImage bgImage = graphics().createImage(1000, 1000);
+		bgImage.canvas().setFillColor(0xaa00ff00);
+		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
+		bg.setImage(bgImage);
 	}
 	
 	@Override
@@ -61,7 +60,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public Dimension getSize() {
 		int width = 0;
-		float height = Float.MAX_VALUE;
+		float height = Float.MIN_VALUE;
 		for (UIComponent child : getChildren()) {
 			width += child.getSize().width;
 			height = Math.max(height, child.getSize().height);
@@ -103,6 +102,11 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public void setPosition(Point position) {
 		mPosition = position;
+		float x = mPosition.x;
+		for (UIComponent comp : mComponents) {
+			comp.setPosition(new Point(x, position.y));
+			x += comp.getSize().width;
+		}
 	}
 
 	@Override
