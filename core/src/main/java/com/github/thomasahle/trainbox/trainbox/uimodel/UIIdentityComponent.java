@@ -93,7 +93,7 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void takeTrain(UITrain train) {
-		mTrains.add(train);
+		mTrains.addFirst(train);
 	}
 
 	@Override

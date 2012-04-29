@@ -12,8 +12,8 @@ public class UITrain {
 	
 	private static final int HEIGHT = 30;
 	private static final int WIDTH = 50;
-	public final static float SPEED = 0.05f; // pixels/s
-	public final static float PADDING = 5.f;
+	public final static float SPEED = 0.02f; // pixels/s
+	public final static float PADDING = 10.f;
 	
 	private Layer mLayer;
 	private UITrain mNext;
