@@ -27,7 +27,7 @@ public final class UIComponentFactory {
 		int x = 0;
 		for (UITrain train : trains) {
 			train.getLayer().setTranslation(x--, 0);
-			track.enterTrain(train);
+			track.takeTrain(train);
 		}
 		return track;
 	}

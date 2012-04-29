@@ -29,8 +29,9 @@ public class UIHorizontalComponent extends AbstractComposite {
 		bg = graphics().createImageLayer(bgImage);
 		mLayer.add(bg);
 		System.out.println("Ba");
-		add(new UIIdentityComponent(100));
-		add(new UIIdentityComponent(100));
+		add(new UIIdentityComponent(200));
+		add(new UIDupComponent(100));
+		add(new UIIdentityComponent(200));
 		System.out.println("Bc");
 	}
 	
@@ -70,11 +71,6 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public Layer getLayer() {
 		return mLayer;
-	}
-
-	@Override
-	public void enterTrain(UITrain train) {
-		mComponents.get(0).enterTrain(train);
 	}
 
 	@Override

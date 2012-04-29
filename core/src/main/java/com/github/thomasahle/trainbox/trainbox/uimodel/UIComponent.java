@@ -26,11 +26,6 @@ public interface UIComponent extends TrainTaker {
 	 */
 	public Layer getLayer();
 	/**
-	 * Notice that UIComponents can't refuse trains the same way normal components can.
-	 * @param train A train that must now be animated and controlled by the component.
-	 */
-	public void enterTrain(UITrain train);
-	/**
 	 * The uicomponent can use this to move the trains it controls.
 	 * Do we also need a paint(delta) method?
 	 * @param delta

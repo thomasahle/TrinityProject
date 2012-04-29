@@ -14,7 +14,7 @@ import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIIdentityComponent implements UIComponent, TrainTaker {
+public class UIDupComponent implements UIComponent, TrainTaker {
 
 	private final static int HEIGHT = 100;
 	private int mWidth;
@@ -29,10 +29,10 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 		mTrainTaker = listener;
 	}
 	
-	public UIIdentityComponent(int width) {
+	public UIDupComponent(int width) {
 		mWidth = width;
 		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xaaaa0000);
+		image.canvas().setFillColor(0xaaaa00aa);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
 		mLayer = graphics().createImageLayer(image);
 	}
@@ -54,48 +54,38 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void update(float delta) {
-		float rightBorder = mTrainTaker.leftBlock();
 		for (Iterator<UITrain> it = mTrains.descendingIterator(); it.hasNext(); ) {
 			UITrain train = it.next();
-			float trainLeft = train.getPosition().x;
 			float compLeft = getPosition().x;
-			float trainRight = trainLeft + train.getSize().width;
 			float compRight = compLeft + getSize().width;
 			
-			// If the train is now entirely gone from us.
-			if (trainLeft >= compRight) {
+			if (compRight < mTrainTaker.leftBlock()) {
+				System.out.println("Sending a cloned element to "+mTrainTaker);
 				it.remove();
-				continue;
-			}
-			// If the train is no longer controlled by us, but still 'on us'.
-			if (trainRight > compRight) {
-				continue;
-			}
-			// See how far we can move it
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
-			float newLeft = newRight-train.getSize().width;
-			train.setPosition(new Point(newLeft, train.getPosition().y));
-			// If it is now out in the right side, give it away
-			if (newRight > compRight) {
-				System.out.println("Giving a train to "+mTrainTaker);
+				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
 				mTrainTaker.takeTrain(train);
+				train.getLayer().setVisible(true);
+				break;
 			}
-			// Update our working right border
-			assert rightBorder >= newLeft - UITrain.PADDING;
-			rightBorder = newLeft - UITrain.PADDING;
 		}
 	}
 
 	@Override
 	public void takeTrain(UITrain train) {
 		mTrains.addFirst(train);
+		train.getLayer().setVisible(false);
+		
+		UITrain clone = new UITrain(train.getCargo());
+		mTrains.addFirst(clone);
+		graphics().rootLayer().add(clone.getLayer());
+		clone.getLayer().setVisible(false);
+		System.out.println("Got a train. Queue length is now "+mTrains.size());
 	}
 
 	@Override
 	public float leftBlock() {
-		if (mTrains.isEmpty())
-			return Integer.MAX_VALUE;
-		return mTrains.peekLast().getPosition().x - UITrain.PADDING;
+		// We never block on the left side.
+		return Integer.MAX_VALUE;
 	}
 
 	@Override
