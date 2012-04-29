@@ -98,6 +98,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 	public void setPosition(Point position) {
 		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
+		// This should not be needed, as the layer should translate its children
 		/*float x = mPosition.x;
 		for (UIComponent comp : mComponents) {
 			comp.setPosition(new Point(x, position.y));

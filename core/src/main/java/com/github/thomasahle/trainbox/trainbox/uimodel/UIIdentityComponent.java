@@ -55,7 +55,7 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 	@Override
 	public void update(float delta) {
 		float rightBorder = mTrainTaker.leftBlock();
-		for (Iterator<UITrain> it = mTrains.descendingIterator(); it.hasNext(); ) {
+		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
 			float compLeft = getPosition().x;
@@ -88,7 +88,7 @@ public class UIIdentityComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void takeTrain(UITrain train) {
-		mTrains.addFirst(train);
+		mTrains.add(train);
 	}
 
 	@Override

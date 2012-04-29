@@ -54,17 +54,20 @@ public class UIDupComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void update(float delta) {
-		for (Iterator<UITrain> it = mTrains.descendingIterator(); it.hasNext(); ) {
+		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float compLeft = getPosition().x;
 			float compRight = compLeft + getSize().width;
 			
 			if (compRight < mTrainTaker.leftBlock()) {
 				System.out.println("Sending a cloned element to "+mTrainTaker);
+				
 				it.remove();
 				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
 				mTrainTaker.takeTrain(train);
 				train.getLayer().setVisible(true);
+				
+				// This should not be strictly nessesary
 				break;
 			}
 		}
@@ -72,11 +75,11 @@ public class UIDupComponent implements UIComponent, TrainTaker {
 
 	@Override
 	public void takeTrain(UITrain train) {
-		mTrains.addFirst(train);
+		mTrains.add(train);
 		train.getLayer().setVisible(false);
 		
 		UITrain clone = new UITrain(train.getCargo());
-		mTrains.addFirst(clone);
+		mTrains.add(clone);
 		graphics().rootLayer().add(clone.getLayer());
 		clone.getLayer().setVisible(false);
 		System.out.println("Got a train. Queue length is now "+mTrains.size());
