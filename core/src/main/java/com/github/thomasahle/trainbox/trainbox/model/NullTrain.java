@@ -9,7 +9,7 @@ public class NullTrain implements Train {
 		return 0;
 	}
 	
-	public Train addBehind(Train behind) {
+	public Train addLast(Train behind) {
 		return behind;
 	}
 
@@ -19,7 +19,7 @@ public class NullTrain implements Train {
 	}
 
 	@Override
-	public Train next() {
+	public Train tail() {
 		return this;
 	}
 	

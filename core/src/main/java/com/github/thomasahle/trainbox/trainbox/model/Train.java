@@ -10,7 +10,7 @@ public interface Train {
 	/**
 	 * The 'next train' is the one that arrives at a component after this one.
 	 */
-	public Train next();
+	public Train tail();
 	
 	/**
 	 * The empty train
@@ -21,5 +21,5 @@ public interface Train {
 	
 	public int length();
 	
-	public Train addBehind(Train behind);
+	public Train addLast(Train behind);
 }

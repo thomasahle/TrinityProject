@@ -31,7 +31,7 @@ public final class ComponentFactory {
 		for (String trainDesc : description.split(" +")) {
 			Train train = Train.EMPTY;
 			for (String cargoDesc : trainDesc.split("-")) {
-				train = train.addBehind(new Carriage(Integer.parseInt(cargoDesc)));
+				train = train.addLast(new Carriage(Integer.parseInt(cargoDesc)));
 			}
 			trains.add(train);
 		}

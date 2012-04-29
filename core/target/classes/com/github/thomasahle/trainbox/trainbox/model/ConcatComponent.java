@@ -15,7 +15,7 @@ public class ConcatComponent implements Component {
 		if (mTrain.length() == 0)
 			mTrain = prev.pull();
 		Train t = mTrain.head();
-		mTrain = mTrain.next();
+		mTrain = mTrain.tail();
 		return t;
 	}
 }

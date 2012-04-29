@@ -20,7 +20,7 @@ public class BoxComponent implements Component {
 			return pull();
 		}
 		else {
-			t = buf.addBehind(t);
+			t = buf.addLast(t);
 			buf = Train.EMPTY;
 			return t;
 		}

@@ -28,7 +28,7 @@ public class Carriage implements Train {
 	}
 
 	@Override
-	public Train next() {
+	public Train tail() {
 		return mNext;
 	}
 	
@@ -39,12 +39,12 @@ public class Carriage implements Train {
 	
 	@Override
 	public int length() {
-		return next().length() + 1;
+		return tail().length() + 1;
 	}
 	
 	@Override
-	public Train addBehind(Train behind) {
-		return new Carriage (cargo(), next().addBehind(behind));
+	public Train addLast(Train behind) {
+		return new Carriage (cargo(), tail().addLast(behind));
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class Carriage implements Train {
 			Train t = (Train)other;
 			return length() == t.length()
 					&& cargo() == t.cargo()
-					&& next().equals(t.next());
+					&& tail().equals(t.tail());
 		}
 		return false;
 	}
@@ -63,7 +63,7 @@ public class Carriage implements Train {
 	public String toString() {
 		String str = "["+cargo()+">";
 		if (length() > 1)
-			return next().toString()+"-"+str;
+			return tail().toString()+"-"+str;
 		return str;
 	}
 }
