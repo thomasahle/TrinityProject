@@ -57,10 +57,13 @@ public class UIHorizontalComponent extends AbstractComposite {
 					return ((UIComposite)c).insertChildAt(c, recursivePoint);
 				}
 				else if (c instanceof UIIdentityComponent) {
+					log().debug("Inserting at position "+p);
 					// Insert the new component before the identity clicked on
-					insert(c, p);
+					insert(child, p);
 					// And insert a new identity before the new component
 					insert(new UIIdentityComponent(padding), p);
+					// TODO: Do we also need to shift the trains, or do we assume
+					// that this is only called when trains are stopped?
 					return true;
 				}
 			}
@@ -94,7 +97,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 		}
 			
 		// Install in data structures
-		mComponents.add(comp);
+		mComponents.add(pos, comp);
 		comp.onAdded(this);
 		super.install(comp);
 		
