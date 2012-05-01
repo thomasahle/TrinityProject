@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 			float compRight = compLeft + getSize().width;
 			
 			if (compRight < mTrainTaker.leftBlock()) {
-				System.out.println("Sending a cloned element to "+mTrainTaker);
+				log().debug("Sending a cloned element to "+mTrainTaker);
 				
 				it.remove();
 				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
@@ -85,7 +86,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		mTrains.add(clone);
 		fireTrainCreatedEvent(clone);
 		clone.getLayer().setVisible(false);
-		System.out.println("Got a train. Queue length is now "+mTrains.size());
+		log().debug("Got a train. Queue length is now "+mTrains.size());
 	}
 
 	@Override

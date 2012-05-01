@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -148,7 +149,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 
 	@Override
 	public void takeTrain(UITrain train) {
-		System.out.println("Passing train down from "+this+" to "+mComponents.get(0));
+		log().debug("Passing train down from "+this+" to "+mComponents.get(0));
 		mComponents.get(0).takeTrain(train);
 	}
 

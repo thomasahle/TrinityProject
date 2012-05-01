@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 			train.setPosition(new Point(newLeft, train.getPosition().y));
 			// If it is now out in the right side, give it away
 			if (newRight > compRight) {
-				System.out.println("Giving a train to "+getTrainTaker());
+				log().debug("Giving a train to "+getTrainTaker());
 				getTrainTaker().takeTrain(train);
 			}
 			// Update our working right border
