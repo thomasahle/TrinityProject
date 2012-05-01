@@ -6,6 +6,7 @@ public abstract class AbstractComponent implements UIComponent {
 	private UIComposite mParent;
 	private Point mPosition = new Point();
 	private TrainTaker mTrainTaker = new NullTrainTaker();
+	private TrainsChangedListener mTrainsChangedListener;
 
 	@Override
 	public void onAdded(UIComposite parent) {
@@ -25,7 +26,8 @@ public abstract class AbstractComponent implements UIComponent {
 	
 	@Override
 	public void setPosition(Point position) {
-		getLayer().setTranslation(position.x, position.y);
+		getBackLayer().setTranslation(position.x, position.y);
+		getFrontLayer().setTranslation(position.x, position.y);
 		mPosition = position;
 	}
 
@@ -52,5 +54,17 @@ public abstract class AbstractComponent implements UIComponent {
 	@Override
 	public TrainTaker getTrainTaker() {
 		return mTrainTaker;
+	}
+	
+	
+	@Override
+	public void setTrainsChangedListener(TrainsChangedListener listener) {
+		mTrainsChangedListener = listener;
+	}
+	protected void fireTrainCreatedEvent(UITrain train) {
+		mTrainsChangedListener.onTrainCreated(train);
+	}
+	protected void fireTrainDestroyedEvent(UITrain train) {
+		mTrainsChangedListener.onTrainDestroyed(train);
 	}
 }

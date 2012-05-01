@@ -19,7 +19,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
-	private Layer mLayer;
+	private Layer mBackLayer, mFrontLayer;
 	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
 	private TrainTaker mTrainTaker;
 	
@@ -30,10 +30,13 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 	
 	public UIDupComponent(int width) {
 		mWidth = width;
+		
+		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		
 		CanvasImage image = graphics().createImage(width, HEIGHT);
 		image.canvas().setFillColor(0xaaaa00aa);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		mLayer = graphics().createImageLayer(image);
+		mFrontLayer = graphics().createImageLayer(image);
 	}
 
 	@Override
@@ -47,8 +50,12 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 	}
 
 	@Override
-	public Layer getLayer() {
-		return mLayer;
+	public Layer getBackLayer() {
+		return mBackLayer;
+	}
+	@Override
+	public Layer getFrontLayer() {
+		return mFrontLayer;
 	}
 
 	@Override
@@ -65,9 +72,6 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
 				mTrainTaker.takeTrain(train);
 				train.getLayer().setVisible(true);
-				
-				// This should not be strictly nessesary
-				break;
 			}
 		}
 	}
@@ -79,7 +83,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		
 		UITrain clone = new UITrain(train.getCargo());
 		mTrains.add(clone);
-		graphics().rootLayer().add(clone.getLayer());
+		fireTrainCreatedEvent(clone);
 		clone.getLayer().setVisible(false);
 		System.out.println("Got a train. Queue length is now "+mTrains.size());
 	}

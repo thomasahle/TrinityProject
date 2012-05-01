@@ -19,18 +19,19 @@ public class UIHorizontalComponent extends AbstractComposite {
 	
 	// Invariant: |mComponents| > 0
 	private List<UIComponent> mComponents = new ArrayList<UIComponent>();
-	private GroupLayer mLayer = graphics().createGroupLayer();
+	private GroupLayer mBackLayer = graphics().createGroupLayer();
+	private GroupLayer mFrontLayer = graphics().createGroupLayer();
 	private ImageLayer bg;
 	
 	public UIHorizontalComponent(int padding) {
 		this.padding = padding;
 		
 		CanvasImage bgImage = graphics().createImage(1000, 1000);
-		bgImage.canvas().setFillColor(0xaa00ff00);
-		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
-		bgImage.canvas().fillRect(0, 0, 50, 50);
+		bgImage.canvas().setFillColor(0xaa00ff00)
+						.fillRect(0, 0, getSize().width, getSize().height)
+						.fillRect(0, 0, 50, 50);
 		bg = graphics().createImageLayer(bgImage);
-		mLayer.add(bg);
+		mBackLayer.add(bg);
 		
 		addReal(new UIIdentityComponent(padding));
 	}
@@ -49,10 +50,12 @@ public class UIHorizontalComponent extends AbstractComposite {
 		
 		// Add the component and its layer, setting its position at the end of our current width
 		Dimension oldSize = getSize();
-		mLayer.add(comp.getLayer());
+		mBackLayer.add(comp.getBackLayer());
+		mFrontLayer.add(comp.getFrontLayer());
 		comp.setPosition(new Point(oldSize.width, 0));
 		mComponents.add(comp);
 		comp.onAdded(this);
+		super.install(comp);
 		
 		// We have now resized, so we need to redraw
 		CanvasImage bgImage = graphics().createImage(1000, 1000);
@@ -78,8 +81,13 @@ public class UIHorizontalComponent extends AbstractComposite {
 	}
 
 	@Override
-	public Layer getLayer() {
-		return mLayer;
+	public Layer getBackLayer() {
+		return mBackLayer;
+	}
+	
+	@Override
+	public Layer getFrontLayer() {
+		return mFrontLayer;
 	}
 
 	@Override

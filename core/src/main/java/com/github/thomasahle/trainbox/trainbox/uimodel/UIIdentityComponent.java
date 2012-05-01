@@ -19,15 +19,18 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
-	private Layer mLayer;
+	private Layer mBackLayer, mFrontLayer;
 	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
 	
 	public UIIdentityComponent(int width) {
 		mWidth = width;
+		
+		mFrontLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		
 		CanvasImage image = graphics().createImage(width, HEIGHT);
 		image.canvas().setFillColor(0xaaaa0000);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		mLayer = graphics().createImageLayer(image);
+		mBackLayer = graphics().createImageLayer(image);
 	}
 
 	@Override
@@ -41,8 +44,13 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	}
 
 	@Override
-	public Layer getLayer() {
-		return mLayer;
+	public Layer getBackLayer() {
+		return mBackLayer;
+	}
+
+	@Override
+	public Layer getFrontLayer() {
+		return mFrontLayer;
 	}
 
 	@Override

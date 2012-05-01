@@ -24,7 +24,8 @@ public interface UIComponent extends TrainTaker {
 	 * This layer will be added by the parent Composite somewhere nice.
 	 * Later we may draw our stuff on it.
 	 */
-	public Layer getLayer();
+	public Layer getBackLayer();
+	public Layer getFrontLayer();
 	/**
 	 * The uicomponent can use this to move the trains it controls.
 	 * Do we also need a paint(delta) method?
@@ -59,4 +60,9 @@ public interface UIComponent extends TrainTaker {
 	 * Returns the parent of the component or null if there is no parent
 	 */
 	public UIComposite getParent();
+	/**
+	 * 
+	 */
+	public void setTrainsChangedListener(TrainsChangedListener listener);
+	
 }
