@@ -66,6 +66,12 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 			float compLeft = getDeepPosition().x;
 			float compRight = compLeft + getSize().width;
 			
+			// TODO: It shouldn't be too hard to make trains continue all the way into the dupcomponent,
+			// as we don't care about them hitting each other at this point.
+			// However if the train is very long, it is still not clear when we should hide it.
+			// Ideally we hide only the right side, so the left side can continue moving in.
+			// Or better yet we do actual dup animation.
+			
 			if (compRight < mTrainTaker.leftBlock()) {
 				log().debug("Sending a cloned element to "+mTrainTaker);
 				
