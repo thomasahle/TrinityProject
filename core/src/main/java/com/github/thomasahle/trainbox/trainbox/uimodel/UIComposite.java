@@ -2,6 +2,8 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import java.util.List;
 
+import pythagoras.f.Point;
+
 /**
  * A component that can have children.
  * 
@@ -10,4 +12,5 @@ import java.util.List;
  */
 public interface UIComposite extends UIComponent {
 	public List<UIComponent> getChildren();
+	public boolean insertChildAt(UIComponent child, Point position);
 }

@@ -3,6 +3,7 @@ package com.github.thomasahle.trainbox.trainbox.scenes;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
+import static playn.core.PlayN.log;
 import static playn.core.PlayN.pointer;
 import playn.core.Canvas;
 import playn.core.CanvasImage;
@@ -140,7 +141,7 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	
 	@Override
 	public void onKeyDown(Event event) {
-		System.out.println(event.key() + " Typed");
+		log().debug(event.key() + " Typed");
 		if(event.key() == Key.DOWN){
 			if (checkGoodPosition(x, y+trainLayer.image().height()+10))
 				y= y+10;
