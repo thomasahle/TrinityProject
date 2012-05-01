@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public final class ComponentFactory {
 	/**
@@ -17,10 +18,27 @@ public final class ComponentFactory {
 		put("box", BoxComponent.class);
 		put("cat", ConcatComponent.class);
 	}};
-	public static Component parseAlgebraic(String description) {
-		// TODO: Create this factory
-		return null;
-	}
+	
+	/*public static Component parseAlgebraic(String desc) {
+		StartComponent e = new StartComponent();
+		StringTokenizer inp = new StringTokenizer("("+desc+")");
+		return parse(e, inp);
+	}*/
+	
+	/*private static Component parse(Component e, StringTokenizer inp) {
+		String token = inp.nextToken();
+		while (true) {
+			if ("(".equals(token)) {
+				e = parse(e, inp);
+			}
+			if ("//".equals(token)) {
+				
+			}
+		}
+		return e;
+	}*/
+	
+	// flip (dup dup || box)
 	
 	/**
 	 * On the form "3 5 4-5"

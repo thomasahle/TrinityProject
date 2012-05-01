@@ -88,7 +88,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		mTrains.add(train);
 		train.getLayer().setVisible(false);
 		
-		UITrain clone = new UITrain(train.getCargo());
+		UITrain clone = new UITrain(train);
 		mTrains.add(clone);
 		fireTrainCreatedEvent(clone);
 		clone.getLayer().setVisible(false);
