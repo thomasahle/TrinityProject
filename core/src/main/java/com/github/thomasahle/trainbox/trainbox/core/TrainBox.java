@@ -5,6 +5,7 @@ import playn.core.Game;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
+import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
 
 public class TrainBox implements Game{
 	
@@ -13,7 +14,7 @@ public class TrainBox implements Game{
 	@Override
 	public void init() {
 		graphics().setSize(900, 700);  // this changes the size of the main window
-		currentScene = new StartScene();
+		currentScene = new LevelScene();
 		currentScene.onAttach();
 	}
 

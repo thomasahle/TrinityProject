@@ -52,7 +52,7 @@ public class LevelScene implements Scene, Listener {
 		
 		// And add some trains. These will just have position 0,0 from start,
 		// but the identity component will push them to the left until they fit.
-		track.takeTrain(new UITrain(1,2));
+		track.takeTrain(new UITrain(1,2,3,4).setPosition(new Point(-100,0)));
 		track.takeTrain(new UITrain(3));
 		
 		// Some components can create new trains. We want to know about this, since

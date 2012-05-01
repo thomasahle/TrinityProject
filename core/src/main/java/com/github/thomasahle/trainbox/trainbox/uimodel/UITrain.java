@@ -67,9 +67,10 @@ public class UITrain {
 	public Point getPosition() {
 		return mPosition;
 	}
-	public void setPosition(Point position) {
+	public UITrain setPosition(Point position) {
 		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
+		return this;
 	}
 	public Dimension getSize() {
 		return mSize;
