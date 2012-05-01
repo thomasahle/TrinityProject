@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.thomasahle.trainbox.trainbox.model.Train;
+
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
@@ -21,15 +23,12 @@ public class UITrain {
 	private Point mPosition;
 	private Dimension mSize;
 	
+	public UITrain(Train train) {
+		this(fromTrain(train));
+	}
+	
 	public UITrain(int... cargos) {
-		mPosition = new Point(0,0);
-		mCarriages = new ArrayList<UICarriage>();
-		for (int cargo : cargos)
-			mCarriages.add(new UICarriage(cargo));
-		
-		mLayer = graphics().createGroupLayer();
-		
-		install(mCarriages);
+		this(fromCargos(cargos));
 	}
 	
 	public UITrain(List<UICarriage> carriages) {
@@ -50,6 +49,23 @@ public class UITrain {
 		
 		install(mCarriages);
 	}
+	
+	private static List<UICarriage> fromCargos (int[] cargos) {
+		List<UICarriage> carriages = new ArrayList<UICarriage>();
+		for (int cargo : cargos)
+			carriages.add(new UICarriage(cargo));
+		return carriages;
+	}
+	
+	private static List<UICarriage> fromTrain (Train train) {
+		List<UICarriage> carriages = new ArrayList<UICarriage>();
+		while (train.length() > 0) {
+			carriages.add(new UICarriage(train.cargo()));
+			train = train.tail();
+		}
+		return carriages;
+	}
+	
 	
 	private void install(List<UICarriage> carriages) {
 		mCarriages = carriages;

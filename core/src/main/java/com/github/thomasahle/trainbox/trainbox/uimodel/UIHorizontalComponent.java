@@ -11,10 +11,11 @@ import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.Layer;
+import playn.core.Layer.HitTester;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIHorizontalComponent extends AbstractComposite {
+public class UIHorizontalComponent extends AbstractComposite implements HitTester {
 	
 	public final int padding;
 	
@@ -35,6 +36,8 @@ public class UIHorizontalComponent extends AbstractComposite {
 		mBackLayer.add(bg);
 		
 		insert(new UIIdentityComponent(padding), 0);
+		
+		mBackLayer.setHitTester(this);
 	}
 	
 	public void add(UIComponent comp) {
@@ -159,5 +162,16 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public float leftBlock() {
 		return mComponents.get(0).leftBlock();
+	}
+
+	@Override
+	public Layer hitTest(Layer layer, Point p) {
+		float x = getPosition().x;
+		float y = getPosition().y;
+		float x1 = x + getSize().width;
+		float y1 = y + getSize().height;
+		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
+			return layer;
+		return null;
 	}
 }

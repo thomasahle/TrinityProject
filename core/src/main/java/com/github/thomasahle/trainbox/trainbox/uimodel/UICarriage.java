@@ -8,8 +8,8 @@ import pythagoras.i.Dimension;
 
 public class UICarriage {
 	
-	private static final int HEIGHT = 20;
-	private static final int WIDTH = 36;
+	public static final int HEIGHT = 20;
+	public static final int WIDTH = 36;
 	
 	private Layer mLayer;
 	private Point mPosition;
