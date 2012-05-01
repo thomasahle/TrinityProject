@@ -19,7 +19,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
  *  - Components to add
  *  - The play button
  */
-public class LevelScene implements Scene, LevelFinishedListener {
+public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	
 	private Layer mBgLayer;
 	private Layer mPlayButton;
@@ -49,6 +49,9 @@ public class LevelScene implements Scene, LevelFinishedListener {
 			public void onPointerDrag(Event event) {}
 		});
 		mPlayButton.setTranslation(graphics().screenWidth()-100, graphics().screenHeight()-100);
+		
+		// Dragging of level
+		mLevel.layer().addListener(this);
 	}
 	
 	private Layer initPlayButton() {
@@ -92,4 +95,15 @@ public class LevelScene implements Scene, LevelFinishedListener {
 	public void levelFailed() {
 		log().debug("Level Failed :(");
 	}
+
+	private float mDragStartXPos;
+	@Override
+	public void onPointerStart(Event event) {
+		mDragStartXPos = event.localX();
+	}
+	@Override
+	public void onPointerDrag(Event event) {
+		mLevel.layer().setTranslation(event.x()-mDragStartXPos, 0);
+	}
+	@Override public void onPointerEnd(Event event) {}
 }

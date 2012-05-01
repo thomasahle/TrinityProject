@@ -2,6 +2,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import playn.core.GroupLayer;
 import playn.core.Layer;
+import playn.core.Layer.HitTester;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
 import pythagoras.f.Point;
@@ -10,7 +11,7 @@ import static playn.core.PlayN.graphics;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
 
-public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener {
+public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester {
 	
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
@@ -54,6 +55,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mLayer.add(mTrack.getBackLayer());
 		mLayer.add(mTrainLayer);
 		mLayer.add(mTrack.getFrontLayer());
+		mLayer.setHitTester(this);
 		
 		mTrack.setTrainsChangedListener(this);
 		mTrack.getBackLayer().addListener(this);
@@ -105,4 +107,15 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	}
 	@Override public void onPointerEnd(Event event) {}
 	@Override public void onPointerDrag(Event event) {}
+
+	@Override
+	public Layer hitTest(Layer layer, Point p) {
+		float x = mTrack.getPosition().x;
+		float y = mTrack.getPosition().y + mTrack.getSize().height*0.6f;
+		float x1 = x + mTrack.getSize().width;
+		float y1 = y + mTrack.getSize().height;
+		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
+			return layer;
+		return mTrack.getBackLayer().hitTest(p);
+	}
 }
