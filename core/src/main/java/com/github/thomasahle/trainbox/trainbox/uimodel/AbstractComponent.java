@@ -67,4 +67,12 @@ public abstract class AbstractComponent implements UIComponent {
 	protected void fireTrainDestroyedEvent(UITrain train) {
 		mTrainsChangedListener.onTrainDestroyed(train);
 	}
+	
+	private boolean mPaused;
+	public void paused(boolean paused) {
+		mPaused = paused;
+	}
+	public boolean paused() {
+		return mPaused;
+	}
 }

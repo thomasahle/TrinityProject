@@ -23,6 +23,7 @@ public abstract class AbstractComposite extends AbstractComponent implements UIC
 	}
 	
 	protected void install(UIComponent child) {
+		child.paused(paused());
 		child.setTrainsChangedListener(this);
 	}
 	public void onTrainCreated(UITrain train) {
@@ -30,5 +31,10 @@ public abstract class AbstractComposite extends AbstractComponent implements UIC
 	}
 	public void onTrainDestroyed(UITrain train) {
 		fireTrainDestroyedEvent(train);
+	}
+	public void paused(boolean paused) {
+		super.paused(paused);
+		for (UIComponent comp : getChildren())
+			comp.paused(paused);
 	}
 }

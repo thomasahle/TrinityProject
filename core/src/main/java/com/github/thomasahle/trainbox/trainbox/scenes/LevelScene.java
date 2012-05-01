@@ -14,6 +14,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.TrainsChangedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComposite;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIDupComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIHorizontalComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIIdentityComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UITrain;
 
 
@@ -42,10 +43,12 @@ public class LevelScene implements Scene, Listener {
 		
 		// Create a recursive track
 		UIHorizontalComponent track = new UIHorizontalComponent(100);
-		track.add(new UIDupComponent(100));
-			UIHorizontalComponent nested = new UIHorizontalComponent(100);
-			nested.add(new UIDupComponent(100));
-		track.add(nested);
+		track.add(new UIIdentityComponent(100));
+		track.paused(true);
+		//track.add(new UIDupComponent(100));
+		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
+		//	nested.add(new UIDupComponent(100));
+		//track.add(nested);
 		
 		// And add some trains. These will just have position 0,0 from start,
 		// but the identity component will push them to the left until they fit.
@@ -70,6 +73,7 @@ public class LevelScene implements Scene, Listener {
 			public void onPointerStart(Event event) {
 				log().debug("Start clicked");
 				// TODO: track.togglePause()
+				mTrack.paused(!mTrack.paused());
 			}
 			public void onPointerEnd(Event event) {}
 			public void onPointerDrag(Event event) {}

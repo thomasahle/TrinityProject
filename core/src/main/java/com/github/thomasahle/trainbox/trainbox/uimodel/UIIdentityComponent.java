@@ -56,6 +56,10 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 
 	@Override
 	public void update(float delta) {
+		
+		if (paused())
+			return;
+		
 		float rightBorder = getTrainTaker().leftBlock();
 		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
