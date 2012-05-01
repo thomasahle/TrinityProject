@@ -116,4 +116,16 @@ public class UIStartComponent implements UIComponent {
 		return false;
 	}
 
+	@Override
+	public void setSizeChangedListener(SizeChangedListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public SizeChangedListener getSizeChangedListener() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

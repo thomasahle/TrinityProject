@@ -121,4 +121,16 @@ public class UIGoalComponent implements UIComponent {
 		
 	}
 
+	@Override
+	public void setSizeChangedListener(SizeChangedListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public SizeChangedListener getSizeChangedListener() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

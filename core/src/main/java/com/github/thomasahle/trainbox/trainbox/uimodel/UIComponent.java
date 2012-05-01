@@ -66,4 +66,6 @@ public interface UIComponent extends TrainTaker {
 	public void setTrainsChangedListener(TrainsChangedListener listener);
 	public void paused(boolean paused);
 	public boolean paused();
+	public void setSizeChangedListener(SizeChangedListener listener);
+	public SizeChangedListener getSizeChangedListener();
 }

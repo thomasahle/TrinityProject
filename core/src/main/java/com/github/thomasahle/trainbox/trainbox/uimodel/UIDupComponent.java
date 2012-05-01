@@ -92,7 +92,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		mTrains.add(clone);
 		clone.getLayer().setVisible(false);
 		
-		fireTrainCreatedEvent(clone);
+		fireTrainCreated(clone);
 		log().debug("Got a train. Queue length is now "+mTrains.size());
 	}
 

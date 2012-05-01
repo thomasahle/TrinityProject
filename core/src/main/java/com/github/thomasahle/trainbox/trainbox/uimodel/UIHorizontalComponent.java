@@ -15,7 +15,7 @@ import playn.core.Layer.HitTester;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIHorizontalComponent extends AbstractComposite implements HitTester {
+public class UIHorizontalComponent extends AbstractComposite implements HitTester, SizeChangedListener {
 	
 	public final int padding;
 	
@@ -77,6 +77,8 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 	private void insert(UIComponent comp, int pos) {
 		assert 0 <= pos && pos <= mComponents.size();
 		
+		Dimension oldSize = getSize();
+		
 		// Insert component correctly in the 'TrainTaker' chain
 		if (pos > 0)
 			mComponents.get(pos-1).setTrainTaker(comp);
@@ -103,7 +105,9 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		mComponents.add(pos, comp);
 		comp.onAdded(this);
 		super.install(comp);
+		comp.setSizeChangedListener(this);
 		
+		fireSizeChanged(oldSize);
 		// We have now resized, so we need to redraw.
 		// TODO: Actually this component shouldn't paint anything.
 		updateBackground();
@@ -173,5 +177,10 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
 			return layer;
 		return null;
+	}
+
+	@Override
+	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		// TODO: Recalculate our size
 	}
 }

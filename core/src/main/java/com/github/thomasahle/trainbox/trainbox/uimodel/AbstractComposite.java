@@ -27,10 +27,10 @@ public abstract class AbstractComposite extends AbstractComponent implements UIC
 		child.setTrainsChangedListener(this);
 	}
 	public void onTrainCreated(UITrain train) {
-		fireTrainCreatedEvent(train);
+		fireTrainCreated(train);
 	}
 	public void onTrainDestroyed(UITrain train) {
-		fireTrainDestroyedEvent(train);
+		fireTrainDestroyed(train);
 	}
 	public void paused(boolean paused) {
 		super.paused(paused);
