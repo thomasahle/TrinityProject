@@ -33,31 +33,76 @@ public class UIHorizontalComponent extends AbstractComposite {
 		bg = graphics().createImageLayer(bgImage);
 		mBackLayer.add(bg);
 		
-		addReal(new UIIdentityComponent(padding));
+		insert(new UIIdentityComponent(padding), 0);
 	}
 	
 	public void add(UIComponent comp) {
-		addReal(comp);
-		addReal(new UIIdentityComponent(padding));
+		insert(comp, getChildren().size());
+		insert(new UIIdentityComponent(padding), getChildren().size());
 	}
 	
-	private void addReal(UIComponent comp) {
-		if (mComponents.size() > 0) {
-			mComponents.get(mComponents.size()-1).setTrainTaker(comp);
-		}
-		// The new component is the last, so it should have the HorizontalComponent's tracker
-		comp.setTrainTaker(getTrainTaker());
+	@Override
+	public boolean insertChildAt(UIComponent child, Point position) {
+		// We accept positions that are on top of an identity component.
+		// For the user that corresponds to the spaces between 'real' components.
 		
-		// Add the component and its layer, setting its position at the end of our current width
-		Dimension oldSize = getSize();
+		for (int p = 0; p < mComponents.size(); p++) {
+			UIComponent c = mComponents.get(p);
+			if (c.getPosition().x <= position.x
+					&& position.x < c.getPosition().x+c.getSize().width) {
+				// Okay, this is not terribly object oriented. But it works for now.
+				if (c instanceof UIComposite) {
+					Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
+					return ((UIComposite)c).insertChildAt(c, recursivePoint);
+				}
+				else if (c instanceof UIIdentityComponent) {
+					// Insert the new component before the identity clicked on
+					insert(c, p);
+					// And insert a new identity before the new component
+					insert(new UIIdentityComponent(padding), p);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void insert(UIComponent comp, int pos) {
+		assert 0 <= pos && pos <= mComponents.size();
+		
+		// Insert component correctly in the 'TrainTaker' chain
+		if (pos > 0)
+			mComponents.get(pos-1).setTrainTaker(comp);
+		if (pos < mComponents.size())
+			comp.setTrainTaker(mComponents.get(pos));
+		if (pos == mComponents.size())
+			comp.setTrainTaker(getTrainTaker());
+		
+		// Reposition old layers to fit the new one
+		for (int p = pos; p < mComponents.size(); p++) {
+			UIComponent c = mComponents.get(p);
+			c.setPosition(new Point(c.getPosition().x + comp.getSize().width, c.getPosition().y));
+		}
+		
+		// Add the new layer
 		mBackLayer.add(comp.getBackLayer());
 		mFrontLayer.add(comp.getFrontLayer());
-		comp.setPosition(new Point(oldSize.width, 0));
+		if (pos != 0) {
+			float x = mComponents.get(pos-1).getPosition().x + mComponents.get(pos-1).getSize().width;
+			comp.setPosition(new Point(x, 0));
+		}
+			
+		// Install in data structures
 		mComponents.add(comp);
 		comp.onAdded(this);
 		super.install(comp);
 		
-		// We have now resized, so we need to redraw
+		// We have now resized, so we need to redraw.
+		// TODO: Actually this component shouldn't paint anything.
+		updateBackground();
+	}
+
+	private void updateBackground() {
 		CanvasImage bgImage = graphics().createImage(1000, 1000);
 		bgImage.canvas().setFillColor(0xaa00ff00);
 		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
