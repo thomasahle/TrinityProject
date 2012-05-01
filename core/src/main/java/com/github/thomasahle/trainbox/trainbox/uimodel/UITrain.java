@@ -1,54 +1,83 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
-import playn.core.CanvasImage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import playn.core.GroupLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
 
-import com.github.thomasahle.trainbox.trainbox.model.Train;
-
 public class UITrain {
 	
-	public final static float SPEED = 0.05f; // pixels/s
-	public final static float PADDING = 5.f;
+	public final static float SPEED = 0.034f; // pixels/s
+	public final static float PADDING = 10.f;
 	
-	private Layer mLayer;
-	private UITrain mNext;
-	private float mLastUpdate;
-	private Dimension mSize;
+	private List<UICarriage> mCarriages;
+	private GroupLayer mLayer;
 	private Point mPosition;
+	private Dimension mSize;
 	
-	public UITrain() {
+	public UITrain(int... cargos) {
 		mPosition = new Point(0,0);
-		int width = 50;
-		int height = 30;
-		mSize = new Dimension(width, height);
-		CanvasImage image = graphics().createImage(width, height);
-		image.canvas().setFillColor(0xff0000ff);
-		image.canvas().fillRect(0, 0, width, height);
-		mLayer = graphics().createImageLayer(image);
+		mCarriages = new ArrayList<UICarriage>();
+		for (int cargo : cargos)
+			mCarriages.add(new UICarriage(cargo));
+		
+		mLayer = graphics().createGroupLayer();
+		
+		install(mCarriages);
+	}
+	
+	public UITrain(List<UICarriage> carriages) {
+		mPosition = new Point(0,0);
+		mCarriages = carriages;
+		mLayer = graphics().createGroupLayer();
+		
+		install(carriages);
+	}
+
+	// Copy constructor
+	public UITrain(UITrain old) {
+		mPosition = old.getPosition();
+		mCarriages = new ArrayList<UICarriage>();
+		for (UICarriage car : old.getCarriages())
+			mCarriages.add(new UICarriage(car));
+		mLayer = graphics().createGroupLayer();
+		
+		install(mCarriages);
+	}
+	
+	private void install(List<UICarriage> carriages) {
+		mCarriages = carriages;
+		int x = 0;
+		int y = 0;
+		for (UICarriage car : carriages) {
+			car.setPosition(new Point(x, 0));
+			x += car.getSize().width;
+			y = Math.max(y, car.getSize().height);
+			mLayer.add(car.getLayer());
+		}
+		mSize = new Dimension(x, y);
 	}
 	
 	public Point getPosition() {
 		return mPosition;
 	}
 	public void setPosition(Point position) {
+		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
 	}
 	public Dimension getSize() {
 		return mSize;
 	}
-	public float getLastUpdate() {
-		return mLastUpdate;
-	}
-	public void setLastUpdate(float lastUpdate) {
-		mLastUpdate = lastUpdate;
-	}
 	public Layer getLayer() {
 		return mLayer;
 	}
-	public UITrain getNext() {
-		return mNext;
+	public List<UICarriage> getCarriages() {
+		return Collections.unmodifiableList(mCarriages);
 	}
 }

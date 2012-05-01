@@ -24,19 +24,46 @@ public interface UIComponent extends TrainTaker {
 	 * This layer will be added by the parent Composite somewhere nice.
 	 * Later we may draw our stuff on it.
 	 */
-	public Layer getLayer();
-	/**
-	 * Notice that UIComponents can't refuse trains the same way normal components can.
-	 * @param train A train that must now be animated and controlled by the component.
-	 */
-	public void enterTrain(UITrain train);
+	public Layer getBackLayer();
+	public Layer getFrontLayer();
 	/**
 	 * The uicomponent can use this to move the trains it controls.
 	 * Do we also need a paint(delta) method?
 	 * @param delta
 	 */
 	public void update(float delta);
-	void setTrainTaker(TrainTaker listener);
-	void setPosition(Point position);
-	Point getPosition();
+	/**
+	 * The train taker is the thing that takes over a train when the component is done with it.
+	 * @param listener
+	 */
+	public void setTrainTaker(TrainTaker listener);
+	public TrainTaker getTrainTaker();
+	/**
+	 * The position is the location of the component inside its parent.
+	 * @param position
+	 */
+	public void setPosition(Point position);
+	/**
+	 * The position is the location of the component inside its parent.
+	 * @return
+	 */
+	public Point getPosition();
+	/**
+	 * Called when the component is added to another one.
+	 */
+	public void onAdded(UIComposite parent);
+	/**
+	 * Called when the component is removed from another one.
+	 */
+	public void onRemoved(UIComposite parent);
+	/**
+	 * Returns the parent of the component or null if there is no parent
+	 */
+	public UIComposite getParent();
+	/**
+	 * 
+	 */
+	public void setTrainsChangedListener(TrainsChangedListener listener);
+	public void paused(boolean paused);
+	public boolean paused();
 }

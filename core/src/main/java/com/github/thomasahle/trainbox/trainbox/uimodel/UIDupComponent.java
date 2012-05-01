@@ -15,23 +15,29 @@ import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIIdentityComponent extends AbstractComponent implements UIComponent, TrainTaker {
+public class UIDupComponent extends AbstractComponent implements UIComponent, TrainTaker {
 
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
 	private Layer mBackLayer, mFrontLayer;
 	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
+	private TrainTaker mTrainTaker;
 	
-	public UIIdentityComponent(int width) {
+	@Override
+	public void setTrainTaker(TrainTaker listener) {
+		mTrainTaker = listener;
+	}
+	
+	public UIDupComponent(int width) {
 		mWidth = width;
 		
-		mFrontLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
 		
 		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xaaaa0000);
+		image.canvas().setFillColor(0xaaaa00aa);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		mBackLayer = graphics().createImageLayer(image);
+		mFrontLayer = graphics().createImageLayer(image);
 	}
 
 	@Override
@@ -48,7 +54,6 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	public Layer getBackLayer() {
 		return mBackLayer;
 	}
-
 	@Override
 	public Layer getFrontLayer() {
 		return mFrontLayer;
@@ -56,51 +61,43 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 
 	@Override
 	public void update(float delta) {
-		
-		if (paused())
-			return;
-		
-		float rightBorder = getTrainTaker().leftBlock();
 		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
-			float trainLeft = train.getPosition().x;
 			float compLeft = getDeepPosition().x;
-			float trainRight = trainLeft + train.getSize().width;
 			float compRight = compLeft + getSize().width;
 			
-			// If the train is now entirely gone from us.
-			if (trainLeft >= compRight) {
+			// TODO: It shouldn't be too hard to make trains continue all the way into the dupcomponent,
+			// as we don't care about them hitting each other at this point.
+			// However if the train is very long, it is still not clear when we should hide it.
+			// Ideally we hide only the right side, so the left side can continue moving in.
+			// Or better yet we do actual dup animation.
+			
+			if (compRight < mTrainTaker.leftBlock()) {
+				log().debug("Sending a cloned element to "+mTrainTaker);
+				
 				it.remove();
-				continue;
+				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
+				mTrainTaker.takeTrain(train);
+				train.getLayer().setVisible(true);
 			}
-			// If the train is no longer controlled by us, but still 'on us'.
-			if (trainRight > compRight) {
-				continue;
-			}
-			// See how far we can move it
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
-			float newLeft = newRight-train.getSize().width;
-			train.setPosition(new Point(newLeft, train.getPosition().y));
-			// If it is now out in the right side, give it away
-			if (newRight > compRight) {
-				log().debug("Giving a train to "+getTrainTaker());
-				getTrainTaker().takeTrain(train);
-			}
-			// Update our working right border
-			assert rightBorder >= newLeft - UITrain.PADDING;
-			rightBorder = newLeft - UITrain.PADDING;
 		}
 	}
 
 	@Override
 	public void takeTrain(UITrain train) {
 		mTrains.add(train);
+		train.getLayer().setVisible(false);
+		
+		UITrain clone = new UITrain(train);
+		mTrains.add(clone);
+		fireTrainCreatedEvent(clone);
+		clone.getLayer().setVisible(false);
+		log().debug("Got a train. Queue length is now "+mTrains.size());
 	}
 
 	@Override
 	public float leftBlock() {
-		if (mTrains.isEmpty())
-			return Integer.MAX_VALUE;
-		return mTrains.peekLast().getPosition().x - UITrain.PADDING;
+		// We never block
+		return Float.MAX_VALUE;
 	}
 }

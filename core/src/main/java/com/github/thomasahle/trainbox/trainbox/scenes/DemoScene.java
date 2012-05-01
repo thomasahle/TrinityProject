@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
 import static playn.core.PlayN.assets;
+import static playn.core.PlayN.log;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
@@ -101,7 +102,7 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	
 	@Override
 	public void onKeyDown(Event event) {
-		System.out.println(event.key() + " Pressed");
+		log().debug(event.key() + " Pressed");
 		if(event.key() == Key.DOWN){
 			vy += 1;
 		}

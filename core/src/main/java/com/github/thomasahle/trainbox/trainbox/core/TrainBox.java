@@ -5,8 +5,6 @@ import playn.core.Game;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
-import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
-
 
 public class TrainBox implements Game{
 	
