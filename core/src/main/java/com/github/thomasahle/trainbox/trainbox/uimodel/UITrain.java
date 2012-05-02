@@ -1,56 +1,103 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
-import playn.core.CanvasImage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.github.thomasahle.trainbox.trainbox.model.Train;
+
+import playn.core.GroupLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
 
-import com.github.thomasahle.trainbox.trainbox.model.Train;
-
 public class UITrain {
 	
-	private static final int HEIGHT = 30;
-	private static final int WIDTH = 50;
-	public final static float SPEED = 0.05f; // pixels/s
-	public final static float PADDING = 5.f;
+	public final static float SPEED = 0.034f; // pixels/s
+	public final static float PADDING = 10.f;
 	
-	private Layer mLayer;
-	private UITrain mNext;
-	private float mLastUpdate;
+	private List<UICarriage> mCarriages;
+	private GroupLayer mLayer;
 	private Point mPosition;
+	private Dimension mSize;
 	
-	public UITrain(int cargo) {
+	public UITrain(Train train) {
+		this(fromTrain(train));
+	}
+	
+	public UITrain(int... cargos) {
+		this(fromCargos(cargos));
+	}
+	
+	public UITrain(List<UICarriage> carriages) {
 		mPosition = new Point(0,0);
+		mCarriages = carriages;
+		mLayer = graphics().createGroupLayer();
 		
-		CanvasImage image = graphics().createImage(WIDTH, HEIGHT);
-		image.canvas().setFillColor(0xff0000ff);
-		image.canvas().fillRect(0, 0, WIDTH, HEIGHT);
-		image.canvas().setFillColor(0xffffffff);
-		image.canvas().drawText(""+cargo, 2, HEIGHT-2);
-		mLayer = graphics().createImageLayer(image);
+		install(carriages);
+	}
+
+	// Copy constructor
+	public UITrain(UITrain old) {
+		mPosition = old.getPosition();
+		mCarriages = new ArrayList<UICarriage>();
+		for (UICarriage car : old.getCarriages())
+			mCarriages.add(new UICarriage(car));
+		mLayer = graphics().createGroupLayer();
+		
+		install(mCarriages);
+	}
+	
+	private static List<UICarriage> fromCargos (int[] cargos) {
+		List<UICarriage> carriages = new ArrayList<UICarriage>();
+		for (int cargo : cargos)
+			carriages.add(new UICarriage(cargo));
+		return carriages;
+	}
+	
+	private static List<UICarriage> fromTrain (Train train) {
+		List<UICarriage> carriages = new ArrayList<UICarriage>();
+		while (train.length() > 0) {
+			carriages.add(new UICarriage(train.cargo()));
+			train = train.tail();
+		}
+		return carriages;
+	}
+	
+	
+	private void install(List<UICarriage> carriages) {
+		mCarriages = carriages;
+		int x = 0;
+		int y = 0;
+		for (int i = carriages.size()-1; i >= 0; i--) {
+			UICarriage car = carriages.get(i);
+			car.setPosition(new Point(x, 0));
+			x += car.getSize().width;
+			y = Math.max(y, car.getSize().height);
+			mLayer.add(car.getLayer());
+		}
+		mSize = new Dimension(x, y);
 	}
 	
 	public Point getPosition() {
 		return mPosition;
 	}
-	public void setPosition(Point position) {
+	public UITrain setPosition(Point position) {
 		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
+		return this;
 	}
 	public Dimension getSize() {
-		return new Dimension(WIDTH, HEIGHT);
-	}
-	public float getLastUpdate() {
-		return mLastUpdate;
-	}
-	public void setLastUpdate(float lastUpdate) {
-		mLastUpdate = lastUpdate;
+		return mSize;
 	}
 	public Layer getLayer() {
 		return mLayer;
 	}
-	public UITrain getNext() {
-		return mNext;
+	public List<UICarriage> getCarriages() {
+		return Collections.unmodifiableList(mCarriages);
 	}
+	
+	
 }

@@ -56,6 +56,16 @@ public class ComponentTest {
 	}
 	
 	@Test
+	public void testTail() {
+		List<Train> input = ComponentFactory.parseTrains("2 1-2-3-4");
+		List<Train> output = ComponentFactory.parseTrains("2-3-4");
+		StartComponent start = new StartComponent();
+		start.addAllLast(input);
+		Component comp = new TailComponent(start);
+		assertEquals(output, pullAll(comp));
+	}
+	
+	@Test
 	public void testBox() {
 		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
 		List<Train> output = ComponentFactory.parseTrains("1-2 3-4");
