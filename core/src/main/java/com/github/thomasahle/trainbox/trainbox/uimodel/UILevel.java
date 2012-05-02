@@ -35,6 +35,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		// Create a recursive track
 		track.add(new UIIdentityComponent(100));
+		track.add(new UIIdentityComponent(100));
 		//track.add(new UIDupComponent(100));
 		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
 		//	nested.add(new UIDupComponent(100));

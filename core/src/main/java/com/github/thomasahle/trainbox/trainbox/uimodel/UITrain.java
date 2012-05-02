@@ -15,7 +15,7 @@ import pythagoras.i.Dimension;
 
 public class UITrain {
 	
-	public final static float SPEED = 0.034f; // pixels/s
+	public final static float SPEED = 0.064f; // pixels/s
 	public final static float PADDING = 10.f;
 	
 	private List<UICarriage> mCarriages;
@@ -98,6 +98,29 @@ public class UITrain {
 	public List<UICarriage> getCarriages() {
 		return Collections.unmodifiableList(mCarriages);
 	}
+
+	public void setCropRight(float width) {
+		for (UICarriage car : mCarriages) {
+			if (width >= car.getSize().width) {
+				car.getLayer().setVisible(true);
+				width -= car.getSize().width;
+			}
+			else {
+				car.getLayer().setVisible(false);
+			}
+		}
+	}
 	
-	
+	public void setCropLeft(float width) {
+		for (int i = mCarriages.size()-1; i >= 0; i--) {
+			UICarriage car = mCarriages.get(i);
+			if (width >= car.getSize().width) {
+				car.getLayer().setVisible(true);
+				width -= car.getSize().width;
+			}
+			else {
+				car.getLayer().setVisible(false);
+			}
+		}
+	}
 }
