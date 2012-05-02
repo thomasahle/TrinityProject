@@ -32,7 +32,7 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 	public UIDupComponent(int width) {
 		mWidth = width;
 		
-		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		mBackLayer = graphics().createGroupLayer();
 		
 		CanvasImage image = graphics().createImage(width, HEIGHT);
 		image.canvas().setFillColor(0xaaaa00aa);
@@ -90,9 +90,9 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		
 		UITrain clone = new UITrain(train);
 		mTrains.add(clone);
-		clone.getLayer().setVisible(false);
 		
 		fireTrainCreated(clone);
+		clone.getLayer().setVisible(false);
 		log().debug("Got a train. Queue length is now "+mTrains.size());
 	}
 

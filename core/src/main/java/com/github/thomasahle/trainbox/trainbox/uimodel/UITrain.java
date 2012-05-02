@@ -71,7 +71,8 @@ public class UITrain {
 		mCarriages = carriages;
 		int x = 0;
 		int y = 0;
-		for (UICarriage car : carriages) {
+		for (int i = carriages.size()-1; i >= 0; i--) {
+			UICarriage car = carriages.get(i);
 			car.setPosition(new Point(x, 0));
 			x += car.getSize().width;
 			y = Math.max(y, car.getSize().height);
@@ -97,4 +98,6 @@ public class UITrain {
 	public List<UICarriage> getCarriages() {
 		return Collections.unmodifiableList(mCarriages);
 	}
+	
+	
 }

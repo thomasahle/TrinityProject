@@ -103,8 +103,11 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 
 	@Override
 	public float leftBlock() {
+		float res = getTrainTaker().leftBlock();
 		if (mTrains.isEmpty())
-			return Integer.MAX_VALUE;
-		return mTrains.peekLast().getPosition().x - UITrain.PADDING;
+			res = Math.min(res, Integer.MAX_VALUE);
+		else
+			res = Math.min(res, mTrains.peekLast().getPosition().x - UITrain.PADDING);
+		return res;
 	}
 }

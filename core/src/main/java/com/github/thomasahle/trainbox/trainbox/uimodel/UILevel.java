@@ -103,7 +103,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	@Override
 	public void onPointerStart(Event event) {
 		Point p = new Point(event.localX(), event.localY());
-		mTrack.insertChildAt(new UIFlipComponent(80), p);
+		mTrack.insertChildAt(new UIDupComponent(80), p);
 	}
 	@Override public void onPointerEnd(Event event) {}
 	@Override public void onPointerDrag(Event event) {}
@@ -111,7 +111,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	@Override
 	public Layer hitTest(Layer layer, Point p) {
 		float x = mTrack.getPosition().x;
-		float y = mTrack.getPosition().y + mTrack.getSize().height*0.6f;
+		float y = mTrack.getPosition().y + mTrack.getSize().height*0.85f;
 		float x1 = x + mTrack.getSize().width;
 		float y1 = y + mTrack.getSize().height;
 		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
