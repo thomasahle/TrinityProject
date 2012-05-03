@@ -27,6 +27,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 	public LevelScene() {
 		// A background image. This should be really nice.
+		//TODO set the graphics to stretch to the max available space.
+		graphics().setSize(graphics().screenWidth(), graphics().screenHeight());
 		final int HEIGHT = graphics().screenHeight();
 		final int WIDTH = graphics().screenWidth();
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
