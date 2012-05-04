@@ -6,6 +6,9 @@ import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
+// A tricky thing here is to avoid deadlocks.
+// For a start we can fix them using buffer component
+
 public class UICrazyComponent extends AbstractComposite {
 
 	@Override

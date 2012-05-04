@@ -66,8 +66,6 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		// TODO: This works ok now, but we still need some more animation graphics,
 		//		 As a minimum we should indicate if the component is loaded or not.
 		
-		// 		 Perhaps we want to blockLeft if there is already a train here being duplicated? 
-
 		float compLeft = getDeepPosition().x;
 		float compRight = compLeft + getSize().width;
 		
@@ -136,7 +134,19 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 
 	@Override
 	public float leftBlock() {
-		// We never block
+		// Nothing is supposed to stick through this component
+		// However because of the hack used to 'truncate' trains, we can't
+		// 'check' this condition.
+		// assert mTrainTaker.leftBlock() > getPosition().x;
+		
+		// If something is being moved in, clearly don't overlap with it
+		if (!mIncomming.isEmpty())
+			return mIncomming.getLast().getPosition().x - UITrain.PADDING;
+		// If something is already being duped, don't send more stuff in
+		// TODO: Should we also wait till the last dup is fully out?
+		if (!mOutgoing.isEmpty())
+			return getPosition().x;
+		// If we don't have anything going on, we don't block
 		return Float.MAX_VALUE;
 	}
 }
