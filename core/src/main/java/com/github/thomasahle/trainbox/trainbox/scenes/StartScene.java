@@ -32,6 +32,7 @@ import playn.core.SurfaceLayer;
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
 public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
+	
 	//static final float GRAVITY = 64;
 	static final float GRAVITY = 128;
 	float px, py; // these are for the watermelon
@@ -141,6 +142,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     	x = a+3*cloudLayer.width()/4;
     	y = b+1*cloudLayer.height()/6;
 	    ayy = GRAVITY;
+	    vxx = -vy; 
 	}
 	
 	@Override
@@ -179,7 +181,6 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		cloudLayer.setTranslation(a, b);
 		System.out.println("(" + currTrPosX + "," + currTrPosY + ")");
 		if (y >bgLayer.height()) {
-			System.out.println("TRUE!!!!!!");
 			resetWaterMelonPosition();
 		}
 		
@@ -212,14 +213,10 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	    	y = b+1*cloudLayer.height()/6;
 	    	ayy = GRAVITY;
 	    	vyy= 0;
-		
-		
-//	    x = a+cloudLayer.width()/2;
-//	    y = b+cloudLayer.height();
-//	    ayy = GRAVITY;
-//	    vyy= 0;
+	    	vxx = -vy; 
 	}
 
+	
 	@Override
 	public void onKeyDown(Event event) {
 		System.out.println(event.key() + " Pressed");
