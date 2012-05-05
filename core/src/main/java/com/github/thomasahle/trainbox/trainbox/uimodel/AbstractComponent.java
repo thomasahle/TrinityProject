@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 public abstract class AbstractComponent implements UIComponent {
@@ -7,12 +8,13 @@ public abstract class AbstractComponent implements UIComponent {
 	private Point mPosition = new Point();
 	private TrainTaker mTrainTaker = new NullTrainTaker();
 	private TrainsChangedListener mTrainsChangedListener;
-
+	private boolean mPaused;
+	private SizeChangedListener mSizeChangedListener;
+	
 	@Override
 	public void onAdded(UIComposite parent) {
 		mParent = parent;
 	}
-
 	@Override
 	public void onRemoved(UIComposite parent) {
 		mParent = null;
@@ -61,18 +63,36 @@ public abstract class AbstractComponent implements UIComponent {
 	public void setTrainsChangedListener(TrainsChangedListener listener) {
 		mTrainsChangedListener = listener;
 	}
-	protected void fireTrainCreatedEvent(UITrain train) {
-		mTrainsChangedListener.onTrainCreated(train);
+	protected void fireTrainCreated(UITrain train) {
+		if (mTrainsChangedListener != null)
+			mTrainsChangedListener.onTrainCreated(train);
 	}
-	protected void fireTrainDestroyedEvent(UITrain train) {
-		mTrainsChangedListener.onTrainDestroyed(train);
+	protected void fireTrainDestroyed(UITrain train) {
+		if (mTrainsChangedListener != null)
+			mTrainsChangedListener.onTrainDestroyed(train);
 	}
 	
-	private boolean mPaused;
+	
+	@Override
 	public void paused(boolean paused) {
 		mPaused = paused;
 	}
+	@Override
 	public boolean paused() {
 		return mPaused;
+	}
+	
+	
+	@Override
+	public void setSizeChangedListener(SizeChangedListener listener) {
+		mSizeChangedListener = listener;
+	}
+	@Override
+	public SizeChangedListener getSizeChangedListener() {
+		return mSizeChangedListener;
+	}
+	protected void fireSizeChanged(Dimension oldSize) {
+		if (mSizeChangedListener != null)
+			mSizeChangedListener.onSizeChanged(this, oldSize);
 	}
 }

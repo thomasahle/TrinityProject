@@ -14,7 +14,7 @@ public class TrainBox implements Game{
 	@Override
 	public void init() {
 		graphics().setSize(900, 700);  // this changes the size of the main window
-		currentScene = new StartScene();
+		currentScene = new LevelScene();
 		currentScene.onAttach();
 	}
 

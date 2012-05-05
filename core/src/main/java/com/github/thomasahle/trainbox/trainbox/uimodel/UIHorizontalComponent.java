@@ -11,10 +11,11 @@ import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.Layer;
+import playn.core.Layer.HitTester;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIHorizontalComponent extends AbstractComposite {
+public class UIHorizontalComponent extends AbstractComposite implements HitTester, SizeChangedListener {
 	
 	public final int padding;
 	
@@ -35,6 +36,8 @@ public class UIHorizontalComponent extends AbstractComposite {
 		mBackLayer.add(bg);
 		
 		insert(new UIIdentityComponent(padding), 0);
+		
+		mBackLayer.setHitTester(this);
 	}
 	
 	public void add(UIComponent comp) {
@@ -74,6 +77,8 @@ public class UIHorizontalComponent extends AbstractComposite {
 	private void insert(UIComponent comp, int pos) {
 		assert 0 <= pos && pos <= mComponents.size();
 		
+		Dimension oldSize = getSize();
+		
 		// Insert component correctly in the 'TrainTaker' chain
 		if (pos > 0)
 			mComponents.get(pos-1).setTrainTaker(comp);
@@ -100,7 +105,9 @@ public class UIHorizontalComponent extends AbstractComposite {
 		mComponents.add(pos, comp);
 		comp.onAdded(this);
 		super.install(comp);
+		comp.setSizeChangedListener(this);
 		
+		fireSizeChanged(oldSize);
 		// We have now resized, so we need to redraw.
 		// TODO: Actually this component shouldn't paint anything.
 		updateBackground();
@@ -159,5 +166,21 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public float leftBlock() {
 		return mComponents.get(0).leftBlock();
+	}
+
+	@Override
+	public Layer hitTest(Layer layer, Point p) {
+		float x = getPosition().x;
+		float y = getPosition().y;
+		float x1 = x + getSize().width;
+		float y1 = y + getSize().height;
+		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
+			return layer;
+		return null;
+	}
+
+	@Override
+	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		// TODO: Recalculate our size
 	}
 }
