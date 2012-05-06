@@ -6,6 +6,7 @@ import playn.core.Game;
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.NullScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
 
@@ -17,7 +18,7 @@ public class TrainBox implements Game{
 	
 	
 	
-	Scene scene = startScene;
+	Scene mScene = new NullScene();
 	
 	@Override
 	public void init() {
@@ -27,15 +28,14 @@ public class TrainBox implements Game{
 		levelScene = new LevelScene(this);
 		moveScene = new MoveScene(this);
 		
-		scene = startScene;
-		scene.onAttach();
+		setScene(startScene);
 	}
 
 	
 	
 	@Override
 	public void update(float delta) {
-		scene.update(delta);
+		mScene.update(delta);
 	}
 
 	@Override
@@ -66,12 +66,13 @@ public class TrainBox implements Game{
 	}
 	
 	public void setScene(Scene scene) {
-		this.scene = scene;
+		mScene.onDetach();
+		mScene = scene;
 		scene.onAttach();
 	}
 	
 	public Scene getScene() {
-		return scene;
+		return mScene;
 	}
 	
 
