@@ -1,5 +1,8 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 import playn.core.Layer;
@@ -9,24 +12,32 @@ import pythagoras.f.Point;
 // A tricky thing here is to avoid deadlocks.
 // For a start we can fix them using buffer component
 
-public class UICrazyComponent extends AbstractComposite {
+// Even simpler start: Use teleportation instead of lead from/to
 
+public class UICrazyComponent extends AbstractComposite {
+	
+	private Deque<UITrain> mTopBuffer = new ArrayDeque<UITrain>();
+	private Deque<UITrain> mBotBuffer = new ArrayDeque<UITrain>();
+	
+	
+	private UIComponent mTopComp, mBotComp;
+	
 	@Override
 	public List<UIComponent> getChildren() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(mTopComp, mBotComp);
 	}
 
 	@Override
 	public boolean insertChildAt(UIComponent child, Point position) {
-		// TODO Auto-generated method stub
+		// We don't accept inserts
 		return false;
 	}
 
 	@Override
 	public Dimension getSize() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Dimension(
+				Math.max(mTopComp.getSize().width, mBotComp.getSize().width),
+				mTopComp.getSize().height + mBotComp.getSize().height);
 	}
 
 	@Override

@@ -49,8 +49,8 @@ public class ComponentTest {
 	public void testFlip() {
 		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
 		List<Train> output = ComponentFactory.parseTrains("2 1 4 3");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
+		
 		Component comp = new FlipComponent(start);
 		assertEquals(output, pullAll(comp));
 	}
@@ -59,8 +59,8 @@ public class ComponentTest {
 	public void testTail() {
 		List<Train> input = ComponentFactory.parseTrains("2 1-2-3-4");
 		List<Train> output = ComponentFactory.parseTrains("2-3-4");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
+		
 		Component comp = new TailComponent(start);
 		assertEquals(output, pullAll(comp));
 	}
@@ -79,8 +79,8 @@ public class ComponentTest {
 	public void testConcat() {
 		List<Train> input = ComponentFactory.parseTrains("1-2 3-4");
 		List<Train> output = ComponentFactory.parseTrains("1 2 3 4");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
+		
 		Component comp = new ConcatComponent(start);
 		assertEquals(output, pullAll(comp));
 	}
@@ -89,8 +89,8 @@ public class ComponentTest {
 	public void testReverse() {
 		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
 		List<Train> output = ComponentFactory.parseTrains("4 3 2 1");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
+		
 		Component comp = new ConcatComponent(
 				new FlipComponent(
 				new BoxComponent(
@@ -102,8 +102,7 @@ public class ComponentTest {
 	public void testMattStyleReverse() {
 		List<Train> input = ComponentFactory.parseTrains("1 2 3 4");
 		List<Train> output = ComponentFactory.parseTrains("4 3 2 1");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
 		
 		SplitComponents split1 = new SplitComponents(start);
 		SplitComponents split2 = new SplitComponents(split1.fst);
@@ -118,8 +117,7 @@ public class ComponentTest {
 	public void testTranspose1() {
 		List<Train> input = ComponentFactory.parseTrains("1-2 3-4");
 		List<Train> output = ComponentFactory.parseTrains("1-3 2-4");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
 		
 		SplitComponents prevs = new SplitComponents(
 				new ConcatComponent(start));
@@ -133,8 +131,7 @@ public class ComponentTest {
 	public void testTranspose2() {
 		List<Train> input = ComponentFactory.parseTrains("1-2 3-4");
 		List<Train> output = ComponentFactory.parseTrains("1-3 2-4");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
 		
 		SplitComponents prevs = new SplitComponents(start);
 		Component comp = new BoxComponent(
@@ -148,8 +145,7 @@ public class ComponentTest {
 	public void testTransposeBig() {
 		List<Train> input = ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16");
 		List<Train> output = ComponentFactory.parseTrains("1-5-9-13 2-6-10-14 3-7-11-15 4-8-12-16");
-		StartComponent start = new StartComponent();
-		start.addAllLast(input);
+		StartComponent start = new StartComponent(input);
 		
 		SplitComponents split1 = new SplitComponents(new ConcatComponent(start));
 		SplitComponents split2 = new SplitComponents(split1.fst);
@@ -162,6 +158,16 @@ public class ComponentTest {
 						new BoxComponent(new BoxComponent(split3.fst)),
 						new BoxComponent(new BoxComponent(split3.snd))));
 		assertEquals(output, pullAll(comp));
+	}
+	
+	@Test
+	public void testStrictParser() {
+		List<Train> input = ComponentFactory.parseTrains("1-2 3-4");
+		List<Train> output = ComponentFactory.parseTrains("1-3 2-4");
+		String description = "(cat||cat) box";
+		
+		assertEquals(output, pullAll(ComponentFactory.parseStrictAlgebraic(
+				new StartComponent(input), description)));
 	}
 }
 
