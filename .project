@@ -25,4 +25,10 @@
 			</matcher>
 		</filter>
 	</filteredResources>
+	<variableList>
+		<variable>
+			<name>jBox2D</name>
+			<value>file:/home/lena/Documents/CS_Projects/TrinityProject/lib/jbox2d-2.0.1-full.jar</value>
+		</variable>
+	</variableList>
 </projectDescription>
