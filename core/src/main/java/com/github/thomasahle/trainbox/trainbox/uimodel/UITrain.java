@@ -98,7 +98,10 @@ public class UITrain {
 	public List<UICarriage> getCarriages() {
 		return Collections.unmodifiableList(mCarriages);
 	}
-
+	
+	// TODO: The current cropping is a hack, which might not work well in all
+	// situations. Better would be to use this approach:
+	// https://groups.google.com/forum/?fromgroups#!topic/playn/9iEnc5HiceI
 	public void setCropRight(float width) {
 		for (UICarriage car : mCarriages) {
 			if (width >= car.getSize().width) {
