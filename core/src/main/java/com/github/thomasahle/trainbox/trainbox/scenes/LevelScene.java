@@ -7,6 +7,7 @@ import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
 
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
@@ -24,8 +25,12 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
+	TrainBox trainBox;
+	
 
-	public LevelScene() {
+
+	public LevelScene(TrainBox trainBox) {
+		this.trainBox = trainBox;
 		// A background image. This should be really nice.
 		//TODO set the graphics to stretch to the max available space.
 		graphics().setSize(graphics().screenWidth(), graphics().screenHeight());

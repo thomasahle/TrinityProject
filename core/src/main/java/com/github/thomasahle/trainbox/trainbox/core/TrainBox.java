@@ -3,25 +3,39 @@ package com.github.thomasahle.trainbox.trainbox.core;
 import static playn.core.PlayN.graphics;
 import playn.core.Game;
 
+import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.StartSceneWitAutoGravity;
 
 public class TrainBox implements Game{
+	Scene demoScene; 
+	Scene levelScene;
+	Scene moveScene;
+	Scene startScene;
 	
-	Scene currentScene;
+	
+	
+	Scene scene = startScene;
 	
 	@Override
 	public void init() {
 		graphics().setSize(600, 500);  // this changes the size of the main window
-		currentScene = new StartScene();
-		currentScene.onAttach();
+		startScene = new StartScene(this);
+		demoScene = new DemoScene(this);
+		levelScene = new LevelScene(this);
+		moveScene = new MoveScene(this);
+		
+		scene = startScene;
+		scene.onAttach();
 	}
 
+	
+	
 	@Override
 	public void update(float delta) {
-		currentScene.update(delta);
+		scene.update(delta);
 	}
 
 	@Override
@@ -34,8 +48,31 @@ public class TrainBox implements Game{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 	
+	public Scene getDemoScene() {
+		return demoScene;
+	}
+	
+	public Scene getLevelScene() {
+		return levelScene;
+	}
+	
+	public Scene getStartScene() {
+		return startScene;
+	}
+
+	public Scene getMoveScene() {
+		return moveScene;
+	}
+	
+	public void setScene(Scene scene) {
+		this.scene = scene;
+		scene.onAttach();
+	}
+	
+	public Scene getScene() {
+		return scene;
+	}
 	
 
 }

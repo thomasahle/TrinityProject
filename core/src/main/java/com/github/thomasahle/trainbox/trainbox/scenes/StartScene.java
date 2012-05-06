@@ -27,7 +27,8 @@ import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
 import playn.core.Pointer.Listener;
 import playn.core.SurfaceLayer;
-import org.jbox2d.*; 
+
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
@@ -58,9 +59,11 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     ImageLayer exitButton; // contained in menulayer
     ImageLayer watermelon;
     boolean menuVisible;   // whether the menu is visible
+    TrainBox trainBox;
     
     
-	public StartScene() {
+	public StartScene(final TrainBox trainBox) {
+		this.trainBox = trainBox;
 		menuVisible = true;
 		CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
 		Canvas canvas = bgImage.canvas();
@@ -100,6 +103,8 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			@Override
 			public void onMouseDown(ButtonEvent event) {
 				startButton.setImage(startButtonOffImage);
+				trainBox.getScene().onDetach();
+				trainBox.setScene(trainBox.getDemoScene());
 				
 			}
 		});
@@ -158,7 +163,9 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
 		graphics().rootLayer().remove(cloudLayer);
-        graphics().rootLayer().add(menuLayer);
+        graphics().rootLayer().remove(menuLayer);
+	    graphics().rootLayer().remove(watermelon);
+
 	}
 	
 	@Override

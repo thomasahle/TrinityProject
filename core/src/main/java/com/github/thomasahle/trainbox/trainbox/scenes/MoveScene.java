@@ -5,6 +5,9 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.log;
 import static playn.core.PlayN.pointer;
+
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+
 import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Image;
@@ -20,6 +23,7 @@ import playn.core.Pointer;
  */
 public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 
+	
 	
     int width = 640;
 	int height = 480;
@@ -39,7 +43,13 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
     ImageLayer bgLayer;
     ImageLayer textLayer;
     
-	public MoveScene() {
+    TrainBox trainBox;
+    
+	public MoveScene(TrainBox trainBox) {
+		this.trainBox = trainBox;
+		
+		
+		
 		CanvasImage bgImage = graphics().createImage(width, height);
 		Canvas canvas = bgImage.canvas();
 		canvas.setFillColor(0xff87ceeb);
