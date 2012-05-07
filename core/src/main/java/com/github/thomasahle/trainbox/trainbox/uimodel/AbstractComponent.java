@@ -52,7 +52,7 @@ public abstract class AbstractComponent implements UIComponent {
 	public void setTrainTaker(TrainTaker listener) {
 		this.mTrainTaker = listener;
 	}
-	
+
 	@Override
 	public TrainTaker getTrainTaker() {
 		return mTrainTaker;

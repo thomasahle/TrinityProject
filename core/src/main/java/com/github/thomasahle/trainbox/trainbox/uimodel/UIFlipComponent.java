@@ -9,13 +9,14 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 import playn.core.CanvasImage;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIFlipComponent extends AbstractComponent implements UIComponent, TrainTaker {
+public class UIFlipComponent extends BlackBoxComponent {
 
 	
 	private final static int HEIGHT = 100;
@@ -100,6 +101,12 @@ public class UIFlipComponent extends AbstractComponent implements UIComponent, T
 				train.getLayer().setVisible(true);
 			}
 		}
+	}
+
+	@Override
+	public void onTrainEntered(UITrain train, Queue<UITrain> currentTrains) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

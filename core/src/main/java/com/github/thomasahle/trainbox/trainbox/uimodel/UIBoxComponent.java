@@ -1,11 +1,12 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import java.util.List;
+import java.util.Queue;
 
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 
-public class UIBoxComponent extends AbstractComponent {
+public class UIBoxComponent extends BlackBoxComponent{
 
 	@Override
 	public List<UITrain> getCarriages() {
@@ -38,6 +39,12 @@ public class UIBoxComponent extends AbstractComponent {
 	}
 
 	@Override
+	public void onTrainEntered(UITrain train, Queue<UITrain> currentTrains) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void takeTrain(UITrain train) {
 		// TODO Auto-generated method stub
 		
@@ -48,5 +55,7 @@ public class UIBoxComponent extends AbstractComponent {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
 
 }
