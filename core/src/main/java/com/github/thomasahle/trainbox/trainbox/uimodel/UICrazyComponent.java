@@ -41,32 +41,8 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 		onSizeChanged(top, new Dimension(0,0));
 		
 		mNextOut = top;
-		top.setTrainTaker(new TrainTaker() {
-			@Override
-			public void takeTrain(UITrain train) {
-				getTrainTaker().takeTrain(train);
-				mNextOut = mBotComp;
-			}
-			@Override
-			public float leftBlock() {
-				if (mNextOut == this)
-					return Float.MAX_VALUE;
-				return Float.MIN_VALUE;
-			}
-		});
-		bot.setTrainTaker(new TrainTaker() {
-			@Override
-			public void takeTrain(UITrain train) {
-				getTrainTaker().takeTrain(train);
-				mNextOut = mTopComp;
-			}
-			@Override
-			public float leftBlock() {
-				if (mNextOut == this)
-					return Float.MAX_VALUE;
-				return Float.MIN_VALUE;
-			}
-		});
+		top.setTrainTaker(mTopTaker);
+		bot.setTrainTaker(mBotTaker);
 	}
 	
 	private void add(UIComponent comp) {
@@ -74,6 +50,22 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 		mBackLayer.add(comp.getBackLayer());
 		mFrontLayer.add(comp.getFrontLayer());
 		super.install(comp);
+	}
+	
+	@Override
+	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		//mTopComp.setPosition(new Point(0, 0));
+		mBotComp.setPosition(new Point(0, mTopComp.getSize().height));
+		
+		Dimension newSize = new Dimension(
+				Math.max(mTopComp.getSize().width, mBotComp.getSize().width),
+				mTopComp.getSize().height + mBotComp.getSize().height);
+		
+		if (!newSize.equals(mSize)) {
+			Dimension ourOldSize = mSize;
+			mSize = newSize;
+			fireSizeChanged(ourOldSize);
+		}
 	}
 	
 	@Override
@@ -134,19 +126,30 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 		return Float.MAX_VALUE;
 	}
 	
-	@Override
-	public void onSizeChanged(UIComponent source, Dimension oldSize) {
-		//mTopComp.setPosition(new Point(0, 0));
-		mBotComp.setPosition(new Point(0, mTopComp.getSize().height));
-		
-		Dimension newSize = new Dimension(
-				Math.max(mTopComp.getSize().width, mBotComp.getSize().width),
-				mTopComp.getSize().height + mBotComp.getSize().height);
-		
-		if (!newSize.equals(mSize)) {
-			Dimension ourOldSize = mSize;
-			mSize = newSize;
-			fireSizeChanged(ourOldSize);
+	private TrainTaker mTopTaker = new TrainTaker() {
+		@Override
+		public void takeTrain(UITrain train) {
+			getTrainTaker().takeTrain(train);
+			mNextOut = mBotComp;
 		}
-	}
+		@Override
+		public float leftBlock() {
+			if (mNextOut == this)
+				return Float.MAX_VALUE;
+			return Float.MIN_VALUE;
+		}
+	};
+	private TrainTaker mBotTaker = new TrainTaker() {
+		@Override
+		public void takeTrain(UITrain train) {
+			getTrainTaker().takeTrain(train);
+			mNextOut = mTopComp;
+		}
+		@Override
+		public float leftBlock() {
+			if (mNextOut == this)
+				return Float.MAX_VALUE;
+			return Float.MIN_VALUE;
+		}
+	};
 }
