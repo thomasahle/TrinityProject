@@ -18,7 +18,7 @@ import pythagoras.f.Point;
 
 // Even simpler start: Use teleportation instead of lead from/to
 
-public class UISplitComponent extends AbstractComposite implements SizeChangedListener {
+public class UISplitComponent extends AbstractComposite {
 	
 	private Deque<UITrain> mTopBuffer = new ArrayDeque<UITrain>();
 	private Deque<UITrain> mBotBuffer = new ArrayDeque<UITrain>();
@@ -26,13 +26,12 @@ public class UISplitComponent extends AbstractComposite implements SizeChangedLi
 	
 	private Dimension mSize;
 	private UIComponent mTopComp, mBotComp;
-	private TrainTaker mNextOut;
 	
 	private GroupLayer mBackLayer = graphics().createGroupLayer();
 	private GroupLayer mFrontLayer = graphics().createGroupLayer();
 	
 	public UISplitComponent(UIComponent top, UIComponent bot) {
-		mNextInbuf = mTopBuffer;
+		mNextInbuf = mBotBuffer;
 		
 		mTopComp = top;
 		mBotComp = bot;
@@ -40,13 +39,12 @@ public class UISplitComponent extends AbstractComposite implements SizeChangedLi
 		add(bot);
 		onSizeChanged(top, new Dimension(0,0));
 		
-		mNextOut = top;
 		top.setTrainTaker(mTopTaker);
 		bot.setTrainTaker(mBotTaker);
+		mNextTaker = mTopTaker;
 	}
 	
 	private void add(UIComponent comp) {
-		comp.setSizeChangedListener(this);
 		mBackLayer.add(comp.getBackLayer());
 		mFrontLayer.add(comp.getFrontLayer());
 		super.install(comp);
@@ -97,13 +95,13 @@ public class UISplitComponent extends AbstractComposite implements SizeChangedLi
 	@Override
 	public void update(float delta) {
 		if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= 0) {
-			log().debug("Giving waiting split train to "+mTopComp);
+			log().debug("Giving waiting split train up to "+mTopComp);
 			UITrain ttrain = mTopBuffer.poll();
 			ttrain.getLayer().setVisible(true);
 			mTopComp.takeTrain(ttrain);
 		}
 		if (!mBotBuffer.isEmpty() && mBotComp.leftBlock() >= 0) {
-			log().debug("Giving waiting split train to "+mBotComp);
+			log().debug("Giving waiting split train down to "+mBotComp);
 			UITrain ttrain = mBotBuffer.poll();
 			ttrain.getLayer().setVisible(true);
 			mBotComp.takeTrain(ttrain);
@@ -130,26 +128,27 @@ public class UISplitComponent extends AbstractComposite implements SizeChangedLi
 		@Override
 		public void takeTrain(UITrain train) {
 			getTrainTaker().takeTrain(train);
-			mNextOut = mBotComp;
+			mNextTaker = mBotTaker;
 		}
 		@Override
 		public float leftBlock() {
-			if (mNextOut == this)
+			if (mNextTaker == this)
 				return Float.MAX_VALUE;
-			return Float.MIN_VALUE;
+			return 0;
 		}
 	};
 	private TrainTaker mBotTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
 			getTrainTaker().takeTrain(train);
-			mNextOut = mTopComp;
+			mNextTaker = mTopTaker;
 		}
 		@Override
 		public float leftBlock() {
-			if (mNextOut == this)
+			if (mNextTaker == this)
 				return Float.MAX_VALUE;
-			return Float.MIN_VALUE;
+			return 0;
 		}
 	};
+	private TrainTaker mNextTaker;
 }

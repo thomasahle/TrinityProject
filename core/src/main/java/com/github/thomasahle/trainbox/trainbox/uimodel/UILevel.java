@@ -35,9 +35,10 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		// Create a recursive track
 		track.add(new UIIdentityComponent(100));
-		track.add(new UISplitComponent(new UIIdentityComponent(100), new UIIdentityComponent(100)));
-		track.add(new UIIdentityComponent(100));
-		//track.add(new UIDupComponent(100));
+		//track.add(new UISplitComponent(new UIIdentityComponent(100), new UIIdentityComponent(100)));
+		//track.add(new UIIdentityComponent(100));
+		track.add(new UIDupComponent(100));
+		track.add(new UIDupComponent(100));
 		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
 		//	nested.add(new UIDupComponent(100));
 		//track.add(nested);
@@ -50,7 +51,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		}
 		
 		mTrainLayer = graphics().createGroupLayer();
-		mTrainLayer.setTranslation(0, mTrack.getSize().height/2 - UICarriage.HEIGHT/2);
+		//mTrainLayer.setTranslation(0, mTrack.getSize().height/2 - UICarriage.HEIGHT/2);
 		for (UITrain train : mTrack.getCarriages())
 			mTrainLayer.add(train.getLayer());
 		

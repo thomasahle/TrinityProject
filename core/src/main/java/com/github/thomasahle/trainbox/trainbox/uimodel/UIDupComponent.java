@@ -91,8 +91,9 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 			}
 			else {
 				float newLeft = trainLeft + UITrain.SPEED*delta;
+				float newRight = newLeft + train.getSize().width;
 				train.setPosition(new Point(newLeft, train.getPosition().y));
-				train.setCropLeft(compRight - newLeft);
+				train.setCropRight(newRight - compRight);
 			}
 		}
 		// Wait for the right moment to spit them out
@@ -103,9 +104,10 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 				log().debug("Sending a cloned element to "+mTrainTaker);
 				
 				it.remove();
-				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
-				mTrainTaker.takeTrain(train);
 				train.getLayer().setVisible(true);
+				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
+				train.setCropRight(0);
+				mTrainTaker.takeTrain(train);
 				
 				mSent.add(train);
 				
@@ -116,9 +118,8 @@ public class UIDupComponent extends AbstractComponent implements UIComponent, Tr
 		for (Iterator<UITrain> it = mSent.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
-			float trainRight = trainLeft + train.getSize().width;
 			
-			train.setCropRight(trainRight-compLeft);
+			train.setCropLeft(compLeft-trainLeft);
 			
 			if (trainLeft >= compRight) {
 				it.remove();

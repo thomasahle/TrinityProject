@@ -13,7 +13,7 @@ import playn.core.Layer.HitTester;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIHorizontalComponent extends AbstractComposite implements HitTester, SizeChangedListener {
+public class UIHorizontalComponent extends AbstractComposite implements HitTester {
 	
 	public final int padding;
 	
@@ -85,9 +85,7 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		
 		// Install in data structures
 		mComponents.add(pos, comp);
-		comp.onAdded(this);
 		super.install(comp);
-		comp.setSizeChangedListener(this);
 		
 		// Update size
 		onSizeChanged(comp, new Dimension(0,0));

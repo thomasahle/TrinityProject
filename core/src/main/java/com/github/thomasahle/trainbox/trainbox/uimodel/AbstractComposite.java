@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * This is just a helper abstract.
  */
-public abstract class AbstractComposite extends AbstractComponent implements UIComposite, TrainsChangedListener {
+public abstract class AbstractComposite extends AbstractComponent implements UIComposite, TrainsChangedListener, SizeChangedListener {
 	@Override
 	public List<UITrain> getCarriages() {
 		List<UITrain> carriages = new ArrayList<UITrain>();
@@ -23,8 +23,10 @@ public abstract class AbstractComposite extends AbstractComponent implements UIC
 	}
 	
 	protected void install(UIComponent child) {
-		child.paused(paused());
 		child.setTrainsChangedListener(this);
+		child.setSizeChangedListener(this);
+		child.paused(paused());
+		child.onAdded(this);
 	}
 	public void onTrainCreated(UITrain train) {
 		fireTrainCreated(train);
