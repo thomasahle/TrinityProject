@@ -1,8 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 
 import playn.core.Layer;
 import pythagoras.f.Point;
