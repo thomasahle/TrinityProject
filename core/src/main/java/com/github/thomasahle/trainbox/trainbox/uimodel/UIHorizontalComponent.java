@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import playn.core.CanvasImage;
 import playn.core.GroupLayer;
-import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIHorizontalComponent extends AbstractComposite implements HitTester, SizeChangedListener {
+public class UIHorizontalComponent extends AbstractComposite implements HitTester {
 	
 	public final int padding;
 	
@@ -23,17 +21,11 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 	private List<UIComponent> mComponents = new ArrayList<UIComponent>();
 	private GroupLayer mBackLayer = graphics().createGroupLayer();
 	private GroupLayer mFrontLayer = graphics().createGroupLayer();
-	private ImageLayer bg;
+
+	private Dimension mSize = new Dimension(0,0);
 	
 	public UIHorizontalComponent(int padding) {
 		this.padding = padding;
-		
-		CanvasImage bgImage = graphics().createImage(1000, 1000);
-		bgImage.canvas().setFillColor(0xaa00ff00)
-						.fillRect(0, 0, getSize().width, getSize().height)
-						.fillRect(0, 0, 50, 50);
-		bg = graphics().createImageLayer(bgImage);
-		mBackLayer.add(bg);
 		
 		insert(new UIIdentityComponent(padding), 0);
 		
@@ -87,37 +79,37 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		if (pos == mComponents.size())
 			comp.setTrainTaker(getTrainTaker());
 		
-		// Reposition old layers to fit the new one
-		for (int p = pos; p < mComponents.size(); p++) {
-			UIComponent c = mComponents.get(p);
-			c.setPosition(new Point(c.getPosition().x + comp.getSize().width, c.getPosition().y));
-		}
-		
 		// Add the new layer
 		mBackLayer.add(comp.getBackLayer());
 		mFrontLayer.add(comp.getFrontLayer());
-		if (pos != 0) {
-			float x = mComponents.get(pos-1).getPosition().x + mComponents.get(pos-1).getSize().width;
-			comp.setPosition(new Point(x, 0));
-		}
-			
+		
 		// Install in data structures
 		mComponents.add(pos, comp);
-		comp.onAdded(this);
 		super.install(comp);
-		comp.setSizeChangedListener(this);
 		
+		// Update size
+		onSizeChanged(comp, new Dimension(0,0));
 		fireSizeChanged(oldSize);
-		// We have now resized, so we need to redraw.
-		// TODO: Actually this component shouldn't paint anything.
-		updateBackground();
 	}
 
-	private void updateBackground() {
-		CanvasImage bgImage = graphics().createImage(1000, 1000);
-		bgImage.canvas().setFillColor(0xaa00ff00);
-		bgImage.canvas().fillRect(0, 0, getSize().width, getSize().height);
-		bg.setImage(bgImage);
+	@Override
+	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		// Recalculate size
+		float width = 0;
+		float height = 0;
+		for (UIComponent child : getChildren()) {
+			width += child.getSize().width;
+			height = Math.max(height, child.getSize().height);
+		}
+		mSize = new Dimension(width, height);
+		
+		// Reposition layers
+		float x = 0;
+		for (int p = 0; p < mComponents.size(); p++) {
+			UIComponent c = mComponents.get(p);
+			c.setPosition(new Point(x, height/2-c.getSize().height/2));
+			x += c.getSize().width;
+		}
 	}
 	
 	@Override
@@ -127,13 +119,7 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 
 	@Override
 	public Dimension getSize() {
-		int width = 0;
-		float height = Float.MIN_VALUE;
-		for (UIComponent child : getChildren()) {
-			width += child.getSize().width;
-			height = Math.max(height, child.getSize().height);
-		}
-		return new Dimension(width, height);
+		return mSize;
 	}
 
 	@Override
@@ -144,11 +130,6 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 	@Override
 	public Layer getFrontLayer() {
 		return mFrontLayer;
-	}
-
-	@Override
-	public void update(float delta) {
-		super.update(delta);
 	}
 
 	@Override
@@ -177,10 +158,5 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
 			return layer;
 		return null;
-	}
-
-	@Override
-	public void onSizeChanged(UIComponent source, Dimension oldSize) {
-		// TODO: Recalculate our size
 	}
 }

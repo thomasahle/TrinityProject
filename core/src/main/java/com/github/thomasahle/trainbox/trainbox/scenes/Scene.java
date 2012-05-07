@@ -1,5 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+
 import playn.core.Layer;
 
 /**

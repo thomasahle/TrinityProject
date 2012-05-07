@@ -1,15 +1,17 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.CanvasImage;
+import playn.core.Image;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
 
 public class UICarriage {
 	
-	public static final int HEIGHT = 20;
-	public static final int WIDTH = 36;
+	public static final int HEIGHT = 25;
+	public static final int WIDTH = 75;
 	
 	private Layer mLayer;
 	private Point mPosition;
@@ -30,8 +32,8 @@ public class UICarriage {
 
 	private void drawLayer(int cargo) {
 		CanvasImage image = graphics().createImage(WIDTH, HEIGHT);
-		image.canvas().setFillColor(0xff0000ff);
-		image.canvas().fillRect(0, 0, WIDTH, HEIGHT);
+		Image emptyTrain = assets().getImage("images/emptyTrain.png");
+		image.canvas().drawImage(emptyTrain, 0, 0, WIDTH, HEIGHT);
 		image.canvas().setFillColor(0xffffffff);
 		image.canvas().drawText(""+cargo, 2, HEIGHT-2);
 		mLayer = graphics().createImageLayer(image);

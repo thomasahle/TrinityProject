@@ -12,16 +12,19 @@ import playn.core.GroupLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
+import static playn.core.PlayN.log;
 
 public class UITrain {
 	
-	public final static float SPEED = 0.034f; // pixels/s
+	public final static float SPEED = 0.064f; // pixels/s
 	public final static float PADDING = 10.f;
 	
 	private List<UICarriage> mCarriages;
 	private GroupLayer mLayer;
 	private Point mPosition;
 	private Dimension mSize;
+	private float mRightCrop;
+	private float mLeftCrop;
 	
 	public UITrain(Train train) {
 		this(fromTrain(train));
@@ -89,6 +92,11 @@ public class UITrain {
 		mPosition = position;
 		return this;
 	}
+	public UITrain vertCenterOn(UIComponent comp) {
+		float y = comp.getPosition().y + comp.getSize().height/2 - getSize().height/2;
+		setPosition(new Point(getPosition().x, y));
+		return this;
+	}
 	public Dimension getSize() {
 		return mSize;
 	}
@@ -99,5 +107,48 @@ public class UITrain {
 		return Collections.unmodifiableList(mCarriages);
 	}
 	
+	// TODO: The current cropping is a hack, which might not work well in all
+	// situations. Better would be to use this approach:
+	// https://groups.google.com/forum/?fromgroups#!topic/playn/9iEnc5HiceI
+	/**
+	 * How much we should crop off the right side.
+	 */
+	public void setCropRight(float width) {
+		mRightCrop = width;
+		applyCrop();
+	}
 	
+	/**
+	 * How much we should crop of the left side.
+	 */
+	public void setCropLeft(float width) {
+		mLeftCrop = width;
+		applyCrop();
+	}
+	
+	private void applyCrop() {
+		// Resets the carriages to visible.
+		// This is (hopefully) done off the buffer, so no worries about glitches.
+		for (UICarriage car : mCarriages)
+			car.getLayer().setVisible(true);
+		// Crop from right
+		float rightCrop = mRightCrop;
+		for (UICarriage car : mCarriages) {
+			if (rightCrop > 0) {
+				car.getLayer().setVisible(false);
+				rightCrop -= car.getSize().width;
+			}
+			else break;
+		}
+		// Crop from left
+		float leftCrop = mLeftCrop;
+		for (int i = mCarriages.size()-1; i >= 0; i--) {
+			UICarriage car = mCarriages.get(i);
+			if (leftCrop > 0) {
+				car.getLayer().setVisible(false);
+				leftCrop -= car.getSize().width;
+			}
+			else break;
+		}
+	}
 }

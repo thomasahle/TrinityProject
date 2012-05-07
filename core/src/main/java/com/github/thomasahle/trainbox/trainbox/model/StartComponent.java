@@ -5,7 +5,15 @@ import java.util.List;
 
 public class StartComponent implements Component {
 	
-	private ArrayDeque<Train> mTrains = new ArrayDeque<Train>(); 
+	private ArrayDeque<Train> mTrains;
+	
+	public StartComponent() {
+		mTrains = new ArrayDeque<Train>();
+	}
+	
+	public StartComponent(List<Train> trains) {
+		mTrains = new ArrayDeque<Train>(trains);
+	}
 	
 	public void addAllLast(List<Train> trains) {
 		mTrains.addAll(trains);

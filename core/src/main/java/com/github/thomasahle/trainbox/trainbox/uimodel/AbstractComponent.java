@@ -52,7 +52,7 @@ public abstract class AbstractComponent implements UIComponent {
 	public void setTrainTaker(TrainTaker listener) {
 		this.mTrainTaker = listener;
 	}
-	
+
 	@Override
 	public TrainTaker getTrainTaker() {
 		return mTrainTaker;
@@ -68,8 +68,10 @@ public abstract class AbstractComponent implements UIComponent {
 			mTrainsChangedListener.onTrainCreated(train);
 	}
 	protected void fireTrainDestroyed(UITrain train) {
-		if (mTrainsChangedListener != null)
+		if (mTrainsChangedListener != null){
 			mTrainsChangedListener.onTrainDestroyed(train);
+			//train.getLayer().destroy();
+		}
 	}
 	
 	

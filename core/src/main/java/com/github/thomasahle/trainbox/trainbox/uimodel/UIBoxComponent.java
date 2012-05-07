@@ -1,52 +1,70 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.List;
+import static playn.core.PlayN.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
+import playn.core.CanvasImage;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 
-public class UIBoxComponent extends AbstractComponent {
+public class UIBoxComponent extends BlackBoxComponent{
 
-	@Override
-	public List<UITrain> getCarriages() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private final static int HEIGHT = 100;
+	private int mWidth;
+	
+	private Layer mBackLayer, mFrontLayer;
+	private UITrain frontTrain;	
+	
+	public UIBoxComponent(int width) {
+		mWidth = width;
+		
+		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		
+		CanvasImage image = graphics().createImage(width, HEIGHT);
+		image.canvas().setFillColor(0xff009999);
+		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
+		mFrontLayer = graphics().createImageLayer(image);
 	}
-
+	
 	@Override
 	public Dimension getSize() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Dimension(mWidth,HEIGHT);
 	}
 
 	@Override
 	public Layer getBackLayer() {
-		// TODO Auto-generated method stub
-		return null;
+		return mBackLayer;
 	}
 
 	@Override
 	public Layer getFrontLayer() {
-		// TODO Auto-generated method stub
-		return null;
+		return mFrontLayer;
 	}
 
 	@Override
-	public void update(float delta) {
-		// TODO Auto-generated method stub
-		
+	public void onTrainEntered(UITrain train, Queue<UITrain> currentTrains) {
+		if(frontTrain!=null){
+			List<UICarriage> secondTrainCarriages = train.getCarriages();
+			List<UICarriage> firstTrainCarriages = frontTrain.getCarriages();
+			List<UICarriage> newTrainCarriages = new ArrayList<UICarriage>(firstTrainCarriages);
+			newTrainCarriages.addAll(secondTrainCarriages);
+			UITrain newTrain = new UITrain(newTrainCarriages);
+			fireTrainDestroyed(train);
+			fireTrainDestroyed(frontTrain);
+			frontTrain = null;
+			
+			currentTrains.add(newTrain);
+			
+			fireTrainCreated(newTrain);
+			newTrain.getLayer().setVisible(false);
+		}else{
+			frontTrain = train;
+		}
 	}
 
-	@Override
-	public void takeTrain(UITrain train) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public float leftBlock() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 }

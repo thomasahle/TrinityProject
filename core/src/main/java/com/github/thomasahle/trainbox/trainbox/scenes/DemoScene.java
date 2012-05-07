@@ -5,6 +5,9 @@ import static playn.core.PlayN.log;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
+
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+
 import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Image;
@@ -34,8 +37,10 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
     boolean menuVisible = false;
     ImageLayer bgLayer;
     ImageLayer textLayer;
+    TrainBox trainBox;
     
-	public DemoScene() {
+	public DemoScene(TrainBox trainBox) {
+		this.trainBox = trainBox;
 		CanvasImage bgImage = graphics().createImage(width, height);
 		Canvas canvas = bgImage.canvas();
 		canvas.setFillColor(0xff87ceeb);

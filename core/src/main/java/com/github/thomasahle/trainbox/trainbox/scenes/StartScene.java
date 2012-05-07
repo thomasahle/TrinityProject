@@ -28,19 +28,21 @@ import playn.core.Pointer;
 import playn.core.Pointer.Listener;
 import playn.core.SurfaceLayer;
 
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
 public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
-	//static final float GRAVITY = 64;
-	static final float GRAVITY = 128;
+	
+	static final float GRAVITY = 64;
 	float px, py; // these are for the watermelon
 	float x, y;
-	float vxx, vyy;
-	float axx, ayy;
-	float currTrPosX;
-	float currTrPosY;
-	
+	float vyy;
+	float ayy;
+    float vxx = 80.0f;
+    float axx = 0.00f;
+
 	
 	Image cloudImage = assets().getImage("images/pngs/trains.png");
     ImageLayer cloudLayer = graphics().createImageLayer(cloudImage);
@@ -49,17 +51,19 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
     float a = 0.0f;
     float b = 0.0f;
-    float vy = 0.0f;
+    float vy = 0.00f;
+    float vx = 0.08f;
     ImageLayer bgLayer;
     GroupLayer menuLayer;
     ImageLayer startButton; // contained in menulayer
     ImageLayer exitButton; // contained in menulayer
     ImageLayer watermelon;
     boolean menuVisible;   // whether the menu is visible
+    TrainBox trainBox;
     
-	public StartScene() {
-		currTrPosX = 0;
-		currTrPosY = 0;
+    
+	public StartScene(final TrainBox trainBox) {
+		this.trainBox = trainBox;
 		menuVisible = true;
 		CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
 		Canvas canvas = bgImage.canvas();
@@ -99,6 +103,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			@Override
 			public void onMouseDown(ButtonEvent event) {
 				startButton.setImage(startButtonOffImage);
+				trainBox.setScene(trainBox.getDemoScene());
 				
 			}
 		});
@@ -115,19 +120,17 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseUp(ButtonEvent event) {
-				
+				trainBox.setScene(trainBox.getLevelScene());
 			}
 			
 			@Override
 			public void onMouseMove(MotionEvent event) {
-				// TODO Auto-generated method stub
-				
+				exitButton.setRotation(-50);
 			}
 			
 			@Override
 			public void onMouseDown(ButtonEvent event) {
 				exitButton.setRotation(50);
-
 			}
 		});
         
@@ -157,17 +160,21 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
 		graphics().rootLayer().remove(cloudLayer);
-        graphics().rootLayer().add(menuLayer);
+        graphics().rootLayer().remove(menuLayer);
+	    graphics().rootLayer().remove(watermelon);
+
 	}
 	
 	@Override
 	public void update(float delta) {
+		//System.out.println("(" + x + "," + y + ")"+ vyy);
 		menuLayer.setVisible(menuVisible);
-		a+=0.08*delta;
+		a+= vx*delta;
+		//a+=0.08*delta;
 		if(a>bgImage.width() + cloudImage.width()){
 			a=-cloudImage.width();
 		}
-		b+=0.01*vy*delta;
+		b+= vy*delta;
 		
 		if(b>bgImage.height()+ cloudImage.height()){
 			b=0;
@@ -175,24 +182,46 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		if(b< -cloudImage.height()){
 			b=bgImage.height()+cloudImage.height();
 		}
-		
 		cloudLayer.setTranslation(a, b);
-		System.out.println("(" + currTrPosX + "," + currTrPosY + ")");
-		if (y >bgLayer.height()) {
-			System.out.println("TRUE!!!!!!");
+		
+
+		if (((y >=bgLayer.height()-watermelon.height()*2) || (x>width-watermelon.width()) )) {
 			resetWaterMelonPosition();
 		}
+		px = x;
+	    py = y;
+
+	    // Update physics.
+	    delta /= 1000;
+	    vxx += axx * delta;
+	    vyy += ayy * delta;
+	    x += vxx * delta;
+	    y += vyy * delta;
+	    
+	    
+	    
+	 // Interpolate current position.
+	    float x = (this.x * delta) + (px * (1f - delta));
+	    float y = (this.y * delta) + (py * (1f - delta));
+
+	    // Update the layer.
+	    //watermelon.resetTransform();
+	    watermelon.setTranslation(
+	      x - watermelon.image().width() / 2,
+	      y - watermelon.image().height() / 2);
 		
-		else {
+/*		else {
 		    px = x;
 		    py = y;
-	
+
 		    // Update physics.
 		    delta /= 1000;
 		    vxx += axx * delta;
 		    vyy += ayy * delta;
 		    x += vxx * delta;
 		    y += vyy * delta;
+		    
+		    
 		    
 		 // Interpolate current position.
 		    float x = (this.x * delta) + (px * (1f - delta));
@@ -203,26 +232,26 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		    watermelon.setTranslation(
 		      x - watermelon.image().width() / 2,
 		      y - watermelon.image().height() / 2);
-		}
+		}*/
 	}
 	
 	private void resetWaterMelonPosition() {
-		if ((a > 0) & (b < bgLayer.height()))
-	    	x = a+3*cloudLayer.width()/4;
-	    	y = b+1*cloudLayer.height()/6;
-	    	ayy = GRAVITY;
-	    	vyy= 0;
-		
-		
-//	    x = a+cloudLayer.width()/2;
-//	    y = b+cloudLayer.height();
-//	    ayy = GRAVITY;
-//	    vyy= 0;
-	}
+		if (y >=bgLayer.height()-watermelon.height()) {
+			System.out.println("(" + x + "," + y + ")"+ vyy);
+	    	vyy = -vyy; 
+	    	vxx = vxx/2;
+		}
+		if (((x > bgLayer.width()) || (x < 0 )) & (0 < a) & (a < width-cloudLayer.width())) {
+    		x = a+3*cloudLayer.width()/4;
+    		y = b+1*cloudLayer.height()/6;
+    		ayy = GRAVITY;
+    		vyy= 0;
+	    }
+	 }
 
+	
 	@Override
 	public void onKeyDown(Event event) {
-		System.out.println(event.key() + " Pressed");
 		if(event.key() == Key.DOWN){
 			vy += 1;
 		}

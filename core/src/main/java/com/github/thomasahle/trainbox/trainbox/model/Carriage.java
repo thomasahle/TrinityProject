@@ -61,7 +61,7 @@ public class Carriage implements Train {
 	
 	@Override
 	public String toString() {
-		String str = "["+cargo()+">";
+		String str = "("+cargo()+">";
 		if (length() > 1)
 			return tail().toString()+"-"+str;
 		return str;
