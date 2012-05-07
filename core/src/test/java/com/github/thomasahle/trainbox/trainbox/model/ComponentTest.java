@@ -169,6 +169,16 @@ public class ComponentTest {
 		assertEquals(output, pullAll(ComponentFactory.parseStrictAlgebraic(
 				new StartComponent(input), description)));
 	}
+	
+	@Test
+	public void testAlgTransposeBig() {
+		List<Train> input = ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16");
+		List<Train> output = ComponentFactory.parseTrains("1-5-9-13 2-6-10-14 3-7-11-15 4-8-12-16");
+		String description = "cat (((box box)||(box box))||((box box)||(box box)))";
+		
+		assertEquals(output, pullAll(ComponentFactory.parseStrictAlgebraic(
+				new StartComponent(input), description)));
+	}
 }
 
 
