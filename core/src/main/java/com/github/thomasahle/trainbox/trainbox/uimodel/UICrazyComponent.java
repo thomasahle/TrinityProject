@@ -3,9 +3,9 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Arrays;
-import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 import playn.core.GroupLayer;
@@ -20,9 +20,9 @@ import pythagoras.f.Point;
 
 public class UICrazyComponent extends AbstractComposite implements SizeChangedListener {
 	
-	private Deque<UITrain> mTopBuffer = new ArrayDeque<UITrain>();
-	private Deque<UITrain> mBotBuffer = new ArrayDeque<UITrain>();
-	private Deque<UITrain> mNextInbuf;
+	private LinkedList<UITrain> mTopBuffer = new LinkedList<UITrain>();
+	private LinkedList<UITrain> mBotBuffer = new LinkedList<UITrain>();
+	private LinkedList<UITrain> mNextInbuf;
 	
 	private Dimension mSize;
 	private UIComponent mTopComp, mBotComp;

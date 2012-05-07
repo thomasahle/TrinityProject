@@ -1,6 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.model;
 
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Queue;
 
 
@@ -24,7 +24,7 @@ public class SplitComponents {
 	}
 	
 	private class Hook implements Component {
-		protected Queue<Train> buffer = new ArrayDeque<Train>();
+		protected Queue<Train> buffer = new LinkedList<Train>();
 		protected Hook other;
 		@Override
 		public Train pull() {

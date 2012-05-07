@@ -1,18 +1,18 @@
 package com.github.thomasahle.trainbox.trainbox.model;
 
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.List;
 
 public class StartComponent implements Component {
 	
-	private ArrayDeque<Train> mTrains;
+	private LinkedList<Train> mTrains;
 	
 	public StartComponent() {
-		mTrains = new ArrayDeque<Train>();
+		mTrains = new LinkedList<Train>();
 	}
 	
 	public StartComponent(List<Train> trains) {
-		mTrains = new ArrayDeque<Train>(trains);
+		mTrains = new LinkedList<Train>(trains);
 	}
 	
 	public void addAllLast(List<Train> trains) {
