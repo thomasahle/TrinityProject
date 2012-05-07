@@ -63,6 +63,4 @@ public class UIDupComponent extends BlackBoxComponent{
 		clone.getLayer().setVisible(false);
 	}
 
-
-
 }

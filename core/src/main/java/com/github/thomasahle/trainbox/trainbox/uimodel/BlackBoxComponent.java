@@ -17,7 +17,7 @@ import pythagoras.f.Point;
 public abstract class BlackBoxComponent extends AbstractComponent {
 
 	private Deque<UITrain> mIncomming = new ArrayDeque<UITrain>();
-	private Deque<UITrain> mOutgoing = new ArrayDeque<UITrain>();
+	private Deque<UITrain> mCurrent = new ArrayDeque<UITrain>();
 	private Deque<UITrain> mSent = new ArrayDeque<UITrain>();
 	private TrainTaker mTrainTaker;
 	
@@ -29,7 +29,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	
 	@Override
 	public List<UITrain> getCarriages() {
-		return Collections.unmodifiableList(new ArrayList<UITrain>(mOutgoing));
+		return Collections.unmodifiableList(new ArrayList<UITrain>(mCurrent));
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 			
 			if (trainLeft >= compLeft) {
 				it.remove();
-				onTrainEntered(train, mOutgoing); // Do component specific things
+				onTrainEntered(train, mCurrent); // Do component specific things
 			}
 			else {
 				float newLeft = trainLeft + UITrain.SPEED*delta;
@@ -55,7 +55,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 			}
 		}
 		// Wait for the right moment to spit them out
-		for (Iterator<UITrain> it = mOutgoing.iterator(); it.hasNext(); ) {
+		for (Iterator<UITrain> it = mCurrent.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			
 			if (compRight < mTrainTaker.leftBlock()) {
@@ -104,7 +104,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 			return mIncomming.getLast().getPosition().x - UITrain.PADDING;
 		// If something is already being duped, don't send more stuff in
 		// TODO: Should we also wait till the last dup is fully out?
-		if (!mOutgoing.isEmpty() || !mSent.isEmpty())
+		if (!mCurrent.isEmpty() || !mSent.isEmpty())
 			return getPosition().x;
 		// If we don't have anything going on, we don't block
 		return Float.MAX_VALUE;
