@@ -67,6 +67,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 				train.setCropRight(0);
 				mTrainTaker.takeTrain(train);
 				
+				assert mSent == null;
 				mSent = train;
 				
 				log().debug("Train cloned. Sent to output queue.");
@@ -87,6 +88,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 
 	@Override
 	public void takeTrain(UITrain train) {
+		assert mIncomming == null;
 		mIncomming = train;
 		log().debug("Got a train to clone.");
 	}
