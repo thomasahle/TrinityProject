@@ -2,22 +2,19 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.log;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import playn.core.Layer;
-import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 public abstract class BlackBoxComponent extends AbstractComponent {
 
 	private UITrain mIncomming = null;
-	private Queue<UITrain> mCurrent = new ArrayDeque<UITrain>();
+	private Queue<UITrain> mCurrent = new LinkedList<UITrain>();
 	private UITrain mSent = null;
 	private TrainTaker mTrainTaker;
 	

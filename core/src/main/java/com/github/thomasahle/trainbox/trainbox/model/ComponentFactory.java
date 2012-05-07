@@ -23,13 +23,23 @@ public final class ComponentFactory {
 	 * @return A component to use
 	 */
 	@SuppressWarnings("serial")
-	private final static Map<Token, Class<? extends Component>> MAP =
-			new HashMap<Token, Class<? extends Component>>() {{
-		put(Token.BOX, BoxComponent.class);
-		put(Token.CAT, ConcatComponent.class);
-		put(Token.DUP, DupComponent.class);
-		put(Token.ID, IdentityComponent.class);
-		put(Token.FLIP, FlipComponent.class);
+	private final static Map<Token, ComponentCreator> MAP =
+			new HashMap<Token, ComponentCreator>() {{
+				put(Token.BOX, new ComponentCreator() {
+					public BoxComponent create(Component e) { return new BoxComponent(e); }
+				});
+				put(Token.CAT, new ComponentCreator() {
+					public ConcatComponent create(Component e) { return new ConcatComponent(e); }
+				});
+				put(Token.DUP, new ComponentCreator() {
+					public DupComponent create(Component e) { return new DupComponent(e); }
+				});
+				put(Token.ID, new ComponentCreator() {
+					public IdentityComponent create(Component e) { return new IdentityComponent(e); }
+				});
+				put(Token.FLIP, new ComponentCreator() {
+					public FlipComponent create(Component e) { return new FlipComponent(e); }
+				});
 	}};
 	
 	/**
@@ -110,20 +120,22 @@ public final class ComponentFactory {
 		}
 		public Component parse(Component e) {
 			try {
-				return MAP.get(type).getConstructor(Component.class).newInstance(e);
+				return MAP.get(type).create(e);
 			} catch (IllegalArgumentException e1) {
 				log().debug("This shouldn't happen", e1);
-			} catch (SecurityException e1) {
-				log().debug("This shouldn't happen", e1);
-			} catch (InstantiationException e1) {
-				log().debug("This shouldn't happen", e1);
-			} catch (IllegalAccessException e1) {
-				log().debug("This shouldn't happen", e1);
-			} catch (InvocationTargetException e1) {
-				log().debug("This shouldn't happen", e1);
-			} catch (NoSuchMethodException e1) {
-				log().debug("This shouldn't happen", e1);
 			}
+			
+//			} catch (SecurityException e1) {
+//				log().debug("This shouldn't happen", e1);
+//			} catch (InstantiationException e1) {
+//				log().debug("This shouldn't happen", e1);
+//			} catch (IllegalAccessException e1) {
+//				log().debug("This shouldn't happen", e1);
+//			} catch (InvocationTargetException e1) {
+//				log().debug("This shouldn't happen", e1);
+//			} catch (NoSuchMethodException e1) {
+//				log().debug("This shouldn't happen", e1);
+//			}
 			return null;
 		}
 		public String toString() {
