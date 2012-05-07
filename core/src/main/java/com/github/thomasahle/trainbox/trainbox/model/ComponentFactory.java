@@ -3,7 +3,7 @@ package com.github.thomasahle.trainbox.trainbox.model;
 import static playn.core.PlayN.log;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +64,7 @@ public final class ComponentFactory {
 	}
 	
 	private static Queue<Token> tokenize(String desc) {
-		Queue<Token> tokens = new ArrayDeque<Token>();
+		Queue<Token> tokens = new LinkedList<Token>();
 		String current = "";
 		for (char c : desc.toCharArray()) {
 			current += c;

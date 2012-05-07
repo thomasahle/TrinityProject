@@ -3,10 +3,10 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	private int mWidth;
 	
 	private Layer mBackLayer, mFrontLayer;
-	private Deque<UITrain> mTrains = new ArrayDeque<UITrain>();
+	private LinkedList<UITrain> mTrains = new LinkedList<UITrain>();
 	
 	public UIIdentityComponent(int width) {
 		mWidth = width;
@@ -112,7 +112,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 		if (mTrains.isEmpty())
 			res = Math.min(res, Integer.MAX_VALUE);
 		else
-			res = Math.min(res, mTrains.peekLast().getPosition().x - UITrain.PADDING);
+			res = Math.min(res, mTrains.getLast().getPosition().x - UITrain.PADDING);
 		return res;
 	}
 }

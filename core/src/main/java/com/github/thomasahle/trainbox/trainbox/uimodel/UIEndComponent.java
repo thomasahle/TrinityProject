@@ -3,10 +3,10 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,8 +25,8 @@ public class UIEndComponent extends AbstractComponent implements UIComponent, Tr
 	
 	private Layer mBackLayer, mFrontLayer, mCargoDisplayLayer;
 	private Canvas textCanvas;
-	private Deque<UITrain> mIncomming = new ArrayDeque<UITrain>();
-	private Deque<UITrain> mOutgoing = new ArrayDeque<UITrain>();
+	private LinkedList<UITrain> mIncomming = new LinkedList<UITrain>();
+	private LinkedList<UITrain> mOutgoing = new LinkedList<UITrain>();
 	private List<UICarriage> finishedCarriages = new ArrayList<UICarriage>();
 	private String finishedCargoString = "";
 	
