@@ -22,7 +22,7 @@ public class TrainBox implements Game{
 	
 	@Override
 	public void init() {
-		graphics().setSize(1920, 1080);  // this changes the size of the main window
+		//graphics().setSize(1920, 1080);  // this changes the size of the main window
 		startScene = new StartScene(this);
 		demoScene = new DemoScene(this);
 		levelScene = new LevelScene(this);

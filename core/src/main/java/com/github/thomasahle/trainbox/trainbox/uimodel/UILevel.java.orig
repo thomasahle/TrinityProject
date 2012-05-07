@@ -34,13 +34,24 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mTrack.paused(true);
 		
 		// Create a recursive track
-		
+		track.add(new UIFlipComponent(100));
+		track.add(new UIBoxComponent(100));
+		track.add(new UIFlipComponent(100));
+		track.add(new UIBoxComponent(100));
+		track.add(new UIFlipComponent(100));
 		track.add(new UIIdentityComponent(100));
-		track.add(new UISeparateComponent(100));
+<<<<<<< HEAD
+		//track.add(new UISplitComponent(new UIIdentityComponent(100), new UIIdentityComponent(100)));
+		//track.add(new UIIdentityComponent(100));
+		track.add(new UIDupComponent(100));
+		track.add(new UIDupComponent(100));
+=======
+		track.add(new UIIdentityComponent(100));
 		track.add(new UIIdentityComponent(100));
 		track.add(new UIIdentityComponent(100));
 
 		//track.add(new UIDupComponent(100));
+>>>>>>> 4279fa0e117e92b78fa0b09229bbf10bf9797374
 		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
 		//	nested.add(new UIDupComponent(100));
 		//track.add(nested);
@@ -108,11 +119,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	@Override
 	public void onPointerStart(Event event) {
 		Point p = new Point(event.localX(), event.localY());
-<<<<<<< HEAD
-		mTrack.insertChildAt(new UIJoinComponent(80), p);
-=======
-		mTrack.insertChildAt(new UIDupComponent(80), p);
->>>>>>> 7919877892d1c3e007a16a7aa3a342378a58b977
+		mTrack.insertChildAt(new UIBoxComponent(80), p);
 	}
 	@Override public void onPointerEnd(Event event) {}
 	@Override public void onPointerDrag(Event event) {}
