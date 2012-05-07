@@ -189,4 +189,9 @@ public final class ComponentFactory {
 		}
 		return trains;
 	}
+	
+	public static interface ComponentCreator {
+		public Component create(Component e);
+	}
+
 }
