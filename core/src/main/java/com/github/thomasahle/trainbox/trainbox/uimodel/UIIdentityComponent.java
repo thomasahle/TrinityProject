@@ -68,6 +68,10 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 			float trainRight = trainLeft + train.getSize().width;
 			float compRight = compLeft + getSize().width;
 			
+			//if (getParent() instanceof UISplitComponent) {
+			//	log().debug(rightBorder+" "+trainLeft+" "+compLeft);
+			//}
+			
 			// HMM: There is a problem with trains that are given to us, but already have past by.
 			// This can happen when a dup component (or another one) spits out a very long train.
 			// It is not clear if giving a train with right side out of bounds should be allowed.

@@ -31,7 +31,10 @@ public class UISplitComponent extends AbstractComposite {
 	private GroupLayer mFrontLayer = graphics().createGroupLayer();
 	
 	public UISplitComponent(UIComponent top, UIComponent bot) {
+		//mNextInbuf = mTopBuffer;
+		//mNextTaker = mTopTaker;
 		mNextInbuf = mBotBuffer;
+		mNextTaker = mBotTaker;
 		
 		mTopComp = top;
 		mBotComp = bot;
@@ -41,7 +44,6 @@ public class UISplitComponent extends AbstractComposite {
 		
 		top.setTrainTaker(mTopTaker);
 		bot.setTrainTaker(mBotTaker);
-		mNextTaker = mTopTaker;
 	}
 	
 	private void add(UIComponent comp) {
@@ -92,16 +94,20 @@ public class UISplitComponent extends AbstractComposite {
 		return mFrontLayer;
 	}
 	
+	
 	@Override
 	public void update(float delta) {
-		if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= 0) {
+		if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= mTopComp.getPosition().x) {
 			log().debug("Giving waiting split train up to "+mTopComp);
+			
 			UITrain ttrain = mTopBuffer.poll();
 			ttrain.getLayer().setVisible(true);
 			mTopComp.takeTrain(ttrain);
 		}
-		if (!mBotBuffer.isEmpty() && mBotComp.leftBlock() >= 0) {
+		
+		if (!mBotBuffer.isEmpty() && mBotComp.leftBlock() >= mBotComp.getPosition().x) {
 			log().debug("Giving waiting split train down to "+mBotComp);
+			
 			UITrain ttrain = mBotBuffer.poll();
 			ttrain.getLayer().setVisible(true);
 			mBotComp.takeTrain(ttrain);
@@ -133,10 +139,11 @@ public class UISplitComponent extends AbstractComposite {
 		@Override
 		public float leftBlock() {
 			if (mNextTaker == this)
-				return Float.MAX_VALUE;
-			return 0;
+				return getTrainTaker().leftBlock();
+			return getDeepPosition().x + getSize().width;
 		}
 	};
+	
 	private TrainTaker mBotTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
@@ -146,8 +153,8 @@ public class UISplitComponent extends AbstractComposite {
 		@Override
 		public float leftBlock() {
 			if (mNextTaker == this)
-				return Float.MAX_VALUE;
-			return 0;
+				return getTrainTaker().leftBlock();
+			return getDeepPosition().x + getSize().width;
 		}
 	};
 	private TrainTaker mNextTaker;
