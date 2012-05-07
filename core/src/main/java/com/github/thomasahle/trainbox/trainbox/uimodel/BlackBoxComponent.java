@@ -16,9 +16,9 @@ import pythagoras.f.Point;
 
 public abstract class BlackBoxComponent extends AbstractComponent {
 
-	private Deque<UITrain> mIncomming = new ArrayDeque<UITrain>();
-	private Deque<UITrain> mCurrent = new ArrayDeque<UITrain>();
-	private Deque<UITrain> mSent = new ArrayDeque<UITrain>();
+	private UITrain mIncomming = null;
+	private Queue<UITrain> mCurrent = new ArrayDeque<UITrain>();
+	private UITrain mSent = null;
 	private TrainTaker mTrainTaker;
 	
 	
@@ -40,19 +40,18 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 		float compRight = compLeft + getSize().width;
 	
 		// Move the trains all the way into the garage
-		for (Iterator<UITrain> it = mIncomming.iterator(); it.hasNext(); ) {
-			UITrain train = it.next();
-			float trainLeft = train.getPosition().x;
+		if (mIncomming != null){
+			float trainLeft = mIncomming.getPosition().x;
 			
 			if (trainLeft >= compLeft) {
-				it.remove();
-				onTrainEntered(train, mCurrent); // Do component specific things
+				onTrainEntered(mIncomming, mCurrent); // Do component specific things
+				mIncomming = null;
 			}
 			else {
 				float newLeft = trainLeft + UITrain.SPEED*delta;
-				float newRight = newLeft + train.getSize().width;
-				train.setPosition(new Point(newLeft, train.getPosition().y));
-				train.setCropRight(newRight - compRight);
+				float newRight = newLeft + mIncomming.getSize().width;
+				mIncomming.setPosition(new Point(newLeft, mIncomming.getPosition().y));
+				mIncomming.setCropRight(newRight - compRight);
 			}
 		}
 		// Wait for the right moment to spit them out
@@ -68,20 +67,19 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 				train.setCropRight(0);
 				mTrainTaker.takeTrain(train);
 				
-				mSent.add(train);
+				mSent = train;
 				
 				log().debug("Train cloned. Sent to output queue.");
 			}
 		}
 		// As they leave us, dragged by the next component, uncrop them gradually
-		for (Iterator<UITrain> it = mSent.iterator(); it.hasNext(); ) {
-			UITrain train = it.next();
-			float trainLeft = train.getPosition().x;
+		if (mSent != null) {
+			float trainLeft = mSent.getPosition().x;
 			
-			train.setCropLeft(compLeft-trainLeft);
+			mSent.setCropLeft(compLeft-trainLeft);
 			
 			if (trainLeft >= compRight) {
-				it.remove();
+				mSent = null;
 			}
 		}
 	}
@@ -89,7 +87,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 
 	@Override
 	public void takeTrain(UITrain train) {
-		mIncomming.add(train);
+		mIncomming = train;
 		log().debug("Got a train to clone.");
 	}
 
@@ -101,11 +99,11 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 		// assert mTrainTaker.leftBlock() > getPosition().x;
 		
 		// If something is being moved in, clearly don't overlap with it
-		if (!mIncomming.isEmpty())
-			return mIncomming.getLast().getPosition().x - UITrain.PADDING;
+		if (mIncomming != null)
+			return mIncomming.getPosition().x - UITrain.PADDING;
 		// If something is already being duped, don't send more stuff in
 		// TODO: Should we also wait till the last dup is fully out?
-		if (!mCurrent.isEmpty() || !mSent.isEmpty())
+		if (!mCurrent.isEmpty() || mSent != null)
 			return getPosition().x;
 		// If we don't have anything going on, we don't block
 		return Float.MAX_VALUE;
