@@ -5,14 +5,8 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
 
-import java.awt.Button;
-import java.awt.Component;
-
-import javax.swing.plaf.metal.MetalButtonUI;
-
 import playn.core.Canvas;
 import playn.core.CanvasImage;
-import playn.core.Events;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
@@ -25,9 +19,6 @@ import playn.core.Mouse.ButtonEvent;
 import playn.core.Mouse.MotionEvent;
 import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
-import playn.core.Pointer.Listener;
-import playn.core.SurfaceLayer;
-
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 
 /**

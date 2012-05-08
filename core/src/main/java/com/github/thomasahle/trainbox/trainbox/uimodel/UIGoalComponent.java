@@ -2,11 +2,8 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import java.util.List;
 
-import com.github.thomasahle.trainbox.trainbox.model.Train;
-
 import playn.core.Layer;
 import pythagoras.f.Dimension;
-import pythagoras.f.Point;
 
 public class UIGoalComponent extends AbstractComponent {
 
