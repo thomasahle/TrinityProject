@@ -38,7 +38,8 @@ public abstract class AbstractComponent implements UIComponent {
 		return mPosition;
 	}
 	
-	protected Point getDeepPosition() {
+	@Override
+	public Point getDeepPosition() {
 		Point p = getPosition();
 		UIComposite par = getParent();
 		while (par != null) {
@@ -88,10 +89,6 @@ public abstract class AbstractComponent implements UIComponent {
 	@Override
 	public void setSizeChangedListener(SizeChangedListener listener) {
 		mSizeChangedListener = listener;
-	}
-	@Override
-	public SizeChangedListener getSizeChangedListener() {
-		return mSizeChangedListener;
 	}
 	protected void fireSizeChanged(Dimension oldSize) {
 		if (mSizeChangedListener != null)

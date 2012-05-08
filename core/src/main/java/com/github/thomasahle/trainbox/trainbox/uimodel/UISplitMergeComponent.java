@@ -3,9 +3,9 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Deque;
 import java.util.List;
 
 import playn.core.GroupLayer;
@@ -18,21 +18,23 @@ import pythagoras.f.Point;
 
 // Even simpler start: Use teleportation instead of lead from/to
 
-public class UICrazyComponent extends AbstractComposite implements SizeChangedListener {
+public class UISplitMergeComponent extends AbstractComposite {
 	
-	private LinkedList<UITrain> mTopBuffer = new LinkedList<UITrain>();
-	private LinkedList<UITrain> mBotBuffer = new LinkedList<UITrain>();
-	private LinkedList<UITrain> mNextInbuf;
+	private Deque<UITrain> mTopBuffer = new ArrayDeque<UITrain>();
+	private Deque<UITrain> mBotBuffer = new ArrayDeque<UITrain>();
+	private Deque<UITrain> mNextInbuf;
 	
 	private Dimension mSize;
 	private UIComponent mTopComp, mBotComp;
-	private TrainTaker mNextOut;
 	
 	private GroupLayer mBackLayer = graphics().createGroupLayer();
 	private GroupLayer mFrontLayer = graphics().createGroupLayer();
 	
-	public UICrazyComponent(UIComponent top, UIComponent bot) {
+	public UISplitMergeComponent(UIComponent top, UIComponent bot) {
 		mNextInbuf = mTopBuffer;
+		mNextTaker = mTopTaker;
+		//mNextInbuf = mBotBuffer;
+		//mNextTaker = mBotTaker;
 		
 		mTopComp = top;
 		mBotComp = bot;
@@ -40,13 +42,11 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 		add(bot);
 		onSizeChanged(top, new Dimension(0,0));
 		
-		mNextOut = top;
 		top.setTrainTaker(mTopTaker);
 		bot.setTrainTaker(mBotTaker);
 	}
 	
 	private void add(UIComponent comp) {
-		comp.setSizeChangedListener(this);
 		mBackLayer.add(comp.getBackLayer());
 		mFrontLayer.add(comp.getFrontLayer());
 		super.install(comp);
@@ -54,6 +54,7 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		// TODO: Should those be centered horizontally?
 		//mTopComp.setPosition(new Point(0, 0));
 		mBotComp.setPosition(new Point(0, mTopComp.getSize().height));
 		
@@ -75,7 +76,20 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 
 	@Override
 	public boolean insertChildAt(UIComponent child, Point position) {
-		// We don't accept inserts
+		if (position.y < mTopComp.getSize().height
+				&& position.x < mTopComp.getSize().width
+				&& mTopComp instanceof UIComposite) {
+			return ((UIComposite)mTopComp).insertChildAt(child, position);
+		}
+		else if (position.y >= mTopComp.getSize().height
+				&& position.x < mBotComp.getSize().width
+				&& mBotComp instanceof UIComposite) {
+			Point newPoint = new Point(position.x, position.y - mTopComp.getSize().height);
+			return ((UIComposite)mBotComp).insertChildAt(child, newPoint);
+		}
+		// We could also check if a identity component has been clicked, which
+		// is a direct child of ours, but let's just assume that we only have
+		// horizontal components as children
 		return false;
 	}
 
@@ -94,16 +108,20 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 		return mFrontLayer;
 	}
 	
+	
 	@Override
 	public void update(float delta) {
-		if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= 0) {
-			log().debug("Giving waiting split train to "+mTopComp);
+		if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= mTopComp.getPosition().x) {
+			log().debug("Giving waiting split train up to "+mTopComp);
+			
 			UITrain ttrain = mTopBuffer.poll();
 			ttrain.getLayer().setVisible(true);
 			mTopComp.takeTrain(ttrain);
 		}
-		if (!mBotBuffer.isEmpty() && mBotComp.leftBlock() >= 0) {
-			log().debug("Giving waiting split train to "+mBotComp);
+		
+		if (!mBotBuffer.isEmpty() && mBotComp.leftBlock() >= mBotComp.getPosition().x) {
+			log().debug("Giving waiting split train down to "+mBotComp);
+			
 			UITrain ttrain = mBotBuffer.poll();
 			ttrain.getLayer().setVisible(true);
 			mBotComp.takeTrain(ttrain);
@@ -130,26 +148,28 @@ public class UICrazyComponent extends AbstractComposite implements SizeChangedLi
 		@Override
 		public void takeTrain(UITrain train) {
 			getTrainTaker().takeTrain(train);
-			mNextOut = mBotComp;
+			mNextTaker = mBotTaker;
 		}
 		@Override
 		public float leftBlock() {
-			if (mNextOut == this)
-				return Float.MAX_VALUE;
-			return Float.MIN_VALUE;
+			if (mNextTaker == this)
+				return getTrainTaker().leftBlock();
+			return getDeepPosition().x + getSize().width;
 		}
 	};
+	
 	private TrainTaker mBotTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
 			getTrainTaker().takeTrain(train);
-			mNextOut = mTopComp;
+			mNextTaker = mTopTaker;
 		}
 		@Override
 		public float leftBlock() {
-			if (mNextOut == this)
-				return Float.MAX_VALUE;
-			return Float.MIN_VALUE;
+			if (mNextTaker == this)
+				return getTrainTaker().leftBlock();
+			return getDeepPosition().x + getSize().width;
 		}
 	};
+	private TrainTaker mNextTaker;
 }

@@ -8,5 +8,6 @@ target
 
 *.class
 *~
+*.orig
 
 .ant-targets-build.xml

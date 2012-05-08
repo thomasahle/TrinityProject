@@ -5,6 +5,7 @@ import static playn.core.PlayN.log;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -62,5 +63,10 @@ public class UIDupComponent extends BlackBoxComponent{
 		fireTrainCreated(clone);
 		clone.getLayer().setVisible(false);
 	}
-
+	
+	@Override
+	public List<UITrain> getHiddenCarriages() {
+		// We never hide anything
+		return new ArrayList<UITrain>();
+	}
 }

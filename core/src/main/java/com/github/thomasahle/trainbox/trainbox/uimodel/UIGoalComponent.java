@@ -8,23 +8,7 @@ import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIGoalComponent implements UIComponent {
-
-	public UIGoalComponent(List<Train> goal) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void takeTrain(UITrain train) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public float leftBlock() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+public class UIGoalComponent extends AbstractComponent {
 
 	@Override
 	public List<UITrain> getCarriages() {
@@ -53,84 +37,19 @@ public class UIGoalComponent implements UIComponent {
 	@Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void setTrainTaker(TrainTaker listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public TrainTaker getTrainTaker() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPosition(Point position) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Point getPosition() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onAdded(UIComposite parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onRemoved(UIComposite parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public UIComposite getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setTrainsChangedListener(TrainsChangedListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void paused(boolean paused) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean paused() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void setListener(LevelFinishedListener listener) {
+	public void takeTrain(UITrain train) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setSizeChangedListener(SizeChangedListener listener) {
+	public float leftBlock() {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public SizeChangedListener getSizeChangedListener() {
-		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 }

@@ -35,8 +35,17 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		// Create a recursive track
 		
+		
+		
 		track.add(new UIIdentityComponent(100));
-//		track.add(new UISeparateComponent(100));
+		track.add(new UISeparateComponent(100));
+		
+		UIHorizontalComponent top = new UIHorizontalComponent(60);
+		UIHorizontalComponent bot = new UIHorizontalComponent(60);
+		track.add(new UISplitMergeComponent(top, bot));
+		top.add(new UIJoinComponent(100));
+		bot.add(new UIJoinComponent(100));
+		
 		track.add(new UIIdentityComponent(100));
 		track.add(new UIIdentityComponent(100));
 

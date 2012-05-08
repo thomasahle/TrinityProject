@@ -5,6 +5,7 @@ import static playn.core.PlayN.log;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -58,6 +59,13 @@ public class UIFlipComponent extends BlackBoxComponent {
 		}else{
 			unpairedTrain = train;
 		}
+	}
+
+	@Override
+	public List<UITrain> getHiddenCarriages() {
+		if (unpairedTrain != null)
+			return Arrays.asList(unpairedTrain);
+		return new ArrayList<UITrain>();
 	}
 
 }

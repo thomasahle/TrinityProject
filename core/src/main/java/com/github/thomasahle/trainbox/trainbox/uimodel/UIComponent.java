@@ -1,8 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 
 import playn.core.Layer;
 import pythagoras.f.Point;
@@ -18,56 +16,77 @@ public interface UIComponent extends TrainTaker {
 	 */
 	public List<UITrain> getCarriages();
 	/**
-	 * Change: Return a layer of the right size instead. Right?
-	 * No: you cant get the size of a layer
+	 * This is necessary since layers don't have a size.
+	 * We use this to layout components.
+	 * @return The size of the component.
 	 */
 	public pythagoras.f.Dimension getSize();
 	/**
-	 * This layer will be added by the parent Composite somewhere nice.
-	 * Later we may draw our stuff on it.
+	 * @return A layer to be placed behind the trains. Draw whatever you like.
 	 */
 	public Layer getBackLayer();
+	/**
+	 * @return A layer to be placed in front of trains. Draw whatever you like.
+	 */
 	public Layer getFrontLayer();
 	/**
 	 * The uicomponent can use this to move the trains it controls.
-	 * Do we also need a paint(delta) method?
-	 * @param delta
+	 * @param delta seconds since laste update
 	 */
 	public void update(float delta);
 	/**
-	 * The train taker is the thing that takes over a train when the component is done with it.
-	 * @param listener
+	 * @param trainTaker the thing that takes over a train when the component is done with it.
 	 */
-	public void setTrainTaker(TrainTaker listener);
+	public void setTrainTaker(TrainTaker trainTaker);
+	/**
+	 * @return the TrainTaker we are currently passing trains to,
+	 * or NullTaker if no such taker is set.
+	 */
 	public TrainTaker getTrainTaker();
 	/**
-	 * The position is the location of the component inside its parent.
-	 * @param position
+	 * @param position The position is the location of the component inside its parent.
 	 */
 	public void setPosition(Point position);
 	/**
-	 * The position is the location of the component inside its parent.
-	 * @return
+	 * @return The position is the location of the component inside its parent.
 	 */
 	public Point getPosition();
 	/**
+	 * @return The position of the component relative to the entire track
+	 */
+	public Point getDeepPosition();
+	/**
 	 * Called when the component is added to another one.
+	 * @param parent The parent that now owns us
 	 */
 	public void onAdded(UIComposite parent);
 	/**
 	 * Called when the component is removed from another one.
+	 * @param parent The parent that used to own us
 	 */
 	public void onRemoved(UIComposite parent);
 	/**
-	 * Returns the parent of the component or null if there is no parent
+	 * @return the parent of the component or null if there is no parent
 	 */
 	public UIComposite getParent();
 	/**
-	 * 
+	 * @param listener A listener that is notified when the component creates
+	 * or destroys trains.
 	 */
 	public void setTrainsChangedListener(TrainsChangedListener listener);
+	/**
+	 * @param paused true if the component should stop moving trains around. False otherwise.
+	 * The component will still receive update calls, so it can animate itself.
+	 */
 	public void paused(boolean paused);
+	/**
+	 * @return the current pause status of the component
+	 */
 	public boolean paused();
+	/**
+	 * @param listener A listener that is notified when the component changes size.
+	 * This mostly happens when new components are added inside, but in the future
+	 * it may also stem from automatic resizing to fit trains.
+	 */
 	public void setSizeChangedListener(SizeChangedListener listener);
-	public SizeChangedListener getSizeChangedListener();
 }

@@ -1,11 +1,12 @@
 package com.github.thomasahle.trainbox.trainbox.model;
 
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
 public class StartComponent implements Component {
 	
-	private LinkedList<Train> mTrains;
+	private Deque<Train> mTrains;
 	
 	public StartComponent() {
 		mTrains = new LinkedList<Train>();

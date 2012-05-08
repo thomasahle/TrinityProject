@@ -3,11 +3,11 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import playn.core.CanvasImage;
@@ -21,7 +21,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	private int mWidth;
 	
 	private Layer mBackLayer, mFrontLayer;
-	private LinkedList<UITrain> mTrains = new LinkedList<UITrain>();
+	private Deque<UITrain> mTrains = new LinkedList<UITrain>();
 	
 	public UIIdentityComponent(int width) {
 		mWidth = width;

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 import playn.core.Canvas;
 import playn.core.CanvasImage;
@@ -25,8 +26,8 @@ public class UIEndComponent extends AbstractComponent implements UIComponent, Tr
 	
 	private Layer mBackLayer, mFrontLayer, mCargoDisplayLayer;
 	private Canvas textCanvas;
-	private LinkedList<UITrain> mIncomming = new LinkedList<UITrain>();
-	private LinkedList<UITrain> mOutgoing = new LinkedList<UITrain>();
+	private Queue<UITrain> mIncomming = new LinkedList<UITrain>();
+	private Queue<UITrain> mOutgoing = new LinkedList<UITrain>();
 	private List<UICarriage> finishedCarriages = new ArrayList<UICarriage>();
 	private String finishedCargoString = "";
 	
@@ -52,7 +53,7 @@ public class UIEndComponent extends AbstractComponent implements UIComponent, Tr
 
 	@Override
 	public List<UITrain> getCarriages() {
-		return Collections.unmodifiableList(new ArrayList<UITrain>(mOutgoing));
+		return new ArrayList<UITrain>(mOutgoing);
 	}
 
 	@Override
