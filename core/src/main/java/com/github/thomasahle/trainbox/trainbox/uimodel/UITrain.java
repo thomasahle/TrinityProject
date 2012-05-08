@@ -12,7 +12,6 @@ import playn.core.GroupLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
-import static playn.core.PlayN.log;
 
 public class UITrain {
 	

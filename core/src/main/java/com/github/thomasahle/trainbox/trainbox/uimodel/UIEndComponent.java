@@ -5,8 +5,6 @@ import static playn.core.PlayN.log;
 
 import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
