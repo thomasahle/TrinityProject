@@ -38,6 +38,9 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	public void update(float delta) {
 		// TODO: We should indicate if the component is loaded or not.
 		
+		if (paused())
+			return;
+		
 		float compLeft = getDeepPosition().x;
 		float compRight = compLeft + getSize().width;
 	
