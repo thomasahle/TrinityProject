@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.core;
 
 import static playn.core.PlayN.assets;
+import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
 import playn.core.Game;
 
@@ -38,7 +39,7 @@ public class TrainBox implements Game{
 		
 		setScene(new LoadingScene(this));
 		
-		//graphics().setSize(1920, 1080);  // this changes the size of the main window
+		graphics().setSize(1024, 640);  // this changes the size of the main window
 		watcher.add(	assets().getImage("images/pngs/trains.png"));
 		watcher.add(	assets().getImage("images/pngs/exit1Tr.png"));
 		watcher.add(	assets().getImage("images/pngs/exit2Tr.png"));
