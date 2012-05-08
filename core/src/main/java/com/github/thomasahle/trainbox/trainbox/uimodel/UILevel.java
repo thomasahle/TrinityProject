@@ -55,16 +55,14 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		//track.add(nested);
 		
 		// This wont be needed when StartComponent is finished
+		mTrainLayer = graphics().createGroupLayer();
 		for (Train train : level.input) {
 			UITrain uitrain = new UITrain(train);
 			uitrain.setPosition(new Point(-uitrain.getSize().width, 0));
 			mTrack.takeTrain(uitrain);
+			mTrainLayer.add(uitrain.getLayer());
 		}
-		
-		mTrainLayer = graphics().createGroupLayer();
-		//mTrainLayer.setTranslation(0, mTrack.getSize().height/2 - UICarriage.HEIGHT/2);
-		for (UITrain train : mTrack.getCarriages())
-			mTrainLayer.add(train.getLayer());
+			
 		
 		mLayer.add(mTrack.getBackLayer());
 		mLayer.add(mTrainLayer);

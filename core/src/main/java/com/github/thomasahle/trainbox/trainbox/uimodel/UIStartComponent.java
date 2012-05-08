@@ -2,21 +2,15 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import java.util.List;
 
-import com.github.thomasahle.trainbox.trainbox.model.Train;
-
 import playn.core.Layer;
 import pythagoras.f.Dimension;
+
+import com.github.thomasahle.trainbox.trainbox.model.Train;
 
 public class UIStartComponent extends AbstractComponent {
 
 	public UIStartComponent(List<Train> input) {
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public List<UITrain> getCarriages() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

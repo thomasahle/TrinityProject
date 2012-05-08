@@ -3,9 +3,9 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -47,11 +47,6 @@ public class UIEndComponent extends AbstractComponent implements UIComponent, Tr
 		mCargoDisplayLayer.setTranslation(this.getPosition().x, this.getPosition().y);
 		
 		
-	}
-
-	@Override
-	public List<UITrain> getCarriages() {
-		return new ArrayList<UITrain>(mOutgoing);
 	}
 
 	@Override

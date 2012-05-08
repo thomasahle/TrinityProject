@@ -1,17 +1,9 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.List;
-
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 
 public class UIGoalComponent extends AbstractComponent {
-
-	@Override
-	public List<UITrain> getCarriages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Dimension getSize() {

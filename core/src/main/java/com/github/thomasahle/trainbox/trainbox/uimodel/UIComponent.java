@@ -1,7 +1,5 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.List;
-
 import playn.core.Layer;
 import pythagoras.f.Point;
 
@@ -9,12 +7,6 @@ import pythagoras.f.Point;
  * An interesting component that trains can go into and maybe come out.
  */
 public interface UIComponent extends TrainTaker {
-	/**
-	 * We need a way to get hold of the trains from the top level.
-	 * And as the components can create more trains as we go along,
-	 * we've got to collect them through recursion.
-	 */
-	public List<UITrain> getCarriages();
 	/**
 	 * This is necessary since layers don't have a size.
 	 * We use this to layout components.
