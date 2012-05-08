@@ -6,7 +6,7 @@ import java.util.List;
 
 public class StartComponent implements Component {
 	
-	private Deque<Train> mTrains;
+	private LinkedList<Train> mTrains;
 	
 	public StartComponent() {
 		mTrains = new LinkedList<Train>();
