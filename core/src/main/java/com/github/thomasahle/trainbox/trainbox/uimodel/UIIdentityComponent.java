@@ -21,7 +21,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	private int mWidth;
 	
 	private Layer mBackLayer, mFrontLayer;
-	private Deque<UITrain> mTrains = new LinkedList<UITrain>();
+	private LinkedList<UITrain> mTrains = new LinkedList<UITrain>();
 	
 	public UIIdentityComponent(int width) {
 		mWidth = width;
