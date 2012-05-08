@@ -42,7 +42,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		UIHorizontalComponent top = new UIHorizontalComponent(60);
 		UIHorizontalComponent bot = new UIHorizontalComponent(60);
-		track.add(new UISplitComponent(top, bot));
+		track.add(new UISplitMergeComponent(top, bot));
 		top.add(new UIJoinComponent(100));
 		bot.add(new UIJoinComponent(100));
 		

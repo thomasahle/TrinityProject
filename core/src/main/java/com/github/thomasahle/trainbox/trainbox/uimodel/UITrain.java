@@ -93,7 +93,7 @@ public class UITrain {
 		return this;
 	}
 	public UITrain vertCenterOn(UIComponent comp) {
-		float y = comp.getPosition().y + comp.getSize().height/2 - getSize().height/2;
+		float y = comp.getDeepPosition().y + comp.getSize().height/2 - getSize().height/2;
 		setPosition(new Point(getPosition().x, y));
 		return this;
 	}
