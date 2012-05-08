@@ -54,6 +54,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		// TODO: Should those be centered horizontally?
 		//mTopComp.setPosition(new Point(0, 0));
 		mBotComp.setPosition(new Point(0, mTopComp.getSize().height));
 		
@@ -75,7 +76,20 @@ public class UISplitMergeComponent extends AbstractComposite {
 
 	@Override
 	public boolean insertChildAt(UIComponent child, Point position) {
-		// We don't accept inserts
+		if (position.y < mTopComp.getSize().height
+				&& position.x < mTopComp.getSize().width
+				&& mTopComp instanceof UIComposite) {
+			return ((UIComposite)mTopComp).insertChildAt(child, position);
+		}
+		else if (position.y >= mTopComp.getSize().height
+				&& position.x < mBotComp.getSize().width
+				&& mBotComp instanceof UIComposite) {
+			Point newPoint = new Point(position.x, position.y - mTopComp.getSize().height);
+			return ((UIComposite)mBotComp).insertChildAt(child, newPoint);
+		}
+		// We could also check if a identity component has been clicked, which
+		// is a direct child of ours, but let's just assume that we only have
+		// horizontal components as children
 		return false;
 	}
 

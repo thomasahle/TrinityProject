@@ -49,7 +49,7 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 				// Okay, this is not terribly object oriented. But it works for now.
 				if (c instanceof UIComposite) {
 					Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
-					return ((UIComposite)c).insertChildAt(c, recursivePoint);
+					return ((UIComposite)c).insertChildAt(child, recursivePoint);
 				}
 				else if (c instanceof UIIdentityComponent) {
 					log().debug("Inserting at position "+p);
