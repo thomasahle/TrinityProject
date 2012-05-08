@@ -37,8 +37,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		
 		// Initialize the level we are going to try to solve
 		mLevel = new UILevel(new Level(
-				ComponentFactory.parseTrains("1-2-3-4"),
-				ComponentFactory.parseTrains("1 2 3 4 5 6 7 8")));
+				ComponentFactory.parseTrains("1-2 3-4"),
+				ComponentFactory.parseTrains("1-3 2-4")));
 		mLevel.setListener(this);
 		
 		// Connect the play button to the track
