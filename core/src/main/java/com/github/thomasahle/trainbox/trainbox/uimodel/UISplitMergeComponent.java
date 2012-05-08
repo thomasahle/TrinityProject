@@ -153,7 +153,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 		public float leftBlock() {
 			if (mNextTaker == this)
 				return getTrainTaker().leftBlock();
-			return getDeepPosition().x + getSize().width;
+			float end = mTopComp.getDeepPosition().x + mTopComp.getSize().width;
+			return Math.min(end, getTrainTaker().leftBlock());
 		}
 	};
 	
@@ -167,7 +168,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 		public float leftBlock() {
 			if (mNextTaker == this)
 				return getTrainTaker().leftBlock();
-			return getDeepPosition().x + getSize().width;
+			float end = mBotComp.getDeepPosition().x + mBotComp.getSize().width;
+			return Math.min(end, getTrainTaker().leftBlock());
 		}
 	};
 	private TrainTaker mNextTaker;

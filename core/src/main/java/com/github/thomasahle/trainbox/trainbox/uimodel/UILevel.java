@@ -43,11 +43,26 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		UIHorizontalComponent top = new UIHorizontalComponent(60);
 		UIHorizontalComponent bot = new UIHorizontalComponent(60);
 		track.add(new UISplitMergeComponent(top, bot));
-		top.add(new UIJoinComponent(100));
-		bot.add(new UIJoinComponent(100));
 		
-		track.add(new UIIdentityComponent(100));
-		track.add(new UIIdentityComponent(100));
+		UIHorizontalComponent top1 = new UIHorizontalComponent(40);
+		UIHorizontalComponent bot1 = new UIHorizontalComponent(40);
+		top.add(new UISplitMergeComponent(top1,bot1));
+		top1.add(new UIJoinComponent(80));
+		top1.add(new UIJoinComponent(80));
+		bot1.add(new UIJoinComponent(80));
+		bot1.add(new UIJoinComponent(80));
+		
+		UIHorizontalComponent top2 = new UIHorizontalComponent(40);
+		UIHorizontalComponent bot2 = new UIHorizontalComponent(40);
+		bot.add(new UISplitMergeComponent(top2,bot2));
+		top2.add(new UIJoinComponent(80));
+		top2.add(new UIJoinComponent(80));
+		bot2.add(new UIJoinComponent(80));
+		bot2.add(new UIJoinComponent(80));
+		
+		track.add(new UIIdentityComponent(200));
+		track.add(new UIIdentityComponent(200));
+		track.add(new UIIdentityComponent(200));
 
 		//track.add(new UIDupComponent(100));
 		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
