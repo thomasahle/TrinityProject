@@ -26,8 +26,21 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	
 	@Override
 	public List<UITrain> getCarriages() {
-		return Collections.unmodifiableList(new ArrayList<UITrain>(mCurrent));
+		List<UITrain> carriages = new ArrayList<UITrain>(mCurrent);
+		if (mIncomming != null) carriages.add(mIncomming);
+		if (mSent != null) carriages.add(mSent);
+		carriages.addAll(getHiddenCarriages());
+		// We don't need to use 'unmodifiable' here, as the list is specially
+		// created in this method call anyway.
+		return carriages;
 	}
+	
+	/**
+	 * Used to retrieve intermediate 'unpaired' trains saved by black box components.
+	 * This method is mostly because it is too easy to forget to override getCarriages().
+	 * @return a list of trains that have 'entered', but are not yet added to currentTrains.
+	 */
+	public abstract List<UITrain> getHiddenCarriages();
 	
 	@Override
 	public void update(float delta) {

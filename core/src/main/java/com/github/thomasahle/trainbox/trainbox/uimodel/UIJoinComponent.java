@@ -3,6 +3,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
@@ -66,5 +67,10 @@ public class UIJoinComponent extends BlackBoxComponent{
 		}
 	}
 
-
+	@Override
+	public List<UITrain> getHiddenCarriages() {
+		if (frontTrain != null)
+			return Arrays.asList(frontTrain);
+		return new ArrayList<UITrain>();
+	}
 }
