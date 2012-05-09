@@ -16,7 +16,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
 	private UIStartComponent mStart;
-	private UIGoalComponent mGoal;
+	private UIEndComponent mGoal;
 	private UIComposite mTrack;
 	private Level mLevel;
 	private LevelFinishedListener mListener;
@@ -25,7 +25,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
-		UIHorizontalComponent track = new UIHorizontalComponent(100); 
+		UIHorizontalComponent track = new UIHorizontalComponent(200); 
 		mTrack = track;
 		//mStart = new UIStartComponent(level.input);
 		//track.add(mStart);
@@ -66,8 +66,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		bot2.add(new UIJoinComponent(80));
 		
 		track.add(new UIIdentityComponent(200));
-		track.add(new UIIdentityComponent(200));
-		track.add(new UIIdentityComponent(200));
+		
+		track.add(new UIEndComponent(400));
 
 		//track.add(new UIDupComponent(100));
 		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
