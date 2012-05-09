@@ -77,11 +77,11 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         menuLayer = graphics().createGroupLayer();
         menuLayer.setTranslation(width/3, height/3);
         menuLayer.setScale((float) 0.3);
-        final Image startButtonOnImage = assets().getImage("images/pngs/start1Tr.png");
+        final Image startButtonOnImage = assets().getImage("images/pngs/startOn.png");
         final ImageLayer startButton = graphics().createImageLayer(startButtonOnImage);
         menuLayer.add(startButton);
         startButton.addListener(new Mouse.Listener() {
-            Image startButtonOffImage = assets().getImage("images/pngs/start2Tr.png");
+            Image startButtonOffImage = assets().getImage("images/pngs/startOff.png");
             
 			@Override
 			public void onMouseWheelScroll(WheelEvent event) {	
@@ -90,7 +90,8 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseUp(ButtonEvent event) {
-				startButton.setImage(startButtonOnImage);
+				startButton.setImage(startButtonOffImage);
+
 				
 			}
 			
@@ -102,14 +103,13 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseDown(ButtonEvent event) {
-				startButton.setImage(startButtonOffImage);
 				trainBox.getScene().onDetach();
 				trainBox.setScene(trainBox.getDemoScene());
 				
 			}
 		});
         
-        final Image exitButtonImage = assets().getImage("images/pngs/exit2Tr.png");
+        final Image exitButtonImage = assets().getImage("images/pngs/startOff.png");
         final ImageLayer exitButton = graphics().createImageLayer(exitButtonImage);
         menuLayer.add(exitButton);
         exitButton.setTranslation(startButton.scaledWidth()+50, 0);
