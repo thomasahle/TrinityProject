@@ -23,7 +23,18 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 		
 		float compLeft = getDeepPosition().x;
 		float compRight = compLeft + getSize().width;
-	
+		
+		// We need to handle the outgoing train first, in order to make space for the next one.
+		// As the train leaves us, dragged by the next component, uncrop it gradually
+		if (mSent != null) {
+			float trainLeft = mSent.getPosition().x;
+			
+			mSent.setCropLeft(compLeft-trainLeft);
+			
+			if (trainLeft >= compRight) {
+				mSent = null;
+			}
+		}
 		// Move the trains all the way into the garage
 		if (mIncomming != null){
 			float trainLeft = mIncomming.getPosition().x;
@@ -34,6 +45,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 			}
 			else {
 				float newLeft = trainLeft + UITrain.SPEED*delta;
+				newLeft = Math.min(newLeft, compLeft+0.1f); // Don't move it too far
 				float newRight = newLeft + mIncomming.getSize().width;
 				mIncomming.setPosition(new Point(newLeft, mIncomming.getPosition().y));
 				mIncomming.setCropRight(newRight - compRight);
@@ -50,20 +62,13 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 				train.getLayer().setVisible(true);
 				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
 				train.setCropRight(0);
+				log().debug("compRight: "+compRight);
+				log().debug("Before it was: "+getTrainTaker().leftBlock());
 				getTrainTaker().takeTrain(train);
+				log().debug("Now it is: "+getTrainTaker().leftBlock());
 				
 				assert mSent == null;
 				mSent = train;
-			}
-		}
-		// As they leave us, dragged by the next component, uncrop them gradually
-		if (mSent != null) {
-			float trainLeft = mSent.getPosition().x;
-			
-			mSent.setCropLeft(compLeft-trainLeft);
-			
-			if (trainLeft >= compRight) {
-				mSent = null;
 			}
 		}
 	}
@@ -71,6 +76,9 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 
 	@Override
 	public void takeTrain(UITrain train) {
+		// The train can't have passed us already. This makes things a lot simpler. 
+		assert train.getPosition().x < getDeepPosition().x+getSize().width;
+		// We can only drag in one train at time.
 		assert mIncomming == null;
 		mIncomming = train;
 		log().debug("Got a train to move inside.");
@@ -83,19 +91,24 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 		// 'check' this assertion.
 		//assert mTrainTaker.leftBlock() > getPosition().x;
 		
+		// If we don't have anything going on, we don't block
+		float res = Float.MAX_VALUE;
+		
+		// Don't allow trains to jump over us
+		res = Math.min(res, getDeepPosition().x+getSize().width-0.1f);
+		
 		// If something is being moved in, clearly don't overlap with it
 		if (mIncomming != null)
-			return mIncomming.getPosition().x - UITrain.PADDING;
+			res = Math.min(res, mIncomming.getPosition().x - UITrain.PADDING);
 		
 		// If something is already being processed, don't send more stuff in.
 		// Notice that the implementations of components may 'hide' trains from
 		// us, that is they don't add them to mCurrent in order to have more trains
 		// moved in.
 		if (!mCurrent.isEmpty() || mSent != null)
-			return getPosition().x;
+			res = Math.min(res, getDeepPosition().x);
 		
-		// If we don't have anything going on, we don't block
-		return Float.MAX_VALUE;
+		return res;
 	}
 	
 	/**

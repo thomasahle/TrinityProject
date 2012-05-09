@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.thomasahle.trainbox.trainbox.model.Carriage;
+import com.github.thomasahle.trainbox.trainbox.model.NullTrain;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
 
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
+import static playn.core.PlayN.log;
 
 public class UITrain {
 	
@@ -104,6 +107,17 @@ public class UITrain {
 	}
 	public List<UICarriage> getCarriages() {
 		return Collections.unmodifiableList(mCarriages);
+	}
+	
+	/**
+	 * Returns a Train object you can use for `toString` and things.
+	 * @return The `Train` representing this `UITrain`. 
+	 */
+	public Train train() {
+		Train train = new NullTrain();
+		for (int i = mCarriages.size()-1; i >= 0; i--)
+			train = new Carriage(mCarriages.get(i).getCargo()).addLast(train);
+		return train;
 	}
 	
 	// TODO: The current cropping is a hack, which might not work well in all
