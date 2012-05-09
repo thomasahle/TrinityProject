@@ -71,10 +71,6 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 			//	log().debug(rightBorder+" "+trainLeft+" "+compLeft);
 			//}
 			
-			// HMM: There is a problem with trains that are given to us, but already have past by.
-			// This can happen when a dup component (or another one) spits out a very long train.
-			// It is not clear if giving a train with right side out of bounds should be allowed.
-			
 			// If the train is now entirely gone from us.
 			if (trainLeft >= compRight) {
 				it.remove();
@@ -101,16 +97,20 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 
 	@Override
 	public void takeTrain(UITrain train) {
+		// The train can't have passed us already. This makes things a lot simpler. 
+		assert train.getPosition().x < getDeepPosition().x+getSize().width;
 		mTrains.add(train);
 		train.vertCenterOn(this);
 	}
 
 	@Override
 	public float leftBlock() {
+		// Channel leftBlock from previous component
 		float res = getTrainTaker().leftBlock();
-		if (mTrains.isEmpty())
-			res = Math.min(res, Integer.MAX_VALUE);
-		else
+		// Don't allow trains to jump over us
+		res = Math.min(res, getDeepPosition().x+getSize().width-0.1f);
+		// Don't overlap trains we currently manage
+		if (!mTrains.isEmpty())
 			res = Math.min(res, mTrains.getLast().getPosition().x - UITrain.PADDING);
 		return res;
 	}

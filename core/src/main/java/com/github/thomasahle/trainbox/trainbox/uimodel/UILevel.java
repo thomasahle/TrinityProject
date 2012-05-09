@@ -37,7 +37,12 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		
 		
-		track.add(new UIIdentityComponent(100));
+		/*for (int i = 0; i < 10; i++)
+			track.add(new UIIdentityComponent(1));
+		track.add(new UISeparateComponent(1));
+		for (int i = 0; i < 10; i++)
+			track.add(new UIIdentityComponent(1));*/
+		
 		track.add(new UISeparateComponent(100));
 		
 		UIHorizontalComponent top = new UIHorizontalComponent(60);
