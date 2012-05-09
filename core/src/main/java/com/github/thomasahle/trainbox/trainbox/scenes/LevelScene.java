@@ -25,15 +25,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
-	TrainBox trainBox;
 	
-
-
 	public LevelScene(TrainBox trainBox) {
-		this.trainBox = trainBox;
+		
 		// A background image. This should be really nice.
-		//TODO set the graphics to stretch to the max available space.
-		graphics().setSize(graphics().screenWidth(), graphics().screenHeight());
 		final int HEIGHT = graphics().screenHeight();
 		final int WIDTH = graphics().screenWidth();
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
@@ -42,8 +37,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		
 		// Initialize the level we are going to try to solve
 		mLevel = new UILevel(new Level(
-				ComponentFactory.parseTrains("1-2-3 4-4"),
-				ComponentFactory.parseTrains("1-2-3 4-4")));
+				ComponentFactory.parseTrains("1-5-9-13 2-6-10-14 3-7-11-15 4-8-12-16"),
+				ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16")));
 		mLevel.setListener(this);
 		
 		// Connect the play button to the track

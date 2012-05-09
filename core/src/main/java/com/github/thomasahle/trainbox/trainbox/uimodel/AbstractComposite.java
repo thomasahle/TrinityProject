@@ -1,20 +1,11 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This is just a helper abstract.
  */
-public abstract class AbstractComposite extends AbstractComponent implements UIComposite, TrainsChangedListener {
-	@Override
-	public List<UITrain> getCarriages() {
-		List<UITrain> carriages = new ArrayList<UITrain>();
-		for (UIComponent comp : getChildren())
-			carriages.addAll(comp.getCarriages());
-		return carriages;
-	}
-	
+public abstract class AbstractComposite extends AbstractComponent implements UIComposite, TrainsChangedListener, SizeChangedListener {
 	@Override
 	public void update(float delta) {
 		List<UIComponent> list = getChildren();
@@ -23,8 +14,10 @@ public abstract class AbstractComposite extends AbstractComponent implements UIC
 	}
 	
 	protected void install(UIComponent child) {
-		child.paused(paused());
 		child.setTrainsChangedListener(this);
+		child.setSizeChangedListener(this);
+		child.paused(paused());
+		child.onAdded(this);
 	}
 	public void onTrainCreated(UITrain train) {
 		fireTrainCreated(train);

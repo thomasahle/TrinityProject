@@ -16,7 +16,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
 	private UIStartComponent mStart;
-	private UIGoalComponent mGoal;
+	private UIEndComponent mGoal;
 	private UIComposite mTrack;
 	private Level mLevel;
 	private LevelFinishedListener mListener;
@@ -25,7 +25,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
-		UIHorizontalComponent track = new UIHorizontalComponent(100); 
+		UIHorizontalComponent track = new UIHorizontalComponent(200); 
 		mTrack = track;
 		//mStart = new UIStartComponent(level.input);
 		//track.add(mStart);
@@ -34,24 +34,55 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mTrack.paused(true);
 		
 		// Create a recursive track
-		track.add(new UIIdentityComponent(100));
-		track.add(new UIIdentityComponent(100));
+		
+		
+		
+		/*for (int i = 0; i < 10; i++)
+			track.add(new UIIdentityComponent(1));
+		track.add(new UISeparateComponent(1));
+		for (int i = 0; i < 10; i++)
+			track.add(new UIIdentityComponent(1));*/
+		
+		track.add(new UISeparateComponent(100));
+		
+		UIHorizontalComponent top = new UIHorizontalComponent(60);
+		UIHorizontalComponent bot = new UIHorizontalComponent(60);
+		track.add(new UISplitMergeComponent(top, bot));
+		
+		UIHorizontalComponent top1 = new UIHorizontalComponent(40);
+		UIHorizontalComponent bot1 = new UIHorizontalComponent(40);
+		top.add(new UISplitMergeComponent(top1,bot1));
+		top1.add(new UIJoinComponent(80));
+		top1.add(new UIJoinComponent(80));
+		bot1.add(new UIJoinComponent(80));
+		bot1.add(new UIJoinComponent(80));
+		
+		UIHorizontalComponent top2 = new UIHorizontalComponent(40);
+		UIHorizontalComponent bot2 = new UIHorizontalComponent(40);
+		bot.add(new UISplitMergeComponent(top2,bot2));
+		top2.add(new UIJoinComponent(80));
+		top2.add(new UIJoinComponent(80));
+		bot2.add(new UIJoinComponent(80));
+		bot2.add(new UIJoinComponent(80));
+		
+		track.add(new UIIdentityComponent(200));
+		
+		track.add(new UIEndComponent(400));
+
 		//track.add(new UIDupComponent(100));
 		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
 		//	nested.add(new UIDupComponent(100));
 		//track.add(nested);
 		
 		// This wont be needed when StartComponent is finished
+		mTrainLayer = graphics().createGroupLayer();
 		for (Train train : level.input) {
 			UITrain uitrain = new UITrain(train);
 			uitrain.setPosition(new Point(-uitrain.getSize().width, 0));
 			mTrack.takeTrain(uitrain);
+			mTrainLayer.add(uitrain.getLayer());
 		}
-		
-		mTrainLayer = graphics().createGroupLayer();
-		mTrainLayer.setTranslation(0, mTrack.getSize().height/2 - UICarriage.HEIGHT/2);
-		for (UITrain train : mTrack.getCarriages())
-			mTrainLayer.add(train.getLayer());
+			
 		
 		mLayer.add(mTrack.getBackLayer());
 		mLayer.add(mTrainLayer);
@@ -104,6 +135,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	@Override
 	public void onPointerStart(Event event) {
 		Point p = new Point(event.localX(), event.localY());
+//		mTrack.insertChildAt(new UIJoinComponent(80), p);
 		mTrack.insertChildAt(new UIDupComponent(80), p);
 	}
 	@Override public void onPointerEnd(Event event) {}

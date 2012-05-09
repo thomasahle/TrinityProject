@@ -103,7 +103,11 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseDown(ButtonEvent event) {
+<<<<<<< HEAD
 				trainBox.getScene().onDetach();
+=======
+				startButton.setImage(startButtonOffImage);
+>>>>>>> 512b3a625e4760266cabf71b2055306be2d3708d
 				trainBox.setScene(trainBox.getDemoScene());
 				
 			}
@@ -121,19 +125,17 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseUp(ButtonEvent event) {
-				
+				trainBox.setScene(trainBox.getLevelScene());
 			}
 			
 			@Override
 			public void onMouseMove(MotionEvent event) {
-				// TODO Auto-generated method stub
-				
+				exitButton.setRotation(-50);
 			}
 			
 			@Override
 			public void onMouseDown(ButtonEvent event) {
 				exitButton.setRotation(50);
-
 			}
 		});
         

@@ -3,6 +3,11 @@
 
   <source path='core'/>
   <source path='html'/>
+  <source path='model'/>
+  <source path='resources'/>
+  <source path='scenes'/>
+  <source path='uimodel'/>
+  
 
   <public path="resources" />
 

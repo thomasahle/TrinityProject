@@ -1,11 +1,15 @@
 package com.github.thomasahle.trainbox.trainbox.core;
 
+import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
+import playn.core.AssetWatcher;
 import playn.core.Game;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.LoadingScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.NullScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
 
@@ -15,27 +19,42 @@ public class TrainBox implements Game{
 	Scene moveScene;
 	Scene startScene;
 	
+	Scene mScene = new NullScene();
 	
-	
-	Scene scene = startScene;
+	AssetWatcher watcher = new AssetWatcher(new AssetWatcher.Listener() {
+		public void done() {
+			startScene = new StartScene(TrainBox.this);
+			demoScene = new DemoScene(TrainBox.this);
+			levelScene = new LevelScene(TrainBox.this);
+			moveScene = new MoveScene(TrainBox.this);
+			setScene(startScene);
+		}
+
+		public void error(Throwable e) {
+		}
+	});
 	
 	@Override
 	public void init() {
-		graphics().setSize(600, 500);  // this changes the size of the main window
-		startScene = new StartScene(this);
-		demoScene = new DemoScene(this);
-		levelScene = new LevelScene(this);
-		moveScene = new MoveScene(this);
 		
-		scene = startScene;
-		scene.onAttach();
+		setScene(new LoadingScene(this));
+		
+		graphics().setSize(1024, 640);  // this changes the size of the main window
+		watcher.add(	assets().getImage("images/pngs/trains.png"));
+		watcher.add(	assets().getImage("images/pngs/exit1Tr.png"));
+		watcher.add(	assets().getImage("images/pngs/exit2Tr.png"));
+		watcher.add(	assets().getImage("images/pngs/start1Tr.png"));
+		watcher.add(	assets().getImage("images/pngs/start2Tr.png"));
+		watcher.add(	assets().getImage("images/pngs/watermelonTr.png"));
+		
+		watcher.start();
 	}
 
 	
 	
 	@Override
 	public void update(float delta) {
-		scene.update(delta);
+		mScene.update(delta);
 	}
 
 	@Override
@@ -66,12 +85,13 @@ public class TrainBox implements Game{
 	}
 	
 	public void setScene(Scene scene) {
-		this.scene = scene;
+		mScene.onDetach();
+		mScene = scene;
 		scene.onAttach();
 	}
 	
 	public Scene getScene() {
-		return scene;
+		return mScene;
 	}
 	
 
