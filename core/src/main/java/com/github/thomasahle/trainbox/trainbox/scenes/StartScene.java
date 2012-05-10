@@ -103,13 +103,8 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseDown(ButtonEvent event) {
-<<<<<<< HEAD
-				trainBox.getScene().onDetach();
-=======
 				startButton.setImage(startButtonOffImage);
->>>>>>> 512b3a625e4760266cabf71b2055306be2d3708d
 				trainBox.setScene(trainBox.getDemoScene());
-				
 			}
 		});
         
