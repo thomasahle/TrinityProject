@@ -1,12 +1,16 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.graphics;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
 import pythagoras.f.Point;
-import static playn.core.PlayN.graphics;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
@@ -16,7 +20,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
 	private UIStartComponent mStart;
-	private UIEndComponent mGoal;
+	private UIGoalComponent mGoal;
 	private UIComposite mTrack;
 	private Level mLevel;
 	private LevelFinishedListener mListener;
@@ -25,25 +29,20 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
-		UIHorizontalComponent track = new UIHorizontalComponent(200); 
-		mTrack = track;
-		//mStart = new UIStartComponent(level.input);
-		//track.add(mStart);
-		//mGoal = new UIGoalComponent(level.goal);
-		//track.add(mGoal);
-		mTrack.paused(true);
+		mTrainLayer = graphics().createGroupLayer();
+		List<UITrain> trains = new ArrayList<UITrain>();
+		for (Train train : level.input) {
+			UITrain uitrain = new UITrain(train);
+			trains.add(uitrain);
+			mTrainLayer.add(uitrain.getLayer());
+		}
 		
-		// Create a recursive track
+		UIHorizontalComponent track = new UIHorizontalComponent(100); 
+		mStart = new UIStartComponent(trains);
+		mGoal = new UIGoalComponent(400);
 		
 		
-		
-		/*for (int i = 0; i < 10; i++)
-			track.add(new UIIdentityComponent(1));
-		track.add(new UISeparateComponent(1));
-		for (int i = 0; i < 10; i++)
-			track.add(new UIIdentityComponent(1));*/
-		
-		track.add(new UISeparateComponent(100));
+		track.add(mStart);
 		
 		UIHorizontalComponent top = new UIHorizontalComponent(60);
 		UIHorizontalComponent bot = new UIHorizontalComponent(60);
@@ -65,26 +64,11 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		bot2.add(new UIJoinComponent(80));
 		bot2.add(new UIJoinComponent(80));
 		
-		track.add(new UIIdentityComponent(200));
+		track.add(mGoal);
 		
-		track.add(new UIEndComponent(400));
-
-		//track.add(new UIDupComponent(100));
-		//	UIHorizontalComponent nested = new UIHorizontalComponent(100);
-		//	nested.add(new UIDupComponent(100));
-		//track.add(nested);
 		
-		// This wont be needed when StartComponent is finished
-		for (Train train : level.input) {
-			UITrain uitrain = new UITrain(train);
-			uitrain.setPosition(new Point(-uitrain.getSize().width, 0));
-			mTrack.takeTrain(uitrain);
-		}
-		
-		mTrainLayer = graphics().createGroupLayer();
-		//mTrainLayer.setTranslation(0, mTrack.getSize().height/2 - UICarriage.HEIGHT/2);
-		for (UITrain train : mTrack.getCarriages())
-			mTrainLayer.add(train.getLayer());
+		mTrack = track;
+		mTrack.paused(true);
 		
 		mLayer.add(mTrack.getBackLayer());
 		mLayer.add(mTrainLayer);

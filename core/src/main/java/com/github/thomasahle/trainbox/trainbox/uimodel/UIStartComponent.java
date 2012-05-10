@@ -1,59 +1,39 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.github.thomasahle.trainbox.trainbox.model.Train;
+import pythagoras.f.Point;
 
-import playn.core.Layer;
-import pythagoras.f.Dimension;
+public class UIStartComponent extends UIIdentityComponent {
 
-public class UIStartComponent extends AbstractComponent {
-
-	public UIStartComponent(List<Train> input) {
-		// TODO Auto-generated constructor stub
+	public UIStartComponent() {
+		this(new ArrayList<UITrain>());
 	}
 
-	@Override
-	public List<UITrain> getCarriages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Dimension getSize() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Layer getBackLayer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Layer getFrontLayer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(float delta) {
-		// TODO Auto-generated method stub
+	public UIStartComponent(List<UITrain> trains) {
+		super(calcWidth(trains));
 		
+		float width = getSize().width;
+		float right = width;
+		for (UITrain train : trains) {
+			takeTrain(train);
+			float left = right - train.getSize().width;
+			train.setPosition(new Point(left, train.getPosition().y));
+			right = left - UITrain.PADDING;
+		}
 	}
 
-	@Override
-	public void takeTrain(UITrain train) {
-		// TODO Auto-generated method stub
-		
+	private static int calcWidth(List<UITrain> input) {
+		int width = 0;
+		for (UITrain train : input)
+			width += train.getSize().width;
+		return width;
 	}
-
-	@Override
-	public float leftBlock() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	
+	@Override
+	public void setPosition(Point position) {
+		super.setPosition(position);
+		
+	}
 }
