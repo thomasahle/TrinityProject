@@ -95,7 +95,6 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			public void onMouseDown(ButtonEvent event) {
 				startButton.setImage(startButtonOffImage);
 				trainBox.setScene(trainBox.getDemoScene());
-				
 			}
 		});
         

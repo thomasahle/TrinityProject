@@ -41,10 +41,10 @@ public class TrainBox implements Game{
 		
 		graphics().setSize(1024, 640);  // this changes the size of the main window
 		watcher.add(	assets().getImage("images/pngs/trains.png"));
-		watcher.add(	assets().getImage("images/pngs/exit1Tr.png"));
+		/*watcher.add(	assets().getImage("images/pngs/exit1Tr.png"));
 		watcher.add(	assets().getImage("images/pngs/exit2Tr.png"));
 		watcher.add(	assets().getImage("images/pngs/start1Tr.png"));
-		watcher.add(	assets().getImage("images/pngs/start2Tr.png"));
+		watcher.add(	assets().getImage("images/pngs/start2Tr.png"));*/
 		watcher.add(	assets().getImage("images/pngs/watermelonTr.png"));
 		
 		watcher.start();
