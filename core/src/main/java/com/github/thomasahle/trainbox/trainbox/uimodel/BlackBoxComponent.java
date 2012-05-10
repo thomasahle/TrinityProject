@@ -2,10 +2,8 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.log;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import pythagoras.f.Point;
@@ -15,24 +13,6 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	private UITrain mIncomming = null;
 	private Queue<UITrain> mCurrent = new LinkedList<UITrain>();
 	private UITrain mSent = null;
-	
-	@Override
-	public List<UITrain> getCarriages() {
-		List<UITrain> carriages = new ArrayList<UITrain>(mCurrent);
-		if (mIncomming != null) carriages.add(mIncomming);
-		if (mSent != null) carriages.add(mSent);
-		carriages.addAll(getHiddenCarriages());
-		// We don't need to use 'unmodifiable' here, as the list is specially
-		// created in this method call anyway.
-		return carriages;
-	}
-	
-	/**
-	 * Used to retrieve intermediate 'unpaired' trains saved by black box components.
-	 * This method is mostly because it is too easy to forget to override getCarriages().
-	 * @return a list of trains that have 'entered', but are not yet added to currentTrains.
-	 */
-	public abstract List<UITrain> getHiddenCarriages();
 	
 	@Override
 	public void update(float delta) {

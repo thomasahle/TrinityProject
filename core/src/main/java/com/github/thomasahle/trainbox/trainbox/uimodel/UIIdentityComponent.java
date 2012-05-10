@@ -3,11 +3,8 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import playn.core.CanvasImage;
 import playn.core.Layer;
@@ -31,11 +28,6 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 		image.canvas().setFillColor(0xaaaa0000);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
 		mBackLayer = graphics().createImageLayer(image);
-	}
-
-	@Override
-	public List<UITrain> getCarriages() {
-		return Collections.unmodifiableList(new ArrayList<UITrain>(mTrains));
 	}
 
 	@Override

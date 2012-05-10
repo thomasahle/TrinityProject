@@ -1,9 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.Queue;
 
 import playn.core.CanvasImage;
@@ -53,12 +51,4 @@ public class UIFlipComponent extends BlackBoxComponent {
 			unpairedTrain = train;
 		}
 	}
-
-	@Override
-	public List<UITrain> getHiddenCarriages() {
-		if (unpairedTrain != null)
-			return Arrays.asList(unpairedTrain);
-		return new ArrayList<UITrain>();
-	}
-
 }

@@ -1,8 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Queue;
 
 import playn.core.CanvasImage;
@@ -54,11 +53,5 @@ public class UIDupComponent extends BlackBoxComponent{
 		currentTrains.add(clone);
 		fireTrainCreated(clone);
 		clone.getLayer().setVisible(false);
-	}
-	
-	@Override
-	public List<UITrain> getHiddenCarriages() {
-		// We never hide anything
-		return new ArrayList<UITrain>();
 	}
 }

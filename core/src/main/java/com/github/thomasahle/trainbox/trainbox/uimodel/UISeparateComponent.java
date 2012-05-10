@@ -2,7 +2,6 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
@@ -56,11 +55,5 @@ public class UISeparateComponent extends BlackBoxComponent{
 			tmpTrain.getLayer().setVisible(false);
 		}
 		fireTrainDestroyed(train);
-	}
-	
-	@Override
-	public List<UITrain> getHiddenCarriages() {
-		// We never hide anything
-		return new ArrayList<UITrain>();
 	}
 }
