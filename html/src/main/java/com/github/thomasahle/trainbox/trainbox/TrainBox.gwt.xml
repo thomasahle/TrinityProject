@@ -7,8 +7,9 @@
   <source path='resources'/>
   <source path='scenes'/>
   <source path='uimodel'/>
+  <source path='util'/>
   
-
+	
   <public path="resources" />
 
   <entry-point class='com.github.thomasahle.trainbox.trainbox.html.TrainBoxHtml'/>

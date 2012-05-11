@@ -13,6 +13,7 @@ public abstract class AbstractComponent implements UIComponent {
 	private TrainsChangedListener mTrainsChangedListener;
 	private boolean mPaused;
 	private SizeChangedListener mSizeChangedListener;
+	private float mPadding;
 	
 	@Override
 	public void onAdded(UIComposite parent) {
@@ -32,8 +33,8 @@ public abstract class AbstractComponent implements UIComponent {
 	@Override
 	public void setPosition(Point position) {
 		// Move layer
-		getBackLayer().setTranslation(position.x, position.y);
-		getFrontLayer().setTranslation(position.x, position.y);
+		getBackLayer().setTranslation(position.x-mPadding, position.y);
+		getFrontLayer().setTranslation(position.x-mPadding, position.y);
 		// Move trains
 		float diffx = position.x - getPosition().x;
 		float diffy = position.y - getPosition().y;
@@ -62,12 +63,21 @@ public abstract class AbstractComponent implements UIComponent {
 	
 	@Override
 	public void setTrainTaker(TrainTaker listener) {
-		this.mTrainTaker = listener;
+		mTrainTaker = listener;
 	}
 
 	@Override
 	public TrainTaker getTrainTaker() {
 		return mTrainTaker;
+	}
+	
+	
+	public void xpadding(float xpadding) {
+		mPadding = xpadding;
+	}
+
+	public float xpadding() {
+		return mPadding;
 	}
 	
 	

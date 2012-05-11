@@ -10,8 +10,8 @@ import pythagoras.i.Dimension;
 
 public class UICarriage {
 	
-	public static final int HEIGHT = 25;
-	public static final int WIDTH = 75;
+	public static final int HEIGHT = 64;
+	public static final int WIDTH = 64;
 	
 	private Layer mLayer;
 	private Point mPosition;
@@ -32,10 +32,10 @@ public class UICarriage {
 
 	private void drawLayer(int cargo) {
 		CanvasImage image = graphics().createImage(WIDTH, HEIGHT);
-		Image emptyTrain = assets().getImage("images/emptyTrain.png");
+		Image emptyTrain = assets().getImage("images/red_train.png");
 		image.canvas().drawImage(emptyTrain, 0, 0, WIDTH, HEIGHT);
 		image.canvas().setFillColor(0xffffffff);
-		image.canvas().drawText(""+cargo, 2, HEIGHT-2);
+		image.canvas().drawText(""+cargo, 9, 25);
 		mLayer = graphics().createImageLayer(image);
 	}
 	

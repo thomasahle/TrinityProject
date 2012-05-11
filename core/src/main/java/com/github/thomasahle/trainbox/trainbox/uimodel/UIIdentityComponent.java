@@ -7,8 +7,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
+
+import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Layer;
+import playn.core.Path;
 import pythagoras.f.Dimension;
 
 public class UIIdentityComponent extends AbstractComponent implements UIComponent, TrainTaker {
@@ -27,14 +31,15 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	public UIIdentityComponent(int width) {
 		mWidth = width;
 		
-		mFrontLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		mFrontLayer = CanvasHelper.newEmptyLayer();
 		
-		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xaaaa0000);
-		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
+		int imageWidth = width+(int)Math.ceil(2*ComponentHelper.RAIL_EXTRA);
+		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
+		ComponentHelper.drawTracks(image.canvas(), width);
 		mBackLayer = graphics().createImageLayer(image);
+		xpadding(ComponentHelper.RAIL_EXTRA);
 	}
-
+	
 	@Override
 	public Dimension getSize() {
 		return new Dimension(mWidth, HEIGHT);

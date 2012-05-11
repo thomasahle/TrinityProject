@@ -73,6 +73,11 @@ public class UISeparateComponent extends AbstractComponent {
 		return new Dimension(mWidth, HEIGHT);
 	}
 	
+	@Override public void setPosition(Point position) {
+		super.setPosition(position);
+		updateKnife();
+	}
+	
 	/**
 	 * @param percentage 0.05 if the gate must be at least 5% up.
 	 * @return whether the gate is now that much up.
@@ -174,6 +179,10 @@ public class UISeparateComponent extends AbstractComponent {
 		}
 		
 		// Animate the knife
+		updateKnife();
+	}
+
+	private void updateKnife() {
 		float x = getSize().width/2-KNIFE_WIDTH/2.f;
 		float y = gateY(mKnifeT);
 		mKnifeLayer.setTranslation(x + getPosition().x, y + getPosition().y);

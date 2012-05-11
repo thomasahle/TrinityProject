@@ -47,10 +47,11 @@ public class UIStartComponent extends AbstractComponent {
 		
 		mFrontLayer = graphics().createImageLayer(graphics().createImage(1,1));
 		
-		CanvasImage image = graphics().createImage(mWidth, HEIGHT);
-		image.canvas().setFillColor(0xffeeeeee);
-		image.canvas().fillCircle(mWidth/2.f, HEIGHT/2.f, mWidth/2.f);
+		int imageWidth = mWidth+(int)Math.ceil(2*ComponentHelper.RAIL_EXTRA);
+		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
+		ComponentHelper.drawTracks(image.canvas(), mWidth, 0xff565248, 0xff816647);
 		mBackLayer = graphics().createImageLayer(image);
+		xpadding(ComponentHelper.RAIL_EXTRA);
 	}
 
 	private static int calcWidth(List<UITrain> input) {
