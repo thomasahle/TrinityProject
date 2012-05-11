@@ -28,8 +28,16 @@ public abstract class AbstractComponent implements UIComponent {
 	
 	@Override
 	public void setPosition(Point position) {
+		// Move layer
 		getBackLayer().setTranslation(position.x, position.y);
 		getFrontLayer().setTranslation(position.x, position.y);
+		// Move trains
+		float diffx = position.x - getPosition().x;
+		float diffy = position.y - getPosition().y;
+		for (UITrain train : getTrains()) {
+			train.setPosition(new Point(train.getPosition().x + diffx, train.getPosition().y + diffy));
+		}
+		// Save
 		mPosition = position;
 	}
 

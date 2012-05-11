@@ -2,8 +2,10 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.log;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import pythagoras.f.Point;
@@ -13,6 +15,16 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	private UITrain mIncomming = null;
 	private Queue<UITrain> mCurrent = new LinkedList<UITrain>();
 	private UITrain mSent = null;
+	
+	@Override
+	public List<UITrain> getTrains() {
+		List<UITrain> carriages = new ArrayList<UITrain>(mCurrent);
+		if (mIncomming != null) carriages.add(mIncomming);
+		if (mSent != null) carriages.add(mSent);
+		// We don't need to use 'unmodifiable' here, as the list is spec
+		// created in this method call anyway.
+		return carriages;
+	}
 	
 	@Override
 	public void update(float delta) {

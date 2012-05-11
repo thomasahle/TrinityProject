@@ -19,6 +19,13 @@ public class UIJoinComponent extends BlackBoxComponent{
 	private Layer mBackLayer, mFrontLayer;
 	private UITrain frontTrain;	
 	
+	@Override
+	public List<UITrain> getTrains() {
+		List<UITrain> trains = new ArrayList<UITrain>(super.getTrains());
+		if (frontTrain != null) trains.add(frontTrain);
+		return trains;
+	}
+	
 	public UIJoinComponent(int width) {
 		mWidth = width;
 		
