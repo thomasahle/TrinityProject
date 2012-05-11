@@ -1,15 +1,29 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.log;
+import static playn.core.PlayN.graphics;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
+import playn.core.CanvasImage;
+import playn.core.ImageLayer;
+import playn.core.Layer;
+import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIStartComponent extends UIIdentityComponent {
+public class UIStartComponent extends AbstractComponent {
 
-	private List<UITrain> mTrains;
+	private final static int HEIGHT = 100;
+	private int mWidth;
 
+	private Queue<UITrain> mTrains;
+	private Layer mFrontLayer;
+	private Layer mBackLayer;
+	
 	public UIStartComponent() {
 		this(new ArrayList<UITrain>());
 	}
@@ -20,17 +34,23 @@ public class UIStartComponent extends UIIdentityComponent {
 	}
 	
 	public UIStartComponent(List<UITrain> trains) {
-		super(calcWidth(trains));
-		mTrains = trains;
+		mWidth = calcWidth(trains);
+		mTrains = new LinkedList<UITrain>(trains);
 		
-		float width = getSize().width;
-		float right = width;
+		float right = mWidth;
 		for (UITrain train : trains) {
-			takeTrain(train);
 			float left = right - train.getSize().width;
+			train.vertCenterOn(this);
 			train.setPosition(new Point(left, train.getPosition().y));
 			right = left - UITrain.PADDING;
 		}
+		
+		mFrontLayer = graphics().createImageLayer(graphics().createImage(1,1));
+		
+		CanvasImage image = graphics().createImage(mWidth, HEIGHT);
+		image.canvas().setFillColor(0xffeeeeee);
+		image.canvas().fillCircle(mWidth/2.f, HEIGHT/2.f, mWidth/2.f);
+		mBackLayer = graphics().createImageLayer(image);
 	}
 
 	private static int calcWidth(List<UITrain> input) {
@@ -40,5 +60,37 @@ public class UIStartComponent extends UIIdentityComponent {
 			width += UITrain.PADDING;
 		}
 		return width;
+	}
+
+	@Override
+	public Dimension getSize() {
+		return new Dimension(mWidth, HEIGHT);
+	}
+
+	@Override
+	public Layer getBackLayer() {
+		return mBackLayer;
+	}
+
+	@Override
+	public Layer getFrontLayer() {
+		return mFrontLayer;
+	}
+
+	@Override
+	public void update(float delta) {
+		if (paused())
+			return;
+		moveTrains(mTrains, delta);
+	}
+
+	@Override
+	public void takeTrain(UITrain train) {
+		throw new UnsupportedOperationException("Start component doesn't take trains from anyone!");
+	}
+
+	@Override
+	public float leftBlock() {
+		return 0;
 	}
 }

@@ -1,5 +1,8 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import java.util.Iterator;
+import java.util.Queue;
+
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
@@ -78,6 +81,8 @@ public abstract class AbstractComponent implements UIComponent {
 	}
 	protected void fireTrainDestroyed(UITrain train) {
 		if (mTrainsChangedListener != null){
+			//train.getLayer().setVisible(false);
+			train.setPosition(new Point(Float.MAX_VALUE, train.getPosition().y));
 			mTrainsChangedListener.onTrainDestroyed(train);
 			//train.getLayer().destroy();
 		}
@@ -101,5 +106,43 @@ public abstract class AbstractComponent implements UIComponent {
 	protected void fireSizeChanged(Dimension oldSize) {
 		if (mSizeChangedListener != null)
 			mSizeChangedListener.onSizeChanged(this, oldSize);
+	}
+	
+	/**
+	 * Helper method for moving trains, when it just has to be done the obvious way
+	 * @param trains The trains to be moved, in order
+	 * @param delta The amount to move them
+	 */
+	public float moveTrains(Queue<UITrain> trains, float delta) {
+		float rightBorder = getTrainTaker().leftBlock();
+		for (Iterator<UITrain> it = trains.iterator(); it.hasNext(); ) {
+			UITrain train = it.next();
+			float trainLeft = train.getPosition().x;
+			float compLeft = getDeepPosition().x;
+			float trainRight = trainLeft + train.getSize().width;
+			float compRight = compLeft + getSize().width;
+			
+			// If the train is now entirely gone from us.
+			if (trainLeft >= compRight) {
+				it.remove();
+				continue;
+			}
+			// If the train is no longer controlled by us, but still 'on us'.
+			if (trainRight > compRight) {
+				continue;
+			}
+			// See how far we can move it
+			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
+			float newLeft = newRight-train.getSize().width;
+			train.setPosition(new Point(newLeft, train.getPosition().y));
+			// If it is now out in the right side, give it away
+			if (newRight > compRight) {
+				getTrainTaker().takeTrain(train);
+			}
+			// Update our working right border
+			assert rightBorder >= newLeft - UITrain.PADDING;
+			rightBorder = newLeft - UITrain.PADDING;
+		}
+		return rightBorder;
 	}
 }

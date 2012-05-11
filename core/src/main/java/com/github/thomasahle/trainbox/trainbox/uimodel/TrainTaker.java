@@ -6,10 +6,13 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
  */
 public interface TrainTaker {
 	/**
-	 * Assumes that train.position.x <= leftBock()
+	 * Assumes that train.position.x + train.size.width <= leftBock()
 	 * @param train
 	 */
 	public void takeTrain(UITrain train);
-
+	/**
+	 * See `takeTrain`
+	 * @return
+	 */
 	public float leftBlock();
 }

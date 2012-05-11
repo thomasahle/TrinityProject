@@ -1,18 +1,15 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
-import static playn.core.PlayN.log;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import playn.core.CanvasImage;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
-import pythagoras.f.Point;
 
 public class UIIdentityComponent extends AbstractComponent implements UIComponent, TrainTaker {
 
@@ -59,42 +56,9 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 		if (paused())
 			return;
 		
-		float rightBorder = getTrainTaker().leftBlock();
-		for (Iterator<UITrain> it = mTrains.iterator(); it.hasNext(); ) {
-			UITrain train = it.next();
-			float trainLeft = train.getPosition().x;
-			float compLeft = getDeepPosition().x;
-			float trainRight = trainLeft + train.getSize().width;
-			float compRight = compLeft + getSize().width;
-			
-			//if (getParent() instanceof UISplitComponent) {
-			//	log().debug(rightBorder+" "+trainLeft+" "+compLeft);
-			//}
-			
-			// If the train is now entirely gone from us.
-			if (trainLeft >= compRight) {
-				it.remove();
-				continue;
-			}
-			// If the train is no longer controlled by us, but still 'on us'.
-			if (trainRight > compRight) {
-				continue;
-			}
-			// See how far we can move it
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
-			float newLeft = newRight-train.getSize().width;
-			train.setPosition(new Point(newLeft, train.getPosition().y));
-			// If it is now out in the right side, give it away
-			if (newRight > compRight) {
-				log().debug("Giving a train to "+getTrainTaker());
-				getTrainTaker().takeTrain(train);
-			}
-			// Update our working right border
-			assert rightBorder >= newLeft - UITrain.PADDING;
-			rightBorder = newLeft - UITrain.PADDING;
-		}
-	}
-
+		moveTrains(mTrains, delta);
+	}	
+	
 	@Override
 	public void takeTrain(UITrain train) {
 		// The train can't have passed us already. This makes things a lot simpler. 
