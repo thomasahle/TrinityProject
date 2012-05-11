@@ -27,7 +27,7 @@ public class UISeparateComponent extends AbstractComponent {
 	private LinkedList<UITrain> mRightSide = new LinkedList<UITrain>();
 	
 	private final static int KNIFE_WIDTH = 10;
-	private final static float KNIFE_CYCLE = 1500f;
+	private final static float KNIFE_CYCLE = 1000f;
 	private Layer mKnifeLayer;
 	private float mKnifeT = 0;
 
@@ -144,6 +144,7 @@ public class UISeparateComponent extends AbstractComponent {
 		
 		// The right side is easy to move
 		float rightBorder = moveTrains(mRightSide, delta);
+		rightBorder += UITrain.PADDING;
 		
 		// The left side requires more thought
 		for (UITrain train : mLeftSide) {
@@ -154,12 +155,12 @@ public class UISeparateComponent extends AbstractComponent {
 			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
 			
 			// If we are already on the knife, hold it down
-			if (carLeft < knifeX && knifeX <= trainRight) {
+			if (carLeft < knifeX && knifeX <= trainRight - 0.1f) {
 				mKnifeT = 0;
 			}
 			// If we are on the left side of the knife, and its up, we have to wait
-			if (trainRight < knifeX && isUp(DOWN_LEVEL)) {
-				newRight = Math.min(newRight, knifeX - 0.1f);
+			if (trainRight - 0.1f < knifeX && isUp(DOWN_LEVEL)) {
+				newRight = Math.min(newRight, knifeX);
 			}
 			// If we are a big train, we can't go too far even if its down
 			if (train.getCarriages().size() > 1) {

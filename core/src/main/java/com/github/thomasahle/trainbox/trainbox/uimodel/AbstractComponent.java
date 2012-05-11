@@ -140,7 +140,6 @@ public abstract class AbstractComponent implements UIComponent {
 				getTrainTaker().takeTrain(train);
 			}
 			// Update our working right border
-			assert rightBorder >= newLeft - UITrain.PADDING;
 			rightBorder = newLeft - UITrain.PADDING;
 		}
 		return rightBorder;
