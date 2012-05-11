@@ -54,21 +54,22 @@ public class UIJoinComponent extends BlackBoxComponent{
 
 	@Override
 	public void onTrainEntered(UITrain train, Queue<UITrain> currentTrains) {
-		if(frontTrain!=null){
-			List<UICarriage> secondTrainCarriages = train.getCarriages();
-			List<UICarriage> firstTrainCarriages = frontTrain.getCarriages();
-			List<UICarriage> newTrainCarriages = new ArrayList<UICarriage>(firstTrainCarriages);
-			newTrainCarriages.addAll(secondTrainCarriages);
+		if (frontTrain != null) {
+			List<UICarriage> newTrainCarriages = new ArrayList<UICarriage>(
+					frontTrain.getCarriages());
+			newTrainCarriages.addAll(train.getCarriages());
 			UITrain newTrain = new UITrain(newTrainCarriages);
+			
 			fireTrainDestroyed(train);
 			fireTrainDestroyed(frontTrain);
 			frontTrain = null;
-			
-			currentTrains.add(newTrain);
-			
-			fireTrainCreated(newTrain);
+
 			newTrain.getLayer().setVisible(false);
-		}else{
+			newTrain.setCropLeft(newTrain.getSize().width - getSize().width);
+			currentTrains.add(newTrain);
+			fireTrainCreated(newTrain);
+		}
+		else {
 			frontTrain = train;
 		}
 	}
