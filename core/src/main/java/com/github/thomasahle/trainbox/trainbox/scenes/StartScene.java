@@ -49,6 +49,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     int width = graphics().width();
 	int height = graphics().height();
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
+	//CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
     float a = 0.0f;
     float b = 0.0f;
     float vy = 0.00f;
@@ -65,23 +66,36 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	public StartScene(final TrainBox trainBox) {
 		this.trainBox = trainBox;
 		menuVisible = true;
-		CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
 		Canvas canvas = bgImage.canvas();
 		canvas.setFillColor(0xff87ceeb);
 		canvas.fillRect(0, 0, width, height);
-		canvas.setFillColor(0xff6495ed);
-        canvas.fillRect(width/10, height/10, width*8/10, height*8/10);
-		canvas.setFillColor(0xff000000);
-        canvas.drawText("Welcome to the SellCS Game!", width/3,height/3);
-
+        final Image backgroundImage = assets().getImage("images/pngs/startPage.png");
+		canvas.drawImage(backgroundImage, 0, 0);
+		
+		
         menuLayer = graphics().createGroupLayer();
-        menuLayer.setTranslation(width/3, height/3);
-        menuLayer.setScale((float) 0.3);
-        final Image startButtonOnImage = assets().getImage("images/pngs/startOn.png");
-        final ImageLayer startButton = graphics().createImageLayer(startButtonOnImage);
-        menuLayer.add(startButton);
-        startButton.addListener(new Mouse.Listener() {
-            Image startButtonOffImage = assets().getImage("images/pngs/startOff.png");
+        menuLayer.setTranslation(width/5, height/4+40);
+        final Image menuBackgoundImage = assets().getImage("images/pngs/menuBackground.png");
+        final ImageLayer menuBackgoundImageLayer = graphics().createImageLayer(menuBackgoundImage);
+        menuLayer.add(menuBackgoundImageLayer);
+        
+        final Image aboutButtonImage = assets().getImage("images/pngs/aboutButton.png");
+        final ImageLayer aboutButtonImageLayer = graphics().createImageLayer(aboutButtonImage);
+        menuLayer.add(aboutButtonImageLayer);
+        aboutButtonImageLayer.setTranslation(45,210);
+        
+        final Image demoButtonImage = assets().getImage("images/pngs/demoButton.png");
+        final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
+        menuLayer.add(demoButtonImageLayer);
+        demoButtonImageLayer.setTranslation(100,40);
+        
+        
+        final Image playButtonImage = assets().getImage("images/pngs/playButton.png");
+        final ImageLayer playButtonImageLayer = graphics().createImageLayer(playButtonImage);
+        menuLayer.add(playButtonImageLayer);
+        playButtonImageLayer.setTranslation(280,50);
+        playButtonImageLayer.addListener(new Mouse.Listener() {
+            Image playButtonPressedImage = assets().getImage("images/pngs/playButtonPressed.png");
             
 			@Override
 			public void onMouseWheelScroll(WheelEvent event) {	
@@ -90,7 +104,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseUp(ButtonEvent event) {
-				startButton.setImage(startButtonOffImage);
+		        playButtonImageLayer.setImage(playButtonPressedImage);
 
 				
 			}
@@ -103,36 +117,11 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			
 			@Override
 			public void onMouseDown(ButtonEvent event) {
-				startButton.setImage(startButtonOffImage);
-				trainBox.setScene(trainBox.getDemoScene());
-			}
-		});
-        
-        final Image exitButtonImage = assets().getImage("images/pngs/startOff.png");
-        final ImageLayer exitButton = graphics().createImageLayer(exitButtonImage);
-        menuLayer.add(exitButton);
-        exitButton.setTranslation(startButton.scaledWidth()+50, 0);
-        exitButton.addListener(new Mouse.Listener() {            
-			@Override
-			public void onMouseWheelScroll(WheelEvent event) {	
-			}
-
-			
-			@Override
-			public void onMouseUp(ButtonEvent event) {
+		        playButtonImageLayer.setImage(playButtonPressedImage);
 				trainBox.setScene(trainBox.getLevelScene());
 			}
-			
-			@Override
-			public void onMouseMove(MotionEvent event) {
-				exitButton.setRotation(-50);
-			}
-			
-			@Override
-			public void onMouseDown(ButtonEvent event) {
-				exitButton.setRotation(50);
-			}
 		});
+      
         
         
         bgLayer = graphics().createImageLayer(bgImage);
@@ -210,29 +199,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	      x - watermelon.image().width() / 2,
 	      y - watermelon.image().height() / 2);
 		
-/*		else {
-		    px = x;
-		    py = y;
 
-		    // Update physics.
-		    delta /= 1000;
-		    vxx += axx * delta;
-		    vyy += ayy * delta;
-		    x += vxx * delta;
-		    y += vyy * delta;
-		    
-		    
-		    
-		 // Interpolate current position.
-		    float x = (this.x * delta) + (px * (1f - delta));
-		    float y = (this.y * delta) + (py * (1f - delta));
-	
-		    // Update the layer.
-		    //watermelon.resetTransform();
-		    watermelon.setTranslation(
-		      x - watermelon.image().width() / 2,
-		      y - watermelon.image().height() / 2);
-		}*/
 	}
 	
 	private void resetWaterMelonPosition() {
