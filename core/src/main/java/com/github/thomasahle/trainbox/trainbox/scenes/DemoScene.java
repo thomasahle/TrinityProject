@@ -1,78 +1,225 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
 import static playn.core.PlayN.assets;
-import static playn.core.PlayN.log;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
 
-import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+import java.awt.Button;
+import java.awt.Component;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+import javax.swing.plaf.metal.MetalButtonUI;
 
 import playn.core.Canvas;
 import playn.core.CanvasImage;
+import playn.core.Events;
+import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
 import playn.core.Keyboard.TypedEvent;
+import playn.core.Mouse;
+import playn.core.Mouse.ButtonEvent;
+import playn.core.Mouse.MotionEvent;
+import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
+import playn.core.Pointer.Listener;
+import playn.core.SurfaceLayer;
+
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
 public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
-
-	Image cloudImage = assets().getImage("images/cloud.png");
-    ImageLayer cloudLayer = graphics().createImageLayer(cloudImage);
-    int width = 640;
-	int height = 480;
-	CanvasImage bgImage = graphics().createImage(width, height);
-    float x = 0.0f;
-    float y = 0.0f;
-    float vy = 0.0f;
-    CanvasImage statsImage = graphics().createImage(640, 50);
-    ImageLayer statsLayer = graphics().createImageLayer(statsImage);
-    ImageLayer compMenu;
-    boolean menuVisible = false;
+    int width = graphics().width();
+	int height = graphics().height();
+	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
     ImageLayer bgLayer;
-    ImageLayer textLayer;
+    GroupLayer demoLayer;
     TrainBox trainBox;
+    ArrayList<ImageLayer> demoPages;  // this array contains the pages that the demo contains, allows easy iteration
+    int currentDemoIndex;
     
-	public DemoScene(TrainBox trainBox) {
+    ImageLayer nextButtonImageLayer;
+    ImageLayer backButtonImageLayer;
+    ImageLayer doneButtonImageLayer;
+    
+	public DemoScene(final TrainBox trainBox) {
 		this.trainBox = trainBox;
-		CanvasImage bgImage = graphics().createImage(width, height);
+        bgLayer = graphics().createImageLayer(bgImage);
 		Canvas canvas = bgImage.canvas();
-		canvas.setFillColor(0xff87ceeb);
-		canvas.fillRect(0, 0, width, height);
-		bgLayer = graphics().createImageLayer(bgImage);
+        final Image backgroundImage = assets().getImage("images/pngs/startPage.png");
+		canvas.drawImage(backgroundImage, 0, 0);
 		
-	    cloudLayer.setTranslation(x, y);
-	    
-	    CanvasImage textImage = graphics().createImage(640, 50);
-	    textLayer = graphics().createImageLayer(textImage);
-	    textImage.canvas().setFillColor(0xff000000);
-	    textImage.canvas().drawText("Try clicking and using the UP and DOWN arrows, press C to toggle component menu.", 20, 30);
-	    
-	    
-	    statsLayer.setTranslation(0, 50);
+		// Create the demoLayer that contains the demo pages
+        demoLayer = graphics().createGroupLayer();
+        demoLayer.setTranslation(width/20+40, height/20);
+        final Image demoPage1Image = assets().getImage("images/pngs/demoPage1.png");
+        final Image demoPage2Image = assets().getImage("images/pngs/demoPage2.png");
+        final Image demoPage3Image = assets().getImage("images/pngs/demoPage3.png");
+        final Image demoPage4Image = assets().getImage("images/pngs/demoPage4.png");
+        final Image demoPage5Image = assets().getImage("images/pngs/demoPage5.png");
 
-	    statsImage.canvas().setStrokeColor(0x000000);
-	    statsImage.canvas().drawLine(0, statsImage.height(), statsImage.width(), statsImage.height());
-	    textImage.canvas().drawLine(0, textImage.height(), textImage.width(), textImage.height());
-	    
-	    /*ComponentMenu cMenu = new ComponentMenu();
-	    compMenu = cMenu.getLayer();
-	    graphics().rootLayer().add(compMenu);
-	    compMenu.setVisible(false);*/
+        final ImageLayer demoPage1ImageLayer = graphics().createImageLayer(demoPage1Image);
+        final ImageLayer demoPage2ImageLayer = graphics().createImageLayer(demoPage2Image);
+        final ImageLayer demoPage3ImageLayer = graphics().createImageLayer(demoPage3Image);
+        final ImageLayer demoPage4ImageLayer = graphics().createImageLayer(demoPage4Image);
+        final ImageLayer demoPage5ImageLayer = graphics().createImageLayer(demoPage5Image);
+
+        
+        demoPages = new ArrayList();
+        demoPages.add(demoPage1ImageLayer);
+        demoPages.add(demoPage2ImageLayer);
+        demoPages.add(demoPage3ImageLayer);
+        demoPages.add(demoPage4ImageLayer);
+        demoPages.add(demoPage5ImageLayer);
+
+
+
+        for (int i =0; i<demoPages.size(); i++) {
+        	demoLayer.add(demoPages.get(i));
+        }
+    
+        
+        demoLayer.setVisible(true);
+        currentDemoIndex = 0;
+        for (int i =1; i<demoPages.size(); i++) {
+        	demoPages.get(i).setVisible(false);
+        }  
+        
+        
+        final Image backButtonImage = assets().getImage("images/pngs/backButton.png");
+        backButtonImageLayer = graphics().createImageLayer(backButtonImage);
+        demoLayer.add(backButtonImageLayer);
+        backButtonImageLayer.setTranslation(20, 520);
+        backButtonImageLayer.setVisible(false);
+        backButtonImageLayer.addListener(new Mouse.Listener() {
+
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+				demoPages.get(currentDemoIndex).setVisible(false);
+				demoPages.get(currentDemoIndex-1).setVisible(true);
+				nextButtonImageLayer.setVisible(true);
+				doneButtonImageLayer.setVisible(false);
+				if ((currentDemoIndex-1) == 0) 
+					backButtonImageLayer.setVisible(false);
+				currentDemoIndex= currentDemoIndex-1;
+			}
+
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {
+				// TODO Auto-generated method stub
+				
+			}});
+        
+        
+        final Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
+        nextButtonImageLayer = graphics().createImageLayer(nextButtonImage);
+        demoLayer.add(nextButtonImageLayer);
+        nextButtonImageLayer.setTranslation(680, 520);
+        nextButtonImageLayer.addListener(new Mouse.Listener() {
+
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+				demoPages.get(currentDemoIndex).setVisible(false);
+				demoPages.get(currentDemoIndex+1).setVisible(true);
+				backButtonImageLayer.setVisible(true);
+				if ((currentDemoIndex+1) == demoPages.size()-1) {
+					nextButtonImageLayer.setVisible(false);
+					doneButtonImageLayer.setVisible(true);
+				}
+				else {
+					doneButtonImageLayer.setVisible(false);
+				}
+
+				currentDemoIndex= currentDemoIndex+1;
+
+			}
+
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {
+				// TODO Auto-generated method stub
+				
+			}});
+        
+        
+
+        final Image doneButtonImage = assets().getImage("images/pngs/doneButton.png");
+        doneButtonImageLayer = graphics().createImageLayer(doneButtonImage);
+        demoLayer.add(doneButtonImageLayer);
+        doneButtonImageLayer.setTranslation(680, 520);
+        doneButtonImageLayer.setVisible(false);
+        doneButtonImageLayer.addListener(new Mouse.Listener() {
+
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+				demoPages.get(currentDemoIndex).setVisible(false);
+				// initialize for the next run of the demo
+				demoPages.get(0).setVisible(true);
+				currentDemoIndex = 0;
+				doneButtonImageLayer.setVisible(false);
+				backButtonImageLayer.setVisible(false);
+				nextButtonImageLayer.setVisible(true);
+
+
+				trainBox.setScene(trainBox.getStartScene());
+
+
+			}
+
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {
+				// TODO Auto-generated method stub
+				
+			}});
+
 	}
 	
 	@Override
 	public void onAttach() {
 		graphics().rootLayer().add(bgLayer);
-		graphics().rootLayer().add(cloudLayer);
-		graphics().rootLayer().add(textLayer);
-	    graphics().rootLayer().add(statsLayer);
+	    graphics().rootLayer().add(demoLayer);
 	    pointer().setListener(this);
 	    keyboard().setListener(this);	
 	}
@@ -80,44 +227,37 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
-		graphics().rootLayer().remove(cloudLayer);
-		graphics().rootLayer().remove(textLayer);
-		graphics().rootLayer().remove(statsLayer);
+	    graphics().rootLayer().remove(demoLayer);
+
+
 	}
 	
 	@Override
 	public void update(float delta) {
-		x+=0.08*delta;
-		if(x>bgImage.width() + cloudImage.width()){
-			x=-cloudImage.width();
-		}
-		y+=0.01*vy*delta;
-		
-		if(y>bgImage.height()+ cloudImage.height()){
-			y=0;
-		}
-		if(y< -cloudImage.height()){
-			y=bgImage.height()+cloudImage.height();
-		}
-		
-		cloudLayer.setTranslation(x, y);
-		statsImage.canvas().clear();
-		statsImage.canvas().drawText("VEL: "+vy, 20, 30);
+
 	}
-	
+
+	@Override
+	public void onPointerStart(playn.core.Pointer.Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPointerEnd(playn.core.Pointer.Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPointerDrag(playn.core.Pointer.Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void onKeyDown(Event event) {
-		log().debug(event.key() + " Pressed");
-		if(event.key() == Key.DOWN){
-			vy += 1;
-		}
-		if(event.key() == Key.UP){
-			vy -= 1;
-		}
-		if(event.key() == Key.C){
-			menuVisible = !menuVisible;
-			compMenu.setVisible(menuVisible);
-		}
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -129,26 +269,11 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void onKeyUp(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	}
+	
 
-	@Override
-	public void onPointerStart(playn.core.Pointer.Event event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPointerEnd(playn.core.Pointer.Event event) {
-		x = event.x();
-		y = event.y();
-		cloudLayer.setTranslation(x-(cloudImage.width()/2), y-(cloudImage.height()/2));
-	}
-
-	@Override
-	public void onPointerDrag(playn.core.Pointer.Event event) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

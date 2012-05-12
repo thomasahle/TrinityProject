@@ -158,6 +158,33 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
         menuLayer.add(demoButtonImageLayer);
         demoButtonImageLayer.setTranslation(100,40);
+        demoButtonImageLayer.addListener(new Mouse.Listener() {
+           Image demoButtonPressedImage = assets().getImage("images/pngs/demoButtonPressed.png");
+            
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {	
+			}
+
+			
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+		        demoButtonImageLayer.setImage(demoButtonPressedImage);
+
+				
+			}
+			
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+		        demoButtonImageLayer.setImage(demoButtonPressedImage);
+				trainBox.setScene(trainBox.getDemoScene());
+			}
+		});
         
         
         final Image playButtonImage = assets().getImage("images/pngs/playButton.png");
