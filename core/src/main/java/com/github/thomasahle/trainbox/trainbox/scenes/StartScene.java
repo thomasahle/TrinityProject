@@ -7,6 +7,7 @@ import static playn.core.PlayN.pointer;
 
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.event.MouseListener;
 
 import javax.swing.plaf.metal.MetalButtonUI;
 
@@ -59,6 +60,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     ImageLayer startButton; // contained in menulayer
     ImageLayer exitButton; // contained in menulayer
     ImageLayer watermelon;
+    GroupLayer aboutLayer;
     boolean menuVisible;   // whether the menu is visible
     TrainBox trainBox;
     
@@ -72,7 +74,45 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final Image backgroundImage = assets().getImage("images/pngs/startPage.png");
 		canvas.drawImage(backgroundImage, 0, 0);
 		
-		
+        aboutLayer = graphics().createGroupLayer();
+        aboutLayer.setTranslation(width/20+40, height/20);
+        final Image aboutBlurbImage = assets().getImage("images/pngs/aboutPage.png");
+        final ImageLayer aboutBlurbImageLayer = graphics().createImageLayer(aboutBlurbImage);
+        aboutLayer.add(aboutBlurbImageLayer);
+        aboutLayer.setVisible(false);
+        
+        final Image aboutBlurBackButtonImage = assets().getImage("images/pngs/backButton.png");
+        final ImageLayer aboutBlurBackButtonImageLayer = graphics().createImageLayer(aboutBlurBackButtonImage);
+        aboutLayer.add(aboutBlurBackButtonImageLayer);
+        aboutBlurBackButtonImageLayer.setTranslation(680, 520);
+        aboutBlurBackButtonImageLayer.addListener(new Mouse.Listener() {
+
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+				aboutLayer.setVisible(false);
+				
+			}
+
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {
+				// TODO Auto-generated method stub
+				
+			}});
+        
+        
+        
         menuLayer = graphics().createGroupLayer();
         menuLayer.setTranslation(width/5, height/4+40);
         final Image menuBackgoundImage = assets().getImage("images/pngs/menuBackground.png");
@@ -83,7 +123,37 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final ImageLayer aboutButtonImageLayer = graphics().createImageLayer(aboutButtonImage);
         menuLayer.add(aboutButtonImageLayer);
         aboutButtonImageLayer.setTranslation(45,210);
+        aboutButtonImageLayer.addListener(new Mouse.Listener() {
+
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+		        aboutLayer.setVisible(true);
+				
+			}
+
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {
+				// TODO Auto-generated method stub
+				
+			}}
+        );
         
+        
+
+        		
+       
         final Image demoButtonImage = assets().getImage("images/pngs/demoButton.png");
         final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
         menuLayer.add(demoButtonImageLayer);
@@ -141,6 +211,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().add(cloudLayer);
         graphics().rootLayer().add(menuLayer);
 	    graphics().rootLayer().add(watermelon);
+	    graphics().rootLayer().add(aboutLayer);
 	    pointer().setListener(this);
 	    keyboard().setListener(this);	
 	}
@@ -151,6 +222,8 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().remove(cloudLayer);
         graphics().rootLayer().remove(menuLayer);
 	    graphics().rootLayer().remove(watermelon);
+	    graphics().rootLayer().remove(aboutLayer);
+
 
 	}
 	
