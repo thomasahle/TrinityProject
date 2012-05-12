@@ -101,14 +101,16 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 			width += child.getSize().width;
 			height = Math.max(height, child.getSize().height);
 		}
+		Dimension myOldSize = mSize;
 		mSize = new Dimension(width, height);
-		
-		// Reposition layers
-		float x = 0;
-		for (int p = 0; p < mComponents.size(); p++) {
-			UIComponent c = mComponents.get(p);
-			c.setPosition(new Point(x, height/2-c.getSize().height/2));
-			x += c.getSize().width;
+		if (!myOldSize.equals(mSize)) {
+			// Reposition layers
+			float x = 0;
+			for (UIComponent child : getChildren()) {
+				child.setPosition(new Point(x, height/2-child.getSize().height/2));
+				x += child.getSize().width;
+			}
+			fireSizeChanged(myOldSize);
 		}
 	}
 	
