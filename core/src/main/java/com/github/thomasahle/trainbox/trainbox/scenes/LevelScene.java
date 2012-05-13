@@ -39,6 +39,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	ImageLayer pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
 	
 	GroupLayer goalBarLayer;
+	ImageLayer levelFailedBlurbLayer;
+	ImageLayer levelCompletedBlurbLayer;
 
 
 	
@@ -47,7 +49,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		final int HEIGHT = graphics().screenHeight();
 		final int WIDTH = graphics().screenWidth();
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
-		//bgImage.canvas().setFillColor(0xffffffff).fillRect(0, HEIGHT/12, WIDTH, HEIGHT);
 		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
 		mBgLayer = graphics().createImageLayer(bgImage);
