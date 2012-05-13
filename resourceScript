@@ -1,0 +1,14 @@
+cd ./core/src/main/java/com/github/thomasahle/trainbox/trainbox/
+
+FILES=./resources/images/pngs/*.png
+for f in $FILES
+do
+  echo "watcher.add(assets().getImage(\"" $f "\"));"
+done
+
+FILES=./resources/images/*.png
+for f in $FILES
+do
+  echo "watcher.add(assets().getImage(\"" $f "\"));"
+done
+
