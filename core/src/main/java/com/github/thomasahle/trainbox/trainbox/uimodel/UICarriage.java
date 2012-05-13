@@ -5,7 +5,9 @@ import static playn.core.PlayN.graphics;
 import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.Layer;
+import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
+import pythagoras.f.Transform;
 import pythagoras.i.Dimension;
 
 public class UICarriage {
@@ -43,8 +45,15 @@ public class UICarriage {
 		return mPosition;
 	}
 	public void setPosition(Point position) {
-		getLayer().setTranslation(position.x, position.y);
+		getLayer().setOrigin(-position.x, -position.y);
 		mPosition = position;
+	}
+	public void setRotation(float dx, float dy) {
+		float theta = FloatMath.atan2(dy, dx);
+		Transform tr = getLayer().transform();
+		tr.translate(WIDTH/2.f+mPosition.x, HEIGHT/2.f+mPosition.y);
+		tr.setRotation(theta);
+		tr.translate(-WIDTH/2.f-mPosition.x, -HEIGHT/2.f-mPosition.y);
 	}
 	public Dimension getSize() {
 		return new Dimension(WIDTH, HEIGHT);

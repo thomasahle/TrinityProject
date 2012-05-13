@@ -4,6 +4,7 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Path;
 import pythagoras.f.Dimension;
+import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
@@ -84,16 +86,28 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mUpPathIn = createPath (
 				0, mSize.height/2,
 				SIDES_WIDTH, mTopComp.getSize().height/2);
+		/*mUpPathIn.print();
+		for (int x = 0; x < SIDES_WIDTH; x++) {
+			log().debug(""+mUpPathIn.calculateT(x)+" "+Arrays.toString(mUpPathIn.evaluateSlope(mUpPathIn.calculateT(x))));
+		}*/
+		mDownPathIn = createPath (
+				0, mSize.height/2,
+				SIDES_WIDTH, mBotComp.getPosition().y + mBotComp.getSize().height/2);
 		mUpPathOut = createPath (
 				0, mTopComp.getSize().height/2,
+				SIDES_WIDTH, mSize.height/2);
+		mDownPathOut = createPath (
+				0, mBotComp.getPosition().y + mBotComp.getSize().height/2,
 				SIDES_WIDTH, mSize.height/2);
 		
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		drawBendTrack(imageLeft, mUpPathIn);
+		drawBendTrack(imageLeft, mDownPathIn);
 		mLeftLayer.setImage(imageLeft);
 		
 		CanvasImage imageRight = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		drawBendTrack(imageRight, mUpPathOut);
+		drawBendTrack(imageRight, mDownPathOut);
 		mRightLayer.setImage(imageRight);
 	}
 	
@@ -165,13 +179,60 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public void update(float delta) {
-		if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= mTopComp.getPosition().x) {
+		if (paused())
+			return;
+		//float tBorder = mUpPathIn.calculateT(getTrainTaker().leftBlock());
+		float rightBorder = mTopComp.leftBlock();
+		for (Iterator<UITrain> it = mTopBuffer.iterator(); it.hasNext(); ) {
+			UITrain train = it.next();
+			float trainLeft = train.getPosition().x;
+			float compLeft = getDeepPosition().x;
+			float trainRight = trainLeft + train.getSize().width;
+			float compRight = compLeft + getSize().width;
+			
+			for (UICarriage car : train.getCarriages()) {
+				float carLeft = car.getPosition().x + trainLeft - getDeepPosition().x;
+				float carRight = carLeft + car.WIDTH;
+				float tCenter = mUpPathIn.calculateT((carRight+carLeft)/2.f);
+				float[] slope = mUpPathIn.evaluateSlope(tCenter);
+				//log().debug(carLeft+" "+carRight+" "+tCenter+" "+slope[0]+" "+slope[1]+" "+FloatMath.atan2(slope[1],slope[0]));
+				car.setRotation(slope[0], slope[1]);
+			}
+			
+			// If the train is now entirely gone from us.
+			if (trainLeft >= compRight) {
+				it.remove();
+				continue;
+			}
+			// If the train is no longer controlled by us, but still 'on us'.
+			if (trainRight > compRight) {
+				continue;
+			}
+			// See how far we can move it
+			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
+			float newLeft = newRight-train.getSize().width;
+			
+			train.setPosition(new Point(newLeft, train.getPosition().y));
+			// If it is now out in the right side, give it away
+			if (newRight > compRight) {
+				mTopComp.takeTrain(train);
+			}
+			// Update our working right border
+			rightBorder = newLeft - UITrain.PADDING;
+		}
+		
+		
+		/*if (!mTopBuffer.isEmpty() && mTopComp.leftBlock() >= mTopComp.getPosition().x) {
+			
+			
 			log().debug("Giving waiting split train up to "+mTopComp);
 			
 			UITrain ttrain = mTopBuffer.poll();
+			for (UICarriage car : ttrain.getCarriages())
+				car.setRotation(0.5f, 0.5f);
 			ttrain.getLayer().setVisible(true);
 			mTopComp.takeTrain(ttrain);
-		}
+		}*/
 		
 		if (!mBotBuffer.isEmpty() && mBotComp.leftBlock() >= mBotComp.getPosition().x) {
 			log().debug("Giving waiting split train down to "+mBotComp);
@@ -188,7 +249,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 	@Override
 	public void takeTrain(UITrain train) {
 		log().debug("Got train to splitter, sending it "+(mNextInbuf==mTopBuffer?"up":"down"));
-		train.getLayer().setVisible(false);
 		mNextInbuf.add(train);
 		mNextInbuf = (mNextInbuf==mTopBuffer) ? mBotBuffer : mTopBuffer;
 	}
