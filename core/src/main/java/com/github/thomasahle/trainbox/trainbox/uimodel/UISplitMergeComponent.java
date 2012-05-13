@@ -7,17 +7,23 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import playn.core.CanvasImage;
 import playn.core.GroupLayer;
+import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Layer;
+import playn.core.Path;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-// A tricky thing here is to avoid deadlocks.
-// For a start we can fix them using buffer component
+import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
 
-// Even simpler start: Use teleportation instead of lead from/to
+// It's expected that this deadlocks when the output is waiting for the input.
+// This is not a task for the splitmerge to solve, but rather for the player.
 
 public class UISplitMergeComponent extends AbstractComposite {
+	
+	private final static float SIDES_WIDTH = 150;
 	
 	private LinkedList<UITrain> mTopBuffer = new LinkedList<UITrain>();
 	private LinkedList<UITrain> mBotBuffer = new LinkedList<UITrain>();
@@ -26,8 +32,13 @@ public class UISplitMergeComponent extends AbstractComposite {
 	private Dimension mSize;
 	private UIComponent mTopComp, mBotComp;
 	
+	private ImageLayer mLeftLayer = graphics().createImageLayer();
+	private ImageLayer mRightLayer = graphics().createImageLayer();
 	private GroupLayer mBackLayer = graphics().createGroupLayer();
 	private GroupLayer mFrontLayer = graphics().createGroupLayer();
+	
+	private QuadPath mUpPathIn, mDownPathIn;
+	private QuadPath mUpPathOut, mDownPathOut;
 	
 	public UISplitMergeComponent(UIComponent top, UIComponent bot) {
 		mNextInbuf = mTopBuffer;
@@ -43,6 +54,47 @@ public class UISplitMergeComponent extends AbstractComposite {
 		
 		top.setTrainTaker(mTopTaker);
 		bot.setTrainTaker(mBotTaker);
+		
+		mBackLayer.add(mLeftLayer);
+		mBackLayer.add(mRightLayer);
+		mRightLayer.setImage(graphics().createImage(1, 1));
+		mLeftLayer.setImage(graphics().createImage(1, 1));
+	}
+	
+	private QuadPath createPath(float x0, float y0, float x2, float y2) {
+		QuadPath path = new QuadPath();
+		float x1 = (x0+x2)/2;
+		float y1 = (y0+y2)/2;
+		path.moveTo(x0, y0);
+		path.quadraticCurveTo(x1, y0, x1, y1);
+		path.quadraticCurveTo(x1, y2, x2, y2);
+		return path;
+	}
+	
+	private void drawBendTrack(CanvasImage image, QuadPath path) {
+		Path playnPath = path.paintPath(image.canvas().createPath());
+		image.canvas().setStrokeColor(0xff000000);
+		image.canvas().setStrokeWidth(30);
+		image.canvas().strokePath(playnPath);
+		image.canvas().setStrokeColor(0xffffffff);
+		image.canvas().setStrokeWidth(24);
+		image.canvas().strokePath(playnPath);
+	}
+	private void updateLeftSideLayer() {
+		mUpPathIn = createPath (
+				0, mSize.height/2,
+				SIDES_WIDTH, mTopComp.getSize().height/2);
+		mUpPathOut = createPath (
+				0, mTopComp.getSize().height/2,
+				SIDES_WIDTH, mSize.height/2);
+		
+		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
+		drawBendTrack(imageLeft, mUpPathIn);
+		mLeftLayer.setImage(imageLeft);
+		
+		CanvasImage imageRight = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
+		drawBendTrack(imageRight, mUpPathOut);
+		mRightLayer.setImage(imageRight);
 	}
 	
 	private void add(UIComponent comp) {
@@ -53,18 +105,21 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
-		// TODO: Should those be centered horizontally?
-		//mTopComp.setPosition(new Point(0, 0));
-		mBotComp.setPosition(new Point(0, mTopComp.getSize().height));
-		
 		Dimension newSize = new Dimension(
-				Math.max(mTopComp.getSize().width, mBotComp.getSize().width),
+				Math.max(mTopComp.getSize().width, mBotComp.getSize().width) + 2*SIDES_WIDTH,
 				mTopComp.getSize().height + mBotComp.getSize().height);
 		
 		if (!newSize.equals(mSize)) {
+			mTopComp.setPosition(new Point(SIDES_WIDTH, 0));
+			mBotComp.setPosition(new Point(SIDES_WIDTH, mTopComp.getSize().height));
+			mRightLayer.setTranslation(newSize.width-SIDES_WIDTH, 0);
+			
+			
 			Dimension ourOldSize = mSize;
 			mSize = newSize;
 			fireSizeChanged(ourOldSize);
+			
+			updateLeftSideLayer();
 		}
 	}
 	
