@@ -61,9 +61,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
 		// Initialize the level we are going to try to solve
-		mLevel = new UILevel(new Level(
+		mLevel = new UILevel(new Level(1,
 				ComponentFactory.parseTrains("1-5-9-13 2-6-10-14 3-7-11-15 4-8-12-16"),
-				ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16")));
+				ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16")
+				));
 		mLevel.setListener(this);
 		
 		
