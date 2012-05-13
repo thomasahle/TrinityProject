@@ -4,6 +4,8 @@ import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
+import static playn.core.PlayN.pointer;
+
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
