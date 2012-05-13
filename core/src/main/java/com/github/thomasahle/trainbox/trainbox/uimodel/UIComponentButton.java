@@ -5,7 +5,6 @@ import static playn.core.PlayN.graphics;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
-import com.sun.tools.doclets.internal.toolkit.util.Group;
 
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;

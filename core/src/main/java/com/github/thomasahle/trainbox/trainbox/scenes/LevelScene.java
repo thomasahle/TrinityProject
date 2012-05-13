@@ -68,7 +68,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	
 	public LevelScene(TrainBox trainBox, Level l) {
 		this.trainBox = trainBox;
-		
+		toolMan = new ToolManager();
 
 		// A background image. This should be really nice.
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
@@ -78,6 +78,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		
 		// Initialize the level we are going to try to solve
 		mLevel = new UILevel(toolMan, l);
+		toolMan.add(mLevel);
 		mLevel.setListener(this);
 		mLevelNumber=l.levelNumber;
 		
@@ -268,8 +269,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		
 		// add the component pallet.
 		mPallet = new UIPallet(this);
-		toolMan = new ToolManager();
-		toolMan.add(mLevel);
 		
 		UIComponentButton dupBut = new UIComponentButton(toolMan, UIToken.DUP);
 		UIComponentButton boxBut = new UIComponentButton(toolMan, UIToken.BOX);
