@@ -4,6 +4,7 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
 import playn.core.Game;
+import playn.core.PlayN;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
@@ -139,6 +140,7 @@ public class TrainBox implements Game{
 	public void setLevel(int index){
 		LevelTracker.updateLevel(index);
 		setScene(new LevelScene(this,Level.levels.get(index)));
+		PlayN.log().debug("Setting Level "+index);
 	}
 
 

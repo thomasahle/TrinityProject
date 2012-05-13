@@ -29,6 +29,7 @@ public class UIPallet implements Listener, HitTester{
 	private ImageLayer background;
 	private CanvasImage rect;
 	private LevelScene levelScene;
+	private float padding = 5.0f;
 	
 
 	public UIPallet(LevelScene levelScene) {
@@ -43,8 +44,12 @@ public class UIPallet implements Listener, HitTester{
 	private void setBackground() {
 		rect = graphics().createImage((int)mSize.width+20, (int)mSize.height+20);
 		rect.canvas().clear();
-		rect.canvas().setFillColor(0xffffff00);
+		rect.canvas().setFillColor(0xaa000000);
 		rect.canvas().fillRect(0, 0, mSize.width+20, mSize.height+20);
+		rect.canvas().setStrokeColor(0xff000000);
+		rect.canvas().setStrokeWidth(10.0f);
+		rect.canvas().drawLine(0, 0, mSize.width+20, 0);
+		rect.canvas().drawLine(0, mSize.height+20, mSize.width+20, mSize.height+20);
 		background = graphics().createImageLayer(rect);
 		background.setDepth(-1);
 		mLayer.add(background);
@@ -86,17 +91,20 @@ public class UIPallet implements Listener, HitTester{
 		float width = 0;
 		float height = 0;
 		for (UIComponentButton but : compList) {
-			width += but.getSize().width;
+			width += (but.getSize().width + padding);
 			height = Math.max(height, but.getSize().height);
 		}
+		width += padding;
+		height += 2*padding;
+		
 		Dimension myOldSize = mSize;
 		mSize = new Dimension(width, height);
 		if (!myOldSize.equals(mSize)) {
 			// Reposition layers
-			float x = 0;
+			float x = padding;
 			for (UIComponentButton but : compList) {
 				but.setPosition(new Point(x, height/2-but.getSize().height/2));
-				x += but.getSize().width;
+				x += (but.getSize().width+padding);
 			}
 		}
 		background.destroy();

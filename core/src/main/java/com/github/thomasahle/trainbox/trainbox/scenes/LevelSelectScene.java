@@ -89,12 +89,10 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	        
 		}*/
 
-	private final List<ImageLayer> mButtons = new ArrayList<ImageLayer>();
 
 	private void initializeLevelButtons() {
 		int numberOfLevels = Level.levels.size();
 		int currentProgress = LevelTracker.getCurrentProgress();
-		mButtons.clear();
 		
 		float x = 90;
 		float y = 200;
@@ -104,11 +102,10 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 		for (int i=0; i<numberOfLevels; i++) {
 			 final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
-			 mButtons.add(levelButtonImageLayer);
 			 if (i<=currentProgress) {
 				 final int level = i;
 				 levelButtonImageLayer.setImage(levelButtonOk);
-	/*			 levelButtonImageLayer.addListener(new Pointer.Listener() {
+         		 levelButtonImageLayer.addListener(new Pointer.Listener() {
 					
 					@Override
 					public void onPointerStart(Event event) {
@@ -120,7 +117,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 					
 					@Override
 					public void onPointerDrag(Event event) {}
-				});                                                               */
+				});                                                               
 			 }
 			 else {
 				 levelButtonImageLayer.setImage(levelButtonNotOk);
@@ -142,6 +139,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	
 	@Override
 	public void onPointerStart(Event event) {
+		/*
 		
 		
 		
@@ -153,6 +151,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		
 		trainBox.setLevel(0);
 		//PlayN.log().debug("Seting level 1 - (choosing other levels not implemented yet)");
+	 */
 	}
 
 	@Override
@@ -186,9 +185,6 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
-	    for(ImageLayer l:mButtons){
-	    	//graphics().rootLayer().remove(l);
-	    }
 	    pointer().setListener(null);
 	    keyboard().setListener(null);
 	}
