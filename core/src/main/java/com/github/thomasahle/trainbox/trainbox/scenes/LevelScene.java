@@ -29,7 +29,8 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
  *  - The play button
  */
 public class LevelScene implements Scene, LevelFinishedListener, Listener {
-	
+	final int HEIGHT = graphics().screenHeight();
+	final int WIDTH = graphics().screenWidth();
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
@@ -39,15 +40,16 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	ImageLayer pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
 	
 	GroupLayer goalBarLayer;
-	ImageLayer levelFailedBlurbLayer;
-	ImageLayer levelCompletedBlurbLayer;
 
+	
+	GroupLayer levelStatusLayer;
+	ImageLayer levelFailedBlurbImageLayer;
+	ImageLayer levelCompletedBlurbImageLayer;
 
 	
 	public LevelScene(TrainBox trainBox) {
 		// A background image. This should be really nice.
-		final int HEIGHT = graphics().screenHeight();
-		final int WIDTH = graphics().screenWidth();
+
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
 		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
@@ -81,8 +83,53 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		goalBarLayer = graphics().createGroupLayer();
 		goalBarLayer.setTranslation(10, HEIGHT*5/6);
 		initGoalBar();
+		initLevelStatus();
 	}
 	
+	private void initLevelStatus() {
+		levelStatusLayer = graphics().createGroupLayer();
+		levelStatusLayer.setTranslation(WIDTH/20+40, HEIGHT/20);
+
+		Image levelFailedBlurbImage = assets().getImage("images/pngs/levelFailedBlurb.png");
+		Image levelCompletedBlurb = assets().getImage("images/pngs/levelCompleteBlurb.png");
+		levelFailedBlurbImageLayer = graphics().createImageLayer(levelFailedBlurbImage);
+		levelCompletedBlurbImageLayer = graphics().createImageLayer(levelCompletedBlurb);
+		levelStatusLayer.add(levelCompletedBlurbImageLayer);
+		levelStatusLayer.add(levelFailedBlurbImageLayer);
+		levelFailedBlurbImageLayer.setVisible(false);
+		levelCompletedBlurbImageLayer.setVisible(true);
+		
+		//initialize the next button image layer
+		Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
+		ImageLayer nextButtonLeveLStatusImageLayer = graphics().createImageLayer(nextButtonImage);
+		levelStatusLayer.add(nextButtonLeveLStatusImageLayer);
+		nextButtonLeveLStatusImageLayer.setTranslation(680, 520);
+		nextButtonLeveLStatusImageLayer.addListener(new Listener() {
+
+			@Override
+			public void onPointerStart(Event event) {
+				levelFailedBlurbImageLayer.setVisible(false);
+				levelCompletedBlurbImageLayer.setVisible(false);
+				levelStatusLayer.setVisible(false);
+			}
+			
+
+			@Override
+			public void onPointerEnd(Event event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onPointerDrag(Event event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+
+	}
+
 	private void initGoalBar() {
 		Image goalBarImage = assets().getImage("images/pngs/goalBar.png");	
 		ImageLayer goalBarImageLayer = graphics().createImageLayer(goalBarImage);
@@ -97,14 +144,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 	private Layer initPlayButton() {
 		CanvasImage img = graphics().createImage(150, 150);
-/*		CanvasImage img = graphics().createImage(150, 150);
 
-		ImageLayer pauseButtonImageLayer = graphics().createImageLayer(goButtonImage);
-		ArrayList<Image> goPauseButtonRotationList = new ArrayList<Image>();
-		goPauseButtonRotationList.add(goButtonImage);
-		goPauseButtonRotationList.add(pauseButtonImage);
-
-		*/
 		pauseButtonImageLayer.setVisible(false);
 		return graphics().createImageLayer(goButtonImage);
 	}
@@ -123,6 +163,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		graphics().rootLayer().add(mPlayButton);
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(goalBarLayer);
+		graphics().rootLayer().add(levelStatusLayer);
 	}
 
 	@Override
@@ -133,18 +174,21 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		graphics().rootLayer().remove(mPlayButton);
 		graphics().rootLayer().remove(pauseButtonImageLayer);
 		graphics().rootLayer().remove(goalBarLayer);
-
-
+		graphics().rootLayer().remove(levelStatusLayer);
 	}
 
 	@Override
 	public void levelCleared() {
 		log().debug("Level Cleared!");
+		levelStatusLayer.setVisible(true);
+		levelCompletedBlurbImageLayer.setVisible(true);
 	}
 
 	@Override
 	public void levelFailed() {
 		log().debug("Level Failed :(");
+		levelStatusLayer.setVisible(true);
+		levelFailedBlurbImageLayer.setVisible(true);
 	}
 
 	private float mDragStartXPos;
