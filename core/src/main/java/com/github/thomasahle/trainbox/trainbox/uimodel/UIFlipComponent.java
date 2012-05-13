@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Queue;
 
 import playn.core.CanvasImage;
+import playn.core.Image;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 
@@ -30,11 +32,9 @@ public class UIFlipComponent extends BlackBoxComponent {
 		mWidth = width;
 		
 		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
-		
-		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xff0000aa);
-		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		mFrontLayer = graphics().createImageLayer(image);
+
+		Image flipComponentImage = assets().getImage("images/pngs/flipComponent.png");
+		mFrontLayer = graphics().createImageLayer(flipComponentImage);
 	}
 	
 	public Dimension getSize(){

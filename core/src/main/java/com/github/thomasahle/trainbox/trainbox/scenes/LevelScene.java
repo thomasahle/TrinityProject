@@ -11,7 +11,11 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Key;
 import playn.core.Keyboard;
+import playn.core.Mouse;
 import playn.core.Keyboard.TypedEvent;
+import playn.core.Mouse.ButtonEvent;
+import playn.core.Mouse.MotionEvent;
+import playn.core.Mouse.WheelEvent;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
@@ -40,6 +44,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
+	private final int mLevelNumber;
 	private UIPallet mPallet;
 	int currPauseGoButtonImageIndex = 0;
 
@@ -57,6 +62,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 
 	ImageLayer pauseButtonImageLayer;
 	
+	GroupLayer levelPopupLayer;
+	
 	public LevelScene(TrainBox trainBox, Level l) {
 		this.trainBox = trainBox;
 		
@@ -70,6 +77,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		// Initialize the level we are going to try to solve
 		mLevel = new UILevel(l);
 		mLevel.setListener(this);
+		mLevelNumber=l.levelNumber;
 		
 		
 		// initalize the level controller buttons
@@ -84,6 +92,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		goalBarLayer.setTranslation(10, HEIGHT*5/6);
 		initGoalBar();
 		initLevelStatus();
+		initLevelPopup();
 		
 		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
 		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
@@ -93,6 +102,115 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	}
 	
 	
+	private void initLevelPopup() {
+		levelPopupLayer = graphics().createGroupLayer();
+		levelPopupLayer.setVisible(false);
+		levelPopupLayer.setTranslation(WIDTH/5, HEIGHT/5);
+
+		
+		// set background
+        final Image backgroundImage = assets().getImage("images/pngs/menuBackground.png");
+        ImageLayer bgImageLayer = graphics().createImageLayer(backgroundImage);
+        levelPopupLayer.add(bgImageLayer);
+
+		// button to enter a new level
+		Image changeLevelButtonImage = assets().getImage("images/pngs/changeLevelButton.png");
+		ImageLayer changeLevelButtonImageLayer = graphics().createImageLayer(changeLevelButtonImage);
+		levelPopupLayer.add(changeLevelButtonImageLayer);
+		changeLevelButtonImageLayer.setTranslation(350, 100);
+		changeLevelButtonImageLayer.addListener(new Listener() {
+
+			@Override
+			public void onPointerStart(Event event) {
+				mLevel.paused(!mLevel.paused());
+				trainBox.setScene(trainBox.getLevelSelectScene());
+
+			}
+
+			@Override
+			public void onPointerEnd(Event event) {
+			}
+
+			@Override
+			public void onPointerDrag(Event event) {
+			}});
+		
+		Image levelPopulBackButtonImage = assets().getImage("images/pngs/backButton.png");
+		ImageLayer levelPopulBackButtonImageLayer = graphics().createImageLayer(levelPopulBackButtonImage);
+		levelPopupLayer.add(levelPopulBackButtonImageLayer);
+		levelPopulBackButtonImageLayer.setTranslation(370, 230);
+		levelPopulBackButtonImageLayer.addListener(new Listener() {
+
+			@Override
+			public void onPointerStart(Event event) {
+				levelPopupLayer.setVisible(false);
+			}
+
+			@Override
+			public void onPointerEnd(Event event) {
+			}
+
+			@Override
+			public void onPointerDrag(Event event) {
+			}});
+		
+		
+		
+		Image levelPopulHomeButtonImage = assets().getImage("images/pngs/homeButton.png");
+		ImageLayer levelPopulHomeButtonImageLayer = graphics().createImageLayer(levelPopulHomeButtonImage);
+		levelPopupLayer.add(levelPopulHomeButtonImageLayer);
+		levelPopulHomeButtonImageLayer.setTranslation(150, 250);;
+		levelPopulHomeButtonImageLayer.addListener(new Listener() {
+
+			@Override
+			public void onPointerStart(Event event) {
+				trainBox.setScene(trainBox.getStartScene());
+			}
+
+			@Override
+			public void onPointerEnd(Event event) {
+			}
+
+			@Override
+			public void onPointerDrag(Event event) {
+			}});
+		
+		
+		final Image demoButtonImage = assets().getImage("images/pngs/demoButton.png");
+        final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
+        levelPopupLayer.add(demoButtonImageLayer);
+        demoButtonImageLayer.setTranslation(100,40);
+        demoButtonImageLayer.addListener(new Mouse.Listener() {
+           Image demoButtonPressedImage = assets().getImage("images/pngs/demoButtonPressed.png");
+            
+			@Override
+			public void onMouseWheelScroll(WheelEvent event) {	
+			}
+
+			
+			@Override
+			public void onMouseUp(ButtonEvent event) {
+		        demoButtonImageLayer.setImage(demoButtonPressedImage);
+
+				
+			}
+			
+			@Override
+			public void onMouseMove(MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onMouseDown(ButtonEvent event) {
+		        demoButtonImageLayer.setImage(demoButtonPressedImage);
+				trainBox.setScene(trainBox.getDemoScene());
+			}
+		});
+		
+	}
+
+
 	private void initLevelController() {
 		Image goButtonImage = assets().getImage("images/pngs/goButton.png");
 		mPlayButton = graphics().createImageLayer(goButtonImage);
@@ -122,15 +240,15 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		mPlayButton.setTranslation(graphics().width()-145, graphics().height()-150);
 				
 		
-		Image changeLevelButtonImage = assets().getImage("images/pngs/changeLevelButton.png");
-		ImageLayer changeLevelButtonImageLayer = graphics().createImageLayer(changeLevelButtonImage);
-		changeLevelButtonImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-150);
-		changeLevelButtonImageLayer.addListener(new Listener() {
+		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");
+		ImageLayer menuButtonImageImageLayer = graphics().createImageLayer(menuButtonImage);
+		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-150);
+		menuButtonImageImageLayer.addListener(new Listener() {
 
 			@Override
 			public void onPointerStart(Event event) {
-				mLevel.paused(!mLevel.paused());
-				trainBox.setScene(trainBox.getLevelSelectScene());
+				mLevel.paused(true);
+				levelPopupLayer.setVisible(true);
 
 			}
 
@@ -141,6 +259,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 			@Override
 			public void onPointerDrag(Event event) {
 			}});
+		
 		
 		
 		// add the component pallet.
@@ -162,9 +281,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		
 		levelControlLayer.add(mPallet.getLayer());
 		levelControlLayer.add(mPlayButton);
-		
-		levelControlLayer.add(changeLevelButtonImageLayer);
-	
+		levelControlLayer.add(menuButtonImageImageLayer);
+			
 	}
 
 	private void initLevelStatus() {
@@ -193,20 +311,14 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusLayer.setVisible(false);
+				trainBox.setLevel(mLevelNumber+1);
 			}
 			
+			@Override
+			public void onPointerEnd(Event event) {}
 
 			@Override
-			public void onPointerEnd(Event event) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onPointerDrag(Event event) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onPointerDrag(Event event) {}
 			
 		});
 
@@ -240,7 +352,9 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
+		graphics().rootLayer().add(levelPopupLayer);
 		keyboard().setListener(this);
+	  	pointer().setListener(this);
 	    pointer().setListener(this);
 	}
 
@@ -253,6 +367,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().remove(pauseButtonImageLayer);
 		graphics().rootLayer().remove(goalBarLayer);
 		graphics().rootLayer().remove(levelStatusLayer);
+		graphics().rootLayer().remove(levelPopupLayer);
 		keyboard().setListener(null);
 	    pointer().setListener(null);
 	}
