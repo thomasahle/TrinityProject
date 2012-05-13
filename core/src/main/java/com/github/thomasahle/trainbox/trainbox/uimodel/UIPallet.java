@@ -6,8 +6,11 @@ import static playn.core.PlayN.log;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 
+import playn.core.CanvasImage;
 import playn.core.GroupLayer;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
 import playn.core.Pointer.Event;
@@ -19,17 +22,34 @@ public class UIPallet implements Listener, HitTester{
 	
 	private GroupLayer mLayer;
 	private List<UIComponentButton> compList;
-	private Dimension mSize;
+	private Dimension mSize = new Dimension(0, 0);
+	private ImageLayer background;
+	private CanvasImage rect;
 	
 
 	public UIPallet() {
 		mLayer = graphics().createGroupLayer();
+
+		setBackground();
+
 		compList = new ArrayList<UIComponentButton>();
+	}
+
+	private void setBackground() {
+		rect = graphics().createImage((int)mSize.width+20, (int)mSize.height+20);
+		rect.canvas().clear();
+		rect.canvas().setFillColor(0xffffff00);
+		rect.canvas().fillRect(0, 0, mSize.width+20, mSize.height+20);
+		background = graphics().createImageLayer(rect);
+		background.setDepth(-1);
+		mLayer.add(background);
+		background.setTranslation(-10, -10);
 	}
 
 	public void add(UIComponentButton but){
 		compList.add(but);
 		mLayer.add(but.getLayer());
+		sizeChanged();
 	}
 	
 	@Override
@@ -56,7 +76,7 @@ public class UIPallet implements Listener, HitTester{
 		return null;
 	}
 	
-	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+	public void sizeChanged() {
 		// Recalculate size
 		float width = 0;
 		float height = 0;
@@ -74,6 +94,12 @@ public class UIPallet implements Listener, HitTester{
 				x += but.getSize().width;
 			}
 		}
+		background.destroy();
+		setBackground();
+	}
+
+	public Layer getLayer() {
+		return mLayer;
 	}
 
 }

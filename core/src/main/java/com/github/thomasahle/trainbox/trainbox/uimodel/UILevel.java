@@ -26,7 +26,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIComposite mTrack;
 	private Level mLevel;
 	private LevelFinishedListener mListener;
-	private UIToken currentTok;
+	boolean isCompSelected = true;
+	UIToken compSelected = UIToken.BOX;
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -113,6 +114,14 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mTrack.paused(paused);
 	}
 	
+	public void setDragMode(){
+		isCompSelected = false;
+	}
+	
+	public void setCompSel(UIToken tok){
+		isCompSelected = true;
+		compSelected = tok;
+	}
 	
 	public void setListener(LevelFinishedListener listener) {
 		mListener = listener;
@@ -130,16 +139,19 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 
 	@Override
 	public void onPointerStart(Event event) {
-		Point p = new Point(event.localX(), event.localY());
-		mTrack.insertChildAt(new UIJoinComponent(80), p);
-//		try {
-//			mTrack.insertChildAt(UIComponentFactory.fromTok(currentTok), p);
-//		} catch (Exception e) {
-//		}
-
+		if (isCompSelected) {
+			Point p = new Point(event.localX(), event.localY());
+			mTrack.insertChildAt(UIComponentFactory.fromTok(compSelected), p);
+		}
 	}
-	@Override public void onPointerEnd(Event event) {}
-	@Override public void onPointerDrag(Event event) {}
+
+	@Override
+	public void onPointerEnd(Event event) {
+	}
+
+	@Override
+	public void onPointerDrag(Event event) {
+	}
 
 	@Override
 	public Layer hitTest(Layer layer, Point p) {
@@ -147,8 +159,10 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		float y = mTrack.getPosition().y + mTrack.getSize().height*0.85f;
 		float x1 = x + mTrack.getSize().width;
 		float y1 = y + mTrack.getSize().height;
-		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
+		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1 || !isCompSelected) {
+			isCompSelected = false;
 			return layer;
+		}
 		return mTrack.getBackLayer().hitTest(p);
 	}
 }

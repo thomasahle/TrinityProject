@@ -3,9 +3,6 @@ package com.github.thomasahle.trainbox.trainbox.scenes;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
-
-import java.util.ArrayList;
-
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -14,11 +11,12 @@ import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
 
-
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentButton;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIPallet;
 
@@ -70,8 +68,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		
 		// initalize the level controller buttons
 		initLevelController();
-		
-		mPallet = new UIPallet();
 		
 		// Dragging of level
 		mLevel.layer().addListener(this);
@@ -150,7 +146,26 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 			}});
 		
 		
+		// add the component pallet.
+		mPallet = new UIPallet();
+		
+		UIComponentButton dupBut = new UIComponentButton(mLevel, UIToken.DUP);
+		UIComponentButton boxBut = new UIComponentButton(mLevel, UIToken.BOX);
+		UIComponentButton flipBut = new UIComponentButton(mLevel, UIToken.FLIP);
+		UIComponentButton catBut = new UIComponentButton(mLevel, UIToken.CAT);
+		UIComponentButton mergBut = new UIComponentButton(mLevel, UIToken.MERG);
+
+		mPallet.add(dupBut);
+		mPallet.add(boxBut);
+		mPallet.add(flipBut);
+		mPallet.add(catBut);
+		mPallet.add(mergBut);
+		
+		mPallet.getLayer().setTranslation(20, graphics().height() - 180);
+		
+		levelControlLayer.add(mPallet.getLayer());
 		levelControlLayer.add(mPlayButton);
+		
 		levelControlLayer.add(changeLevelButtonImageLayer);
 	
 	}
