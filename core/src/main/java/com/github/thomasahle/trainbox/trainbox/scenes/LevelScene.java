@@ -72,8 +72,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 			public void onPointerEnd(Event event) {}
 			public void onPointerDrag(Event event) {}
 		});
-		mPlayButton.setTranslation(graphics().screenWidth()-150, graphics().screenHeight()-150);
-		pauseButtonImageLayer.setTranslation(graphics().screenWidth()-150, graphics().screenHeight()-168);
+		mPlayButton.setTranslation(graphics().width()-150, graphics().height()-150);
+		pauseButtonImageLayer.setTranslation(graphics().width()-150, graphics().height()-168);
 		
 		// Dragging of level
 		mLevel.layer().addListener(this);
