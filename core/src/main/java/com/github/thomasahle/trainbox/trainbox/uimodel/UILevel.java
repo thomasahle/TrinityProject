@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		UIHorizontalComponent track = new UIHorizontalComponent(100); 
 		mStart = new UIStartComponent(trains);
-		mGoal = new UIGoalComponent(400);
+		mGoal = new UIGoalComponent(400, mLevel.goal);
+		mGoal.addListener(this);
 		
 		
 		track.add(mStart);
@@ -115,10 +117,12 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	}
 	@Override
 	public void levelCleared() {
+		log().debug("LEVEL CLEARED !!!");
 		mListener.levelCleared();
 	}
 	@Override
 	public void levelFailed() {
+		log().debug("LEVEL FAILED !!!");
 		mListener.levelFailed();
 	}
 
