@@ -184,17 +184,14 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	@Override
 	public void onDetach() {
-<<<<<<< HEAD
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
 	    for(ImageLayer l:mButtons){
 	    	//graphics().rootLayer().remove(l);
 	    }
-=======
 	    graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
 	    graphics().rootLayer().remove(demoLayer);	
->>>>>>> 4ee43ee1c3af9e7241d094a52c03d92e38ba141b
 	    pointer().setListener(null);
 	    keyboard().setListener(null);
 	}

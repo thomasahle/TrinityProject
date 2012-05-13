@@ -237,11 +237,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		keyboard().setListener(this);
-<<<<<<< HEAD
-	  //	pointer().setListener(this);
-=======
+	  	pointer().setListener(this);
 	    pointer().setListener(this);
->>>>>>> add8809f754f5b63f8c416a1bfffc9d1faabc494
 	}
 
 	@Override
