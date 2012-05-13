@@ -52,6 +52,12 @@ public class UIPallet implements Listener, HitTester{
 		sizeChanged();
 	}
 	
+	public void setUnselected(){
+		for (UIComponentButton but : compList) {
+			but.setUnselected();
+		}
+	}
+	
 	@Override
 	public void onPointerStart(Event event) {
 		// TODO Auto-generated method stub

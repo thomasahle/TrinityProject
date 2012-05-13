@@ -8,6 +8,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToke
 
 import playn.core.CanvasImage;
 import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
@@ -22,6 +23,10 @@ public class UIComponentButton{
 	private UIComposite mParent;
 	private Point mPosition = new Point();
 	private Dimension mSize = new Dimension(80,80);
+
+	private boolean selected;
+
+	private ImageLayer outlinelayer;
 	
 	public UIComponentButton(final UILevel level, final UIToken comp){
 
@@ -31,6 +36,13 @@ public class UIComponentButton{
 		image.canvas().setFillColor(0xffaa00aa);
 		image.canvas().fillCircle(mSize.width/ 2.f, mSize.height / 2.f, mSize.width / 2.f);
 		layer = graphics().createImageLayer(image);
+		
+		CanvasImage outline = graphics().createImage((int)mSize.width, (int)mSize.height);
+		image.canvas().setStrokeColor(0x00000000);
+		image.canvas().setStrokeWidth(2);
+		image.canvas().strokeRect(5, 5, mSize.width-5, mSize.height-5);
+		outlinelayer = graphics().createImageLayer(image);
+		
 		layer.addListener(new Listener() {
 
 			@Override
@@ -58,6 +70,15 @@ public class UIComponentButton{
 	public void setPosition(Point point) {
 		mPosition = point;
 		layer.setTranslation(point.x, point.y);
+	}
+
+	public void setUnselected() {
+		selected = false;
+		
+	}
+	
+	public void setSelected() {
+		selected = true;
 	}
 
 }

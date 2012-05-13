@@ -1,11 +1,9 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.rmi.activation.UnknownObjectException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.github.thomasahle.trainbox.trainbox.model.Component;
-import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 
 public final class UIComponentFactory {
 

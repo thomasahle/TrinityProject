@@ -11,6 +11,7 @@ import playn.core.Layer;
 import playn.core.Layer.HitTester;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
+import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
@@ -24,7 +25,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIStartComponent mStart;
 	private UIGoalComponent mGoal;
 	private UIComposite mTrack;
-	private Level mLevel;
+	private Level mLevel;	
 	private LevelFinishedListener mListener;
 	boolean isCompSelected = true;
 	UIToken compSelected = UIToken.BOX;
@@ -182,5 +183,9 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 			if(t.getSpeed()-ds >= 0)
 			t.setSpeed(t.getSpeed()-ds);
 		}
+	}
+	
+	public Dimension getSize(){
+		return mTrack.getSize();
 	}
 }
