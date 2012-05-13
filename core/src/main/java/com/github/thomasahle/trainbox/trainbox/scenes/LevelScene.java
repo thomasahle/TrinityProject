@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
@@ -7,9 +8,13 @@ import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Key;
+import playn.core.Keyboard;
+import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
+import pythagoras.f.Dimension;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
@@ -27,7 +32,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIPallet;
  *  - Components to add
  *  - The play button
  */
-public class LevelScene implements Scene, LevelFinishedListener, Listener {
+public class LevelScene implements Scene, LevelFinishedListener, Listener, Keyboard.Listener {
 	TrainBox trainBox;
 	final int HEIGHT = graphics().screenHeight();
 	final int WIDTH = graphics().screenWidth();
@@ -37,6 +42,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private UIPallet mPallet;
 	int currPauseGoButtonImageIndex = 0;
 
+	
+	
 	
 	GroupLayer goalBarLayer;
 
@@ -51,8 +58,9 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	
 	public LevelScene(TrainBox trainBox, Level l) {
 		this.trainBox = trainBox;
-		// A background image. This should be really nice.
+		
 
+		// A background image. This should be really nice.
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
 		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
@@ -103,14 +111,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 			@Override
 			public void onPointerEnd(Event event) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void onPointerDrag(Event event) {
-				// TODO Auto-generated method stub
-				
 			}});
 		
 		
@@ -124,22 +128,17 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 			@Override
 			public void onPointerStart(Event event) {
+				mLevel.paused(!mLevel.paused());
 				trainBox.setScene(trainBox.getLevelSelectScene());
 
-
-				
 			}
 
 			@Override
 			public void onPointerEnd(Event event) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void onPointerDrag(Event event) {
-				// TODO Auto-generated method stub
-				
 			}});
 		
 		
@@ -240,6 +239,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
+		keyboard().setListener(this);
 	}
 
 	@Override
@@ -268,13 +268,63 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	}
 
 	private float mDragStartXPos;
+	private float mDragStartYPos;
 	@Override
 	public void onPointerStart(Event event) {
 		mDragStartXPos = event.localX();
+		mDragStartYPos = event.localY();
+
 	}
 	@Override
 	public void onPointerDrag(Event event) {
-		mLevel.layer().setTranslation(event.x()-mDragStartXPos, 0);
+		Dimension size = mLevel.getSize();
+		float x = event.x()-mDragStartXPos;
+		float y = event.y()-mDragStartYPos;
+		
+		float ybot = -mLevel.getSize().height + graphics().height() - 200;
+		float ytop = 0;
+		if (y > ytop) y = ytop;
+		if (y < ybot) y = ybot;
+		
+		float xbot = -mLevel.getSize().width + graphics().width();
+		float xtop = 0;
+		if (x > xtop) x = xtop;
+		if (x < xbot) x = xbot;
+		
+		mLevel.layer().setTranslation(x,y);
 	}
 	@Override public void onPointerEnd(Event event) {}
+
+
+	@Override
+	public void onKeyDown(playn.core.Keyboard.Event event) {
+		if(event.key() == Key.UP){
+			mLevel.increaseTrainSpeed(0.005f);
+			log().debug("INCREASING SPEED");
+		}
+		if(event.key() == Key.DOWN){
+			mLevel.decreaseTrainSpeed(0.005f);
+			log().debug("DECREASING SPEED");
+
+		}
+		
+		if(event.key() == Key.ESCAPE){
+			mLevel.setDragMode();
+			mPallet.setUnselected();
+		}
+	}
+
+
+	@Override
+	public void onKeyTyped(TypedEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onKeyUp(playn.core.Keyboard.Event event) {
+		// TODO Auto-generated method stub
+		
+	}
 }

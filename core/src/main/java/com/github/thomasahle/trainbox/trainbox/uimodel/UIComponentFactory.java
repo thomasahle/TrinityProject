@@ -1,6 +1,5 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.rmi.activation.UnknownObjectException;
 import java.util.ArrayList;
 import java.util.List;
 

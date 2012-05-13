@@ -110,17 +110,20 @@ public class UISeparateComponent extends AbstractComponent {
 				if (isUp(UP_LEVEL)) {
 					mLeftSide.poll();
 					train.getLayer().setVisible(false);
+					float oldSpeed = train.getSpeed();
 					fireTrainDestroyed(train);
 					
 					List<UICarriage> tailTrains = new ArrayList<UICarriage>(train.getCarriages());
 					tailTrains.remove(0);
 					UITrain tail = new UITrain(tailTrains);
 					fireTrainCreated(tail);
+					tail.setSpeed(oldSpeed); // set the speed of the remaining tail to the old speed of the total train.
 					tail.setPosition(new Point(trainLeft, train.getPosition().y));
 					mLeftSide.addFirst(tail);
 					
 					UITrain head = new UITrain(Arrays.asList(train.getCarriages().get(0)));
 					fireTrainCreated(head);
+					head.setSpeed(oldSpeed); // set the speed of the head to the old speed of the total train.
 					head.setPosition(new Point(carLeft, train.getPosition().y));
 					mLeftSide.addFirst(head);
 				}
@@ -157,7 +160,7 @@ public class UISeparateComponent extends AbstractComponent {
 			float trainRight = trainLeft + train.getSize().width;
 			float carLeft = trainLeft + train.getCarriages().get(0).getPosition().x;
 			
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
+			float newRight = Math.min(rightBorder, trainRight + train.speed*delta);
 			
 			// If we are already on the knife, hold it down
 			if (carLeft < knifeX && knifeX <= trainRight - 0.1f) {

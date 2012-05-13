@@ -18,9 +18,9 @@ import static playn.core.PlayN.log;
 
 public class UITrain {
 	
-	public final static float SPEED = 0.064f; // pixels/s
 	public final static float PADDING = 10.f;
 	
+	public float speed = 0.064f; // pixels/s
 	private List<UICarriage> mCarriages;
 	private GroupLayer mLayer;
 	private Point mPosition;
@@ -30,6 +30,13 @@ public class UITrain {
 	
 	public UITrain(Train train) {
 		this(fromTrain(train));
+	}
+	
+	public void setSpeed(float newSpeed){
+		this.speed = newSpeed;
+	}
+	public float getSpeed(){
+		return speed;
 	}
 	
 	public UITrain(int... cargos) {
@@ -53,6 +60,7 @@ public class UITrain {
 		mLayer = graphics().createGroupLayer();
 		
 		install(mCarriages);
+		this.setSpeed(old.getSpeed());
 	}
 	
 	private static List<UICarriage> fromCargos (int[] cargos) {
