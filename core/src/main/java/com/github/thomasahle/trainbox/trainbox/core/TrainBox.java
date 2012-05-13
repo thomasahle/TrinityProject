@@ -40,34 +40,49 @@ public class TrainBox implements Game{
 		setScene(new LoadingScene(this));
 		
 		graphics().setSize(1024, 640);  // this changes the size of the main window
-		watcher.add(	assets().getImage("images/pngs/trains.png"));
-		/*watcher.add(	assets().getImage("images/pngs/exit1Tr.png"));
-		watcher.add(	assets().getImage("images/pngs/exit2Tr.png"));
-		watcher.add(	assets().getImage("images/pngs/start1Tr.png"));
-		watcher.add(	assets().getImage("images/pngs/start2Tr.png"));*/
-		watcher.add(	assets().getImage("images/pngs/watermelonTr.png"));
-		watcher.add(	assets().getImage("images/pngs/startPage.png"));
-		watcher.add(	assets().getImage("images/pngs/aboutButton.png"));
-		watcher.add(	assets().getImage("images/pngs/aboutButtonPressed.png"));
-		watcher.add(	assets().getImage("images/pngs/demoButton.png"));
-		watcher.add(	assets().getImage("images/pngs/demoButtonPressed.png"));
-		watcher.add(	assets().getImage("images/pngs/playButton.png"));
-		watcher.add(	assets().getImage("images/pngs/playButtonPressed.png"));
-		watcher.add(	assets().getImage("images/pngs/menuBackground.png"));
-
-
-
-
-
-
-
 		
-
+		addResources();
 		
 		watcher.start();
 	}
 
-	
+	private void addResources(){
+		//Insertresources here.
+		watcher.add(assets().getImage("images/pngs/aboutButton.png"));
+		watcher.add(assets().getImage("images/pngs/aboutButtonPressed.png"));
+		watcher.add(assets().getImage("images/pngs/aboutPage.png"));
+		watcher.add(assets().getImage("images/pngs/backButton.png"));
+		watcher.add(assets().getImage("images/pngs/changeLevelButton.png"));
+		watcher.add(assets().getImage("images/pngs/demoButton.png"));
+		watcher.add(assets().getImage("images/pngs/demoButtonPressed.png"));
+		watcher.add(assets().getImage("images/pngs/demoPage1.png"));
+		watcher.add(assets().getImage("images/pngs/demoPage2.png"));
+		watcher.add(assets().getImage("images/pngs/demoPage3.png"));
+		watcher.add(assets().getImage("images/pngs/demoPage4.png"));
+		watcher.add(assets().getImage("images/pngs/demoPage5.png"));
+		watcher.add(assets().getImage("images/pngs/doneButton.png"));
+		watcher.add(assets().getImage("images/pngs/goalBar.png"));
+		watcher.add(assets().getImage("images/pngs/goButton.png"));
+		watcher.add(assets().getImage("images/pngs/levelCompleteBlurb.png"));
+		watcher.add(assets().getImage("images/pngs/levelFailedBlurb.png"));
+		watcher.add(assets().getImage("images/pngs/menuBackground.png"));
+		watcher.add(assets().getImage("images/pngs/nextButton.png"));
+		watcher.add(assets().getImage("images/pngs/pauseButton.png"));
+		watcher.add(assets().getImage("images/pngs/playButton.png"));
+		watcher.add(assets().getImage("images/pngs/playButtonPressed.png"));
+		watcher.add(assets().getImage("images/pngs/standardBackground.png"));
+		watcher.add(assets().getImage("images/pngs/startOff.png"));
+		watcher.add(assets().getImage("images/pngs/startOn.png"));
+		watcher.add(assets().getImage("images/pngs/startPage.png"));
+		watcher.add(assets().getImage("images/pngs/trains.png"));
+		watcher.add(assets().getImage("images/pngs/watermelonTr.png"));
+		watcher.add(assets().getImage("images/basicCarriage.png"));
+		watcher.add(assets().getImage("images/bg.png"));
+		watcher.add(assets().getImage("images/cloud.png"));
+		watcher.add(assets().getImage("images/emptyTrain.png"));
+		watcher.add(assets().getImage("images/fullTrain.png"));
+		watcher.add(assets().getImage("images/red_train.png"));
+	}
 	
 	@Override
 	public void update(float delta) {

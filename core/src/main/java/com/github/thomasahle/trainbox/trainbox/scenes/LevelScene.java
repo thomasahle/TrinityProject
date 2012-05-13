@@ -78,7 +78,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		
 		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
 		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
-		pauseButtonImageLayer.setTranslation(graphics().width()-150, graphics().height()-168);
+		pauseButtonImageLayer.setTranslation(graphics().width()-146, graphics().height()-168);
 		pauseButtonImageLayer.setVisible(false);
 
 	}
