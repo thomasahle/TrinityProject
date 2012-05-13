@@ -6,7 +6,7 @@ import playn.core.AssetWatcher;
 import playn.core.Game;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.LevelChooserScene;
+//import com.github.thomasahle.trainbox.trainbox.scenes.LevelChooserScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LoadingScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
@@ -39,7 +39,6 @@ public class TrainBox implements Game{
 	public void init() {
 		
 		setScene(new LoadingScene(this));
-		
 		graphics().setSize(1024, 640);  // this changes the size of the main window
 		
 		addResources();
