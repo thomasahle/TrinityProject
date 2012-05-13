@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import playn.core.CanvasImage;
+import playn.core.Image;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
@@ -38,6 +40,10 @@ public class UISeparateComponent extends AbstractComponent {
 		image.canvas().setFillColor(0xff009999);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
 		mBackLayer = graphics().createImageLayer(image);
+		
+		Image concatComponentImage = assets().getImage("images/pngs/concatComponent.png");
+		mBackLayer = graphics().createImageLayer(concatComponentImage);
+		
 		
 		CanvasImage knifeImage = graphics().createImage(KNIFE_WIDTH, HEIGHT);
 		playn.core.Path knifePath = knifeImage.canvas().createPath();
