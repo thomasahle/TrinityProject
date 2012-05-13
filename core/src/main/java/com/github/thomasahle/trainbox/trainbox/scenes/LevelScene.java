@@ -20,6 +20,7 @@ import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIPallet;
 
 
 /**
@@ -35,6 +36,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
+	private UIPallet mPallet;
 	int currPauseGoButtonImageIndex = 0;
 
 	
@@ -67,6 +69,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		
 		// initalize the level controller buttons
 		initLevelController();
+		
+		mPallet = new UIPallet();
 		
 		// Dragging of level
 		mLevel.layer().addListener(this);

@@ -6,6 +6,17 @@ import java.util.List;
 import com.github.thomasahle.trainbox.trainbox.model.Component;
 
 public final class UIComponentFactory {
+
+	enum UIToken {
+		NULL("null"), BOX("box"), CAT("cat"), DUP("dup"), ID("id"), FLIP("flip"), DOT(" "), MERG(
+				"||"), PA1("("), PA2(")");
+		final String repr;
+
+		UIToken(String repr) {
+			this.repr = repr;
+		}
+	};
+
 	public static UIComponent fromModel(Component component) {
 		// TODO: Create this factory. Perhaps using the visitor pattern.
 		return null;
@@ -21,5 +32,10 @@ public final class UIComponentFactory {
 			trains.add(new UITrain(cargo));
 		}
 		return trains;
+	}
+
+	public static UIComponent fromTok(UIToken currentTok) {
+
+		return null;
 	}
 }
