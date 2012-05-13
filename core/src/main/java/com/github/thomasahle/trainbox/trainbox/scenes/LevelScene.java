@@ -30,6 +30,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIPallet;
  *  - The play button
  */
 public class LevelScene implements Scene, LevelFinishedListener, Listener {
+	TrainBox trainBox;
 	final int HEIGHT = graphics().screenHeight();
 	final int WIDTH = graphics().screenWidth();
 	private Layer mBgLayer;
@@ -51,6 +52,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	ImageLayer pauseButtonImageLayer;
 	
 	public LevelScene(TrainBox trainBox) {
+		this.trainBox = trainBox;
 		// A background image. This should be really nice.
 
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
@@ -124,6 +126,27 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		Image changeLevelButtonImage = assets().getImage("images/pngs/changeLevelButton.png");
 		ImageLayer changeLevelButtonImageLayer = graphics().createImageLayer(changeLevelButtonImage);
 		changeLevelButtonImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-150);
+		changeLevelButtonImageLayer.addListener(new Listener() {
+
+			@Override
+			public void onPointerStart(Event event) {
+				trainBox.setScene(trainBox.getDemoScene());
+
+				
+			}
+
+			@Override
+			public void onPointerEnd(Event event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onPointerDrag(Event event) {
+				// TODO Auto-generated method stub
+				
+			}});
+		
 		
 		levelControlLayer.add(mPlayButton);
 		levelControlLayer.add(changeLevelButtonImageLayer);
