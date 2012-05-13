@@ -25,7 +25,7 @@ public interface UIComponent extends TrainTaker {
 	 */
 	public List<UITrain> getTrains();
 	/**
-	 * This is necessary since layers don't have a size.
+	 * This is necessary since layers don't have a	 size.
 	 * We use this to layout components.
 	 * @return The size of the component.
 	 */
