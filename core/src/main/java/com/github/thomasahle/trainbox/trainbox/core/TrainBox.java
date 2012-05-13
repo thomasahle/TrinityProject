@@ -8,6 +8,7 @@ import playn.core.Game;
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 //import com.github.thomasahle.trainbox.trainbox.scenes.LevelChooserScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.LevelSelectScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LoadingScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.NullScene;
@@ -19,6 +20,7 @@ public class TrainBox implements Game{
 	Scene levelScene;
 	Scene moveScene;
 	Scene startScene;
+	Scene levelSelectScene;
 	
 	Scene mScene = new NullScene();
 	
@@ -28,6 +30,8 @@ public class TrainBox implements Game{
 			demoScene = new DemoScene(TrainBox.this);
 			levelScene = new LevelScene(TrainBox.this);
 			moveScene = new MoveScene(TrainBox.this);
+			levelSelectScene = new LevelSelectScene(TrainBox.this);
+			
 			setScene(startScene);
 		}
 
@@ -116,6 +120,10 @@ public class TrainBox implements Game{
 		return moveScene;
 	}
 	
+	public Scene getLevelSelectScene() {
+		return levelSelectScene;
+	}
+	
 	public void setScene(Scene scene) {
 		mScene.onDetach();
 		mScene = scene;
@@ -125,6 +133,7 @@ public class TrainBox implements Game{
 	public Scene getScene() {
 		return mScene;
 	}
+
 
 	
 

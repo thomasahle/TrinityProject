@@ -9,4 +9,8 @@ public class Level {
 		this.input = Collections.unmodifiableList(input);
 		this.goal = Collections.unmodifiableList(goal);
 	}
+	public boolean isAccessible() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
