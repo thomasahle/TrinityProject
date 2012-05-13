@@ -136,7 +136,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		//TODO Delete the following code
 		
 		trainBox.setLevel(0);
-		PlayN.log().debug("Seting level 1");
+		PlayN.log().debug("Seting level 1 - (choosing other levels not implemented yet)");
 	}
 
 	@Override
@@ -160,11 +160,11 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	@Override
 	public void onAttach() {
-		//problem
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
-	    pointer().setListener(this);
-	    keyboard().setListener(this);		
+	   // pointer().setListener(this);
+	   // keyboard().setListener(this);
+	    trainBox.setLevel(0);
 	}
 
 	@Override
