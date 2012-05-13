@@ -1,11 +1,19 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
+
+import java.util.ArrayList;
+
 import playn.core.CanvasImage;
+import playn.core.GroupLayer;
+import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
+
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
@@ -25,14 +33,23 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
+	int currPauseGoButtonImageIndex = 0;
+	Image goButtonImage = assets().getImage("images/pngs/goButton.png");
+	Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
+	ImageLayer pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
+	
+	GroupLayer goalBarLayer;
+
+
 	
 	public LevelScene(TrainBox trainBox) {
-		
 		// A background image. This should be really nice.
 		final int HEIGHT = graphics().screenHeight();
 		final int WIDTH = graphics().screenWidth();
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
-		bgImage.canvas().setFillColor(0xffffffff).fillRect(0, 0, WIDTH, HEIGHT);
+		//bgImage.canvas().setFillColor(0xffffffff).fillRect(0, HEIGHT/12, WIDTH, HEIGHT);
+		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
+		bgImage.canvas().drawImage(backgroundImage, 0, 0);
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
 		// Initialize the level we are going to try to solve
@@ -46,27 +63,52 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		mPlayButton.addListener(new Listener(){
 			public void onPointerStart(Event event) {
 				mLevel.paused(!mLevel.paused());
+				currPauseGoButtonImageIndex=(1+currPauseGoButtonImageIndex)%2;
+				updateGoPauseButtonImage();
 			}
 			public void onPointerEnd(Event event) {}
 			public void onPointerDrag(Event event) {}
 		});
-		mPlayButton.setTranslation(graphics().screenWidth()-100, graphics().screenHeight()-100);
+		mPlayButton.setTranslation(graphics().screenWidth()-150, graphics().screenHeight()-150);
+		pauseButtonImageLayer.setTranslation(graphics().screenWidth()-150, graphics().screenHeight()-168);
 		
 		// Dragging of level
 		mLevel.layer().addListener(this);
+		
+		
+		// adding a goal bar
+		goalBarLayer = graphics().createGroupLayer();
+		goalBarLayer.setTranslation(10, HEIGHT*5/6);
+		initGoalBar();
 	}
 	
-	private Layer initPlayButton() {
-		CanvasImage img = graphics().createImage(100, 100);
-		img.canvas().setFillColor(0xffffffff).fillRect(0, 0, 100, 100);
-		playn.core.Path triangle = img.canvas().createPath();
-		triangle.moveTo(0, 0);
-		triangle.lineTo(87, 50);
-		triangle.lineTo(0,100);
-		triangle.lineTo(0,0);
-		img.canvas().setFillColor(0xff339900).fillPath(triangle);
-		return graphics().createImageLayer(img);
+	private void initGoalBar() {
+		Image goalBarImage = assets().getImage("images/pngs/goalBar.png");	
+		ImageLayer goalBarImageLayer = graphics().createImageLayer(goalBarImage);
+		goalBarLayer.add(goalBarImageLayer);
 	}
+
+	protected void updateGoPauseButtonImage() {
+			pauseButtonImageLayer.setVisible(!(currPauseGoButtonImageIndex ==0));	
+	}
+
+
+
+	private Layer initPlayButton() {
+		CanvasImage img = graphics().createImage(150, 150);
+/*		CanvasImage img = graphics().createImage(150, 150);
+
+		ImageLayer pauseButtonImageLayer = graphics().createImageLayer(goButtonImage);
+		ArrayList<Image> goPauseButtonRotationList = new ArrayList<Image>();
+		goPauseButtonRotationList.add(goButtonImage);
+		goPauseButtonRotationList.add(pauseButtonImage);
+
+		*/
+		pauseButtonImageLayer.setVisible(false);
+		return graphics().createImageLayer(goButtonImage);
+	}
+	
+	
 	
 	@Override
 	public void update(float delta) {
@@ -78,6 +120,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		graphics().rootLayer().add(mBgLayer);
 		graphics().rootLayer().add(mLevel.layer());
 		graphics().rootLayer().add(mPlayButton);
+		graphics().rootLayer().add(pauseButtonImageLayer);
+		graphics().rootLayer().add(goalBarLayer);
 	}
 
 	@Override
@@ -86,6 +130,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		graphics().rootLayer().remove(mBgLayer);
 		graphics().rootLayer().remove(mLevel.layer());
 		graphics().rootLayer().remove(mPlayButton);
+		graphics().rootLayer().remove(pauseButtonImageLayer);
+		graphics().rootLayer().remove(goalBarLayer);
+
+
 	}
 
 	@Override
