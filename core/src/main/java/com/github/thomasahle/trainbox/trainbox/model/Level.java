@@ -5,12 +5,11 @@ import java.util.List;
 
 public class Level {
 	public final List<Train> input, goal;
-	public Level(List<Train> input, List<Train> goal) {
+	public final int levelNumber;
+	public Level(int levelNumber, List<Train> input, List<Train> goal) {
+		this.levelNumber=levelNumber;
 		this.input = Collections.unmodifiableList(input);
 		this.goal = Collections.unmodifiableList(goal);
 	}
-	public boolean isAccessible() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	
 }
