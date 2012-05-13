@@ -130,7 +130,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 			@Override
 			public void onPointerStart(Event event) {
-				trainBox.setScene(trainBox.getDemoScene());
+				trainBox.setScene(trainBox.getLevelSelectScene());
+
 
 				
 			}

@@ -1,5 +1,10 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import static playn.core.PlayN.assets;
+import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.keyboard;
+import static playn.core.PlayN.pointer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +13,11 @@ import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 
+import playn.core.Canvas;
+import playn.core.CanvasImage;
+import playn.core.GroupLayer;
+import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Keyboard;
 import playn.core.Keyboard.TypedEvent;
 import playn.core.Pointer;
@@ -16,13 +26,61 @@ import playn.core.Pointer.Event;
 public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Listener{
 	
 	TrainBox trainBox;
-	
+	int width = graphics().width();
+	int height = graphics().height();
+	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
+    ImageLayer bgLayer;
+    GroupLayer demoLayer;
+    Image levelButtonImage;
 	public LevelSelectScene(final TrainBox trainBox ){
 		this.trainBox = trainBox;
-		// graphics..
 		
+		bgLayer = graphics().createImageLayer(bgImage);
+		Canvas canvas = bgImage.canvas();
+        final Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
+		canvas.drawImage(backgroundImage, 0, 0);
+		
+		
+		// Create the demoLayer that contains the level select pages
+        demoLayer = graphics().createGroupLayer();
+        demoLayer.setTranslation(width/20+40, height/20);
+		
+        final Image demoPageImage = assets().getImage("images/pngs/chooseLevelBlurb.png");
+        final ImageLayer demoPageImageLayer = graphics().createImageLayer(demoPageImage);
+    	demoLayer.add(demoPageImageLayer);
+    	initializeLevelButtons();
+
+
 	}
 	
+	private void initializeLevelButtons() {
+		List<Level> levels =  getLevels();
+		int x = 0;
+		int y = 0;
+		Image levelButtonImage = assets().getImage("images/pngs/inaccessibleLevelButton.png");
+		for(int i =0; i <levels.size(); i++) {
+			if (levels.get(i).isAccessible()) {
+				levelButtonImage = assets().getImage("images/pngs/levelButton.png");
+			}
+				
+			
+	        final ImageLayer levelButtonImageLayer = graphics().createImageLayer(levelButtonImage);
+	        levelButtonImageLayer.setTranslation(x, y);
+	    	demoLayer.add(levelButtonImageLayer);
+
+	    	// initialize for the position of the next button
+	        int newX=(x+levelButtonImage.width())%graphics().width();
+	        if (newX < x) {
+	        	y+=levelButtonImage.height();
+	        }
+	        x = newX;
+	        
+		}   
+	        
+	        
+		}
+
+
 	public void startLevel(Level l){
 		// Each level will have a button that when clicked will call this method with the level to be launched.
 		UILevel level = new UILevel(l);
@@ -73,14 +131,16 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	@Override
 	public void onAttach() {
-		// TODO Auto-generated method stub
-		
+		graphics().rootLayer().add(bgLayer);
+	    graphics().rootLayer().add(demoLayer);
+	    pointer().setListener(this);
+	    keyboard().setListener(this);		
 	}
 
 	@Override
 	public void onDetach() {
-		// TODO Auto-generated method stub
-		
+		graphics().rootLayer().remove(bgLayer);
+	    graphics().rootLayer().remove(demoLayer);	
 	}
 
 	
