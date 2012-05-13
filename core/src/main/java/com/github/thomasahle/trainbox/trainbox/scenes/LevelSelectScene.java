@@ -191,7 +191,14 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	    }
 	    graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
+<<<<<<< HEAD
+=======
 	    graphics().rootLayer().remove(demoLayer);	
+<<<<<<< HEAD
+=======
+>>>>>>> 4ee43ee1c3af9e7241d094a52c03d92e38ba141b
+>>>>>>> add8809f754f5b63f8c416a1bfffc9d1faabc494
+>>>>>>> 881d8d4423c5143acfa9964eb9e56ca0ac7ef39a
 	    pointer().setListener(null);
 	    keyboard().setListener(null);
 	}
