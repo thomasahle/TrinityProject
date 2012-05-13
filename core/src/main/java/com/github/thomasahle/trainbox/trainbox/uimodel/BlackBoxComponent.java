@@ -56,7 +56,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 				mIncomming = null;
 			}
 			else {
-				float newLeft = trainLeft + UITrain.SPEED*delta;
+				float newLeft = trainLeft + mIncomming.getSpeed()*delta;
 				newLeft = Math.min(newLeft, compLeft+0.1f); // Don't move it too far
 				float newRight = newLeft + mIncomming.getSize().width;
 				mIncomming.setPosition(new Point(newLeft, mIncomming.getPosition().y));

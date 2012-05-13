@@ -151,4 +151,22 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 			return layer;
 		return mTrack.getBackLayer().hitTest(p);
 	}
+	
+	public void setTrainSpeed(float s){
+		for(UITrain t: mTrack.getTrains()){
+			t.setSpeed(s);
+		}
+	}
+	public void increaseTrainSpeed(float ds){
+		for(UITrain t: mTrack.getTrains()){
+			t.setSpeed(t.getSpeed()+ds);
+		}
+	}
+
+	public void decreaseTrainSpeed(float ds) {
+		for(UITrain t: mTrack.getTrains()){
+			if(t.getSpeed()-ds >= 0)
+			t.setSpeed(t.getSpeed()-ds);
+		}
+	}
 }

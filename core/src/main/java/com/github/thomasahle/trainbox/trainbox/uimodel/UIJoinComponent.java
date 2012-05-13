@@ -59,7 +59,7 @@ public class UIJoinComponent extends BlackBoxComponent{
 					frontTrain.getCarriages());
 			newTrainCarriages.addAll(train.getCarriages());
 			UITrain newTrain = new UITrain(newTrainCarriages);
-			
+			float oldSpeed = train.getSpeed();
 			fireTrainDestroyed(train);
 			fireTrainDestroyed(frontTrain);
 			frontTrain = null;
@@ -68,6 +68,7 @@ public class UIJoinComponent extends BlackBoxComponent{
 			newTrain.setCropLeft(newTrain.getSize().width - getSize().width);
 			currentTrains.add(newTrain);
 			fireTrainCreated(newTrain);
+			newTrain.setSpeed(oldSpeed);
 		}
 		else {
 			frontTrain = train;

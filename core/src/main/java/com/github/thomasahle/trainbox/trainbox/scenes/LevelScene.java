@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
@@ -10,6 +11,9 @@ import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Key;
+import playn.core.Keyboard;
+import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
@@ -29,7 +33,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIPallet;
  *  - Components to add
  *  - The play button
  */
-public class LevelScene implements Scene, LevelFinishedListener, Listener {
+public class LevelScene implements Scene, LevelFinishedListener, Listener, Keyboard.Listener {
 	TrainBox trainBox;
 	final int HEIGHT = graphics().screenHeight();
 	final int WIDTH = graphics().screenWidth();
@@ -39,6 +43,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private UIPallet mPallet;
 	int currPauseGoButtonImageIndex = 0;
 
+	
+	
 	
 	GroupLayer goalBarLayer;
 
@@ -53,8 +59,9 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	
 	public LevelScene(TrainBox trainBox) {
 		this.trainBox = trainBox;
-		// A background image. This should be really nice.
+		
 
+		// A background image. This should be really nice.
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
 		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
@@ -130,10 +137,9 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 			@Override
 			public void onPointerStart(Event event) {
+				mLevel.paused(!mLevel.paused());
 				trainBox.setScene(trainBox.getLevelSelectScene());
 
-
-				
 			}
 
 			@Override
@@ -227,6 +233,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
+		keyboard().setListener(this);
 	}
 
 	@Override
@@ -264,4 +271,32 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		mLevel.layer().setTranslation(event.x()-mDragStartXPos, 0);
 	}
 	@Override public void onPointerEnd(Event event) {}
+
+
+	@Override
+	public void onKeyDown(playn.core.Keyboard.Event event) {
+		if(event.key() == Key.UP){
+			mLevel.increaseTrainSpeed(0.005f);
+			log().debug("INCREASING SPEED");
+		}
+		if(event.key() == Key.DOWN){
+			mLevel.decreaseTrainSpeed(0.005f);
+			log().debug("DECREASING SPEED");
+
+		}
+	}
+
+
+	@Override
+	public void onKeyTyped(TypedEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onKeyUp(playn.core.Keyboard.Event event) {
+		// TODO Auto-generated method stub
+		
+	}
 }
