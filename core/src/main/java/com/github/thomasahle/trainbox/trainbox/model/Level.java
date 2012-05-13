@@ -11,6 +11,6 @@ public class Level {
 	}
 	public boolean isAccessible() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }

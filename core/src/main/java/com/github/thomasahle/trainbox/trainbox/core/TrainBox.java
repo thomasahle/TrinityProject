@@ -6,7 +6,6 @@ import playn.core.AssetWatcher;
 import playn.core.Game;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.LevelChooserScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelSelectScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LoadingScene;
