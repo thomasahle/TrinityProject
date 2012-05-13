@@ -35,9 +35,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	private Layer mPlayButton;
 	private UILevel mLevel;
 	int currPauseGoButtonImageIndex = 0;
-	Image goButtonImage = assets().getImage("images/pngs/goButton.png");
-	Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
-	ImageLayer pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
+
 	
 	GroupLayer goalBarLayer;
 
@@ -45,7 +43,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	GroupLayer levelStatusLayer;
 	ImageLayer levelFailedBlurbImageLayer;
 	ImageLayer levelCompletedBlurbImageLayer;
+	
+	GroupLayer levelControlLayer;
 
+	ImageLayer pauseButtonImageLayer;
 	
 	public LevelScene(TrainBox trainBox) {
 		// A background image. This should be really nice.
@@ -61,19 +62,9 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 				ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16")));
 		mLevel.setListener(this);
 		
-		// Connect the play button to the track
-		mPlayButton = initPlayButton();
-		mPlayButton.addListener(new Listener(){
-			public void onPointerStart(Event event) {
-				mLevel.paused(!mLevel.paused());
-				currPauseGoButtonImageIndex=(1+currPauseGoButtonImageIndex)%2;
-				updateGoPauseButtonImage();
-			}
-			public void onPointerEnd(Event event) {}
-			public void onPointerDrag(Event event) {}
-		});
-		mPlayButton.setTranslation(graphics().width()-150, graphics().height()-150);
-		pauseButtonImageLayer.setTranslation(graphics().width()-150, graphics().height()-168);
+		
+		// initalize the level controller buttons
+		initLevelController();
 		
 		// Dragging of level
 		mLevel.layer().addListener(this);
@@ -84,8 +75,57 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		goalBarLayer.setTranslation(10, HEIGHT*5/6);
 		initGoalBar();
 		initLevelStatus();
+		
+		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
+		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
+		pauseButtonImageLayer.setTranslation(graphics().width()-146, graphics().height()-168);
+		pauseButtonImageLayer.setVisible(false);
+
 	}
 	
+	
+	private void initLevelController() {
+		Image goButtonImage = assets().getImage("images/pngs/goButton.png");
+		mPlayButton = graphics().createImageLayer(goButtonImage);
+		
+		
+		levelControlLayer = graphics().createGroupLayer();
+		
+		// Connect the play button to the track
+		mPlayButton.addListener(new Listener() {
+
+			@Override
+			public void onPointerStart(Event event) {
+				mLevel.paused(!mLevel.paused());
+				currPauseGoButtonImageIndex=(1+currPauseGoButtonImageIndex)%2;
+				updateGoPauseButtonImage();	
+			}
+
+			@Override
+			public void onPointerEnd(Event event) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onPointerDrag(Event event) {
+				// TODO Auto-generated method stub
+				
+			}});
+		
+		
+		mPlayButton.setTranslation(graphics().width()-145, graphics().height()-150);
+				
+		
+		Image changeLevelButtonImage = assets().getImage("images/pngs/changeLevelButton.png");
+		ImageLayer changeLevelButtonImageLayer = graphics().createImageLayer(changeLevelButtonImage);
+		changeLevelButtonImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-150);
+		
+		levelControlLayer.add(mPlayButton);
+		levelControlLayer.add(changeLevelButtonImageLayer);
+	
+	}
+
 	private void initLevelStatus() {
 		levelStatusLayer = graphics().createGroupLayer();
 		levelStatusLayer.setTranslation(WIDTH/20+40, HEIGHT/20);
@@ -97,7 +137,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		levelStatusLayer.add(levelCompletedBlurbImageLayer);
 		levelStatusLayer.add(levelFailedBlurbImageLayer);
 		levelFailedBlurbImageLayer.setVisible(false);
-		levelCompletedBlurbImageLayer.setVisible(true);
+		levelCompletedBlurbImageLayer.setVisible(false);
+		levelStatusLayer.setVisible(false);
 		
 		//initialize the next button image layer
 		Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
@@ -142,12 +183,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 
 
 
-	private Layer initPlayButton() {
-		CanvasImage img = graphics().createImage(150, 150);
-
-		pauseButtonImageLayer.setVisible(false);
-		return graphics().createImageLayer(goButtonImage);
-	}
 	
 	
 	
@@ -160,7 +195,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 	public void onAttach() {
 		graphics().rootLayer().add(mBgLayer);
 		graphics().rootLayer().add(mLevel.layer());
-		graphics().rootLayer().add(mPlayButton);
+		graphics().rootLayer().add(levelControlLayer);
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
@@ -171,7 +206,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener {
 		// This helps us avoid a memory leak
 		graphics().rootLayer().remove(mBgLayer);
 		graphics().rootLayer().remove(mLevel.layer());
-		graphics().rootLayer().remove(mPlayButton);
+		graphics().rootLayer().remove(levelControlLayer);
 		graphics().rootLayer().remove(pauseButtonImageLayer);
 		graphics().rootLayer().remove(goalBarLayer);
 		graphics().rootLayer().remove(levelStatusLayer);
