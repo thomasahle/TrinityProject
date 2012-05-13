@@ -4,6 +4,7 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,10 +28,9 @@ import pythagoras.f.Point;
 
 public class UIGoalComponent extends BlackBoxComponent {
 
-	private final static int HEIGHT = 100;
+	private final static int HEIGHT = 120;
 	private int mWidth;
 	
-	private CanvasImage textImage;
 	private Layer mBackLayer, mImageLayer, textLayer;
 	private GroupLayer mFrontLayer;
 	private String deliveredCargoString = "";
@@ -42,32 +42,43 @@ public class UIGoalComponent extends BlackBoxComponent {
 	
 
 	
-	public UIGoalComponent(int width, List<Train> goal) {
-		mWidth = width;
-		for(Train t: goal){
-			UITrain train = new UITrain(t);
+	public UIGoalComponent(List<Train> goal) {
+		mWidth =0;
+	    int padding = 5;
+		List<UITrain> trains = new ArrayList<UITrain>();
+		for(Train t:goal){
+			UITrain uit = new UITrain(t);
+			for(UICarriage c: uit.getCarriages()){
+				UITrain train = new UITrain(Arrays.asList(c));
+				mWidth+=train.getSize().width+padding;
+				trains.add(0,train);
+			}
+		}
+		mWidth+=padding;
+		
+		mBackLayer = graphics().createGroupLayer();
+		
+		CanvasImage image = graphics().createImage(mWidth, HEIGHT);
+		image.canvas().setFillColor(0x33775577);
+		image.canvas().fillCircle(mWidth/2.f, HEIGHT/2.f, mWidth/2.f);
+		mImageLayer = graphics().createImageLayer(image);
+		mFrontLayer = graphics().createGroupLayer();
+		mFrontLayer.add(mImageLayer);
+			  
+	    int compCtr =0;
+	    for(UITrain train: trains){
+    		train.setSpeed(0f);
+			Layer l = train.getLayer();
+			l.setAlpha(0.4f);
+			l.setTranslation(compCtr*train.getSize().width+padding, 0);
+			mFrontLayer.add(l);
 			List<UICarriage> cs = train.getCarriages();
 			for(UICarriage c :cs){
 				cargoGoalList.add(c.getCargo());
 				cargoGoalString = (c.getCargo()+" | ") + cargoGoalString;
 			}
+			compCtr ++;
 		}
-		
-		mBackLayer = graphics().createGroupLayer();
-		
-		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xff775577);
-		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		mImageLayer = graphics().createImageLayer(image);
-		mFrontLayer = graphics().createGroupLayer();
-		mFrontLayer.add(mImageLayer);
-		
-		textImage = graphics().createImage(width *10, HEIGHT); //TODO do something better than an arbitrary constant here.
-		//When we have Images as cargo rather than integers we can use the width of those.
-	    textLayer = graphics().createImageLayer(textImage);
-	    textImage.canvas().setFillColor(0xff000000);
-	    mFrontLayer.add(textLayer);
-	    textImage.canvas().drawText(cargoGoalString, 10, HEIGHT/4);
 	}
 
 	public void addListener(LevelFinishedListener l){
@@ -111,9 +122,7 @@ public class UIGoalComponent extends BlackBoxComponent {
 			deliveredCount ++;
 			deliveredCargoString = cargo+" | " + deliveredCargoString;	
 			//log().debug("Cargo: "+cargo+" delivered sucessfully!");
-			
-			boolean match = true;
-			
+					
 			//TODO Tidy up this code.
 			if(deliveredCargoList.size() == cargoGoalList.size()){
 				if(checkDelivered()){
@@ -143,9 +152,6 @@ public class UIGoalComponent extends BlackBoxComponent {
 			
 		}
 		//Display the cargos delivered
-		textImage.canvas().clear();
-		textImage.canvas().drawText(deliveredCargoString, 10, HEIGHT/2);
-		textImage.canvas().drawText(cargoGoalString, 10, HEIGHT/4);
 		//Destroy the train.
 		fireTrainDestroyed(train);
 	}
