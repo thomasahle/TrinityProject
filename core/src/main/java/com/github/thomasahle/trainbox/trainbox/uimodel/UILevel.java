@@ -131,9 +131,11 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	@Override
 	public void onPointerStart(Event event) {
 		Point p = new Point(event.localX(), event.localY());
-//		mTrack.insertChildAt(new UIJoinComponent(80), p);
-		mTrack.insertChildAt(new UIDupComponent(80), p);
-		mTrack.insertChildAt(UIComponentFactory.fromTok(currentTok), p);
+		mTrack.insertChildAt(new UIJoinComponent(80), p);
+//		try {
+//			mTrack.insertChildAt(UIComponentFactory.fromTok(currentTok), p);
+//		} catch (Exception e) {
+//		}
 
 	}
 	@Override public void onPointerEnd(Event event) {}
