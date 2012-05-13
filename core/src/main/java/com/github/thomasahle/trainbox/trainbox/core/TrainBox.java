@@ -5,6 +5,7 @@ import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
 import playn.core.Game;
 
+import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelSelectScene;
@@ -13,10 +14,10 @@ import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.NullScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
+import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
 
 public class TrainBox implements Game{
 	Scene demoScene; 
-	Scene levelScene;
 	Scene moveScene;
 	Scene startScene;
 	Scene levelSelectScene;
@@ -27,7 +28,6 @@ public class TrainBox implements Game{
 		public void done() {
 			startScene = new StartScene(TrainBox.this);
 			demoScene = new DemoScene(TrainBox.this);
-			levelScene = new LevelScene(TrainBox.this);
 			moveScene = new MoveScene(TrainBox.this);
 			levelSelectScene = new LevelSelectScene(TrainBox.this);
 			
@@ -107,10 +107,6 @@ public class TrainBox implements Game{
 		return demoScene;
 	}
 	
-	public Scene getLevelScene() {
-		return levelScene;
-	}
-	
 	public Scene getStartScene() {
 		return startScene;
 	}
@@ -131,6 +127,11 @@ public class TrainBox implements Game{
 	
 	public Scene getScene() {
 		return mScene;
+	}
+	
+	public void setLevel(int index){
+		LevelTracker.updateLevel(index);
+		setScene(new LevelScene(this,Level.levels.get(index)));
 	}
 
 

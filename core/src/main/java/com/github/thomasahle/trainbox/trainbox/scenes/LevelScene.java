@@ -56,7 +56,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 
 	ImageLayer pauseButtonImageLayer;
 	
-	public LevelScene(TrainBox trainBox) {
+	public LevelScene(TrainBox trainBox, Level l) {
 		this.trainBox = trainBox;
 		
 
@@ -67,10 +67,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
 		// Initialize the level we are going to try to solve
-		mLevel = new UILevel(new Level(1,
-				ComponentFactory.parseTrains("1-5-9-13 2-6-10-14 3-7-11-15 4-8-12-16"),
-				ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16")
-				));
+		mLevel = new UILevel(l);
 		mLevel.setListener(this);
 		
 		
@@ -243,6 +240,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		keyboard().setListener(this);
+	  	pointer().setListener(this);
 	}
 
 	@Override
@@ -254,6 +252,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().remove(pauseButtonImageLayer);
 		graphics().rootLayer().remove(goalBarLayer);
 		graphics().rootLayer().remove(levelStatusLayer);
+		keyboard().setListener(null);
+	    pointer().setListener(null);
 	}
 
 	@Override
