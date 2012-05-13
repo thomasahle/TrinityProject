@@ -22,13 +22,9 @@ public class UIComponentButton{
 	private UIComposite mParent;
 	private Point mPosition = new Point();
 	private Dimension mSize = new Dimension(80,80);
-	private UIToken comp; 
-	private UILevel level;
-
 	
-	public UIComponentButton(UILevel level, UIToken comp){
-		this.comp = comp;
-		this.level = level;
+	public UIComponentButton(final UILevel level, final UIToken comp){
+
 		layer = graphics().createGroupLayer();
 
 		CanvasImage image = graphics().createImage((int)mSize.width, (int)mSize.height);
@@ -39,7 +35,7 @@ public class UIComponentButton{
 
 			@Override
 			public void onPointerStart(Event event) {
-				UIComponentButton.this.level.setCompSel(UIComponentButton.this.comp);
+				level.setCompSel(comp);
 			}
 
 			@Override
@@ -61,6 +57,7 @@ public class UIComponentButton{
 
 	public void setPosition(Point point) {
 		mPosition = point;
+		layer.setTranslation(point.x, point.y);
 	}
 
 }

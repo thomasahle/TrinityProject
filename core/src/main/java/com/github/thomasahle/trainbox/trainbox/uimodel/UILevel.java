@@ -26,9 +26,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIComposite mTrack;
 	private Level mLevel;
 	private LevelFinishedListener mListener;
-	private UIToken currentTok;
-	boolean isCompSelected = false;
-	UIToken compSelected;
+	boolean isCompSelected = true;
+	UIToken compSelected = UIToken.BOX;
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -142,7 +141,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	public void onPointerStart(Event event) {
 		if (isCompSelected) {
 			Point p = new Point(event.localX(), event.localY());
-			mTrack.insertChildAt(new UIJoinComponent(80), p);
+			mTrack.insertChildAt(UIComponentFactory.fromTok(compSelected), p);
 		}
 	}
 
