@@ -56,6 +56,10 @@ public class QuadPath {
 		assert iter.currentSegment(buffer) == PathIterator.SEG_MOVETO;
 		float lastx = buffer[0];
 		float lasty = buffer[1];
+		if (t <= 0) {
+			buffer[0] += t;
+			return buffer;
+		}
 		iter.next();
 		while (!iter.isDone()) {
 			assert iter.currentSegment(buffer) == PathIterator.SEG_LINETO;
@@ -67,6 +71,7 @@ public class QuadPath {
 			lastx = buffer[0];
 			lasty = buffer[1];
 		}
+		buffer[0] += t;
 		return buffer;
 	}
 	

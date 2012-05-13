@@ -86,10 +86,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mUpPathIn = createPath (
 				0, mSize.height/2,
 				SIDES_WIDTH, mTopComp.getSize().height/2);
-		/*mUpPathIn.print();
-		for (int x = 0; x < SIDES_WIDTH; x++) {
-			log().debug(""+mUpPathIn.calculateT(x)+" "+Arrays.toString(mUpPathIn.evaluateSlope(mUpPathIn.calculateT(x))));
-		}*/
 		mDownPathIn = createPath (
 				0, mSize.height/2,
 				SIDES_WIDTH, mBotComp.getPosition().y + mBotComp.getSize().height/2);
@@ -176,28 +172,21 @@ public class UISplitMergeComponent extends AbstractComposite {
 		return mFrontLayer;
 	}
 	
-	
 	@Override
 	public void update(float delta) {
 		if (paused())
 			return;
-		//float tBorder = mUpPathIn.calculateT(getTrainTaker().leftBlock());
-		float rightBorder = mTopComp.leftBlock();
+		float tBorder = mUpPathIn.calculateT(getTrainTaker().leftBlock());
+		//if (mTopBuffer.size() > 0)
+		//	log().debug(tBorder+" "+getTrainTaker().leftBlock());
+		//float rightBorder = mTopComp.leftBlock();
 		for (Iterator<UITrain> it = mTopBuffer.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
 			float compLeft = getDeepPosition().x;
 			float trainRight = trainLeft + train.getSize().width;
-			float compRight = compLeft + getSize().width;
-			
-			for (UICarriage car : train.getCarriages()) {
-				float carLeft = car.getPosition().x + trainLeft - getDeepPosition().x;
-				float carRight = carLeft + car.WIDTH;
-				float tCenter = mUpPathIn.calculateT((carRight+carLeft)/2.f);
-				float[] slope = mUpPathIn.evaluateSlope(tCenter);
-				//log().debug(carLeft+" "+carRight+" "+tCenter+" "+slope[0]+" "+slope[1]+" "+FloatMath.atan2(slope[1],slope[0]));
-				car.setRotation(slope[0], slope[1]);
-			}
+			float compRight = compLeft + SIDES_WIDTH;
+			//log().debug(Arrays.toString(new float[] {trainLeftT, compLeftT, trainRightT, compRightT}));
 			
 			// If the train is now entirely gone from us.
 			if (trainLeft >= compRight) {
@@ -206,19 +195,59 @@ public class UISplitMergeComponent extends AbstractComposite {
 			}
 			// If the train is no longer controlled by us, but still 'on us'.
 			if (trainRight > compRight) {
+				for (UICarriage car : train.getCarriages()) {
+					float carLeft = car.getPosition().x + trainLeft - compLeft;
+					float carRight = carLeft + car.WIDTH;
+					float tCenter = mUpPathIn.calculateT((carRight+carLeft)/2.f);
+					tCenter = Math.min(tCenter, tBorder - car.WIDTH/2.f);
+					if (carLeft < compRight) {
+						float[] slope = mUpPathIn.evaluateSlope(tCenter);
+						float[] pos = mUpPathIn.evaluate(tCenter);
+						pos[0] += (compLeft - trainLeft)-car.WIDTH/2.f;
+						pos[1] -= mTopComp.getSize().height/2.f;
+						car.setRotation(1,0);
+						car.setPosition(new Point(pos[0], pos[1]));
+						car.setRotation(slope[0], slope[1]);
+					}
+					tBorder = tCenter - car.WIDTH/2.f;
+				}
 				continue;
 			}
-			// See how far we can move it
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
-			float newLeft = newRight-train.getSize().width;
 			
+			train.vertCenterOn(mTopComp);
+			for (UICarriage car : train.getCarriages()) {
+				float carLeft = car.getPosition().x + trainLeft - compLeft;
+				float carRight = carLeft + car.WIDTH;
+				//if (carRight >= 0) {
+					float tCenter = mUpPathIn.calculateT((carRight+carLeft)/2.f);
+					tCenter = Math.min(tBorder - car.WIDTH/2.f, tCenter + UITrain.SPEED*delta);
+					float[] slope = mUpPathIn.evaluateSlope(tCenter);
+					float[] pos = mUpPathIn.evaluate(tCenter);
+					pos[0] += (compLeft - trainLeft)-car.WIDTH/2.f;
+					pos[1] -= mTopComp.getSize().height/2.f;
+					car.setRotation(1,0);
+					car.setPosition(new Point(pos[0], pos[1]));
+					car.setRotation(slope[0], slope[1]);
+					tBorder = tCenter - car.WIDTH/2.f;
+				//}
+			}
+			
+			UICarriage first = train.getCarriages().get(0);
+			float newRight = trainLeft + first.getPosition().x + first.WIDTH;
+			float newLeft = newRight - train.getSize().width;
 			train.setPosition(new Point(newLeft, train.getPosition().y));
-			// If it is now out in the right side, give it away
+			for (UICarriage car : train.getCarriages()) {
+				float[] rot = car.getRotation();
+				car.setRotation(1, 0);
+				car.setPosition(new Point(car.getPosition().x+trainLeft-newLeft, car.getPosition().y));
+				car.setRotation(rot[0], rot[1]);
+			}
+			
 			if (newRight > compRight) {
 				mTopComp.takeTrain(train);
 			}
-			// Update our working right border
-			rightBorder = newLeft - UITrain.PADDING;
+			
+			tBorder -= UITrain.PADDING;
 		}
 		
 		

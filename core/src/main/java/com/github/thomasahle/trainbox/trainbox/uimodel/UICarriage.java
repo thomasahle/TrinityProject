@@ -18,6 +18,8 @@ public class UICarriage {
 	private Layer mLayer;
 	private Point mPosition;
 	private int mCargo;
+	private float mDx;
+	private float mDy;
 	
 	public UICarriage(int cargo) {
 		mPosition = new Point(0,0);
@@ -49,11 +51,15 @@ public class UICarriage {
 		mPosition = position;
 	}
 	public void setRotation(float dx, float dy) {
-		float theta = FloatMath.atan2(dy, dx);
+		mDx = dx;
+		mDy = dy;
 		Transform tr = getLayer().transform();
 		tr.translate(WIDTH/2.f+mPosition.x, HEIGHT/2.f+mPosition.y);
-		tr.setRotation(theta);
+		tr.setRotation(FloatMath.atan2(dy, dx));
 		tr.translate(-WIDTH/2.f-mPosition.x, -HEIGHT/2.f-mPosition.y);
+	}
+	public float[] getRotation() {
+		return new float[] {mDx, mDy};
 	}
 	public Dimension getSize() {
 		return new Dimension(WIDTH, HEIGHT);
