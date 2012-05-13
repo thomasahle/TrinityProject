@@ -77,7 +77,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
 		// Initialize the level we are going to try to solve
-		mLevel = new UILevel(this, l);
+		mLevel = new UILevel(toolMan, l);
 		mLevel.setListener(this);
 		mLevelNumber=l.levelNumber;
 		

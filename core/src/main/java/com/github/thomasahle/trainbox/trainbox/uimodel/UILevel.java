@@ -30,10 +30,10 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private LevelFinishedListener mListener;
 	boolean isCompSelected = false;
 	UIToken compSelected = null;
-	private LevelScene levelScene;
+	private ToolManager toolMan;
 	
-	public UILevel(LevelScene levelScene, Level level) {
-		this.levelScene = levelScene;
+	public UILevel(ToolManager toolMan, Level level) {
+		this.toolMan = toolMan;
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
@@ -164,7 +164,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		float x1 = x + mTrack.getSize().width;
 		float y1 = y + mTrack.getSize().height;
 		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1 || !isCompSelected) {
-			isCompSelected = false;
+			toolMan.unselect();
 			return layer;
 		}
 		return mTrack.getBackLayer().hitTest(p);
