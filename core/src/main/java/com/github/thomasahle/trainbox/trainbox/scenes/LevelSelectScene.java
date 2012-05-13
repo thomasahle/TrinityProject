@@ -27,7 +27,7 @@ import playn.core.Pointer.Event;
 
 public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Listener{
 	
-	TrainBox trainBox;
+	private final TrainBox trainBox;
 	int width = graphics().width();
 	int height = graphics().height();
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
@@ -89,11 +89,12 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	        
 		}*/
 
-	
+	private final List<ImageLayer> mButtons = new ArrayList<ImageLayer>();
 
 	private void initializeLevelButtons() {
 		int numberOfLevels = Level.levels.size();
 		int currentProgress = LevelTracker.getCurrentProgress();
+		mButtons.clear();
 		
 		float x = 90;
 		float y = 200;
@@ -103,8 +104,23 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 		for (int i=0; i<numberOfLevels; i++) {
 			 final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
+			 mButtons.add(levelButtonImageLayer);
 			 if (i<=currentProgress) {
+				 final int level = i;
 				 levelButtonImageLayer.setImage(levelButtonOk);
+	/*			 levelButtonImageLayer.addListener(new Pointer.Listener() {
+					
+					@Override
+					public void onPointerStart(Event event) {
+						trainBox.setLevel(level);
+					}
+					
+					@Override
+					public void onPointerEnd(Event event) {}
+					
+					@Override
+					public void onPointerDrag(Event event) {}
+				});                                                               */
 			 }
 			 else {
 				 levelButtonImageLayer.setImage(levelButtonNotOk);
@@ -136,7 +152,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		//TODO Delete the following code
 		
 		trainBox.setLevel(0);
-		PlayN.log().debug("Seting level 1 - (choosing other levels not implemented yet)");
+		//PlayN.log().debug("Seting level 1 - (choosing other levels not implemented yet)");
 	}
 
 	@Override
@@ -168,8 +184,20 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	@Override
 	public void onDetach() {
+<<<<<<< HEAD
+		graphics().rootLayer().remove(bgLayer);
+	    graphics().rootLayer().remove(demoLayer);
+	    for(ImageLayer l:mButtons){
+	    	//graphics().rootLayer().remove(l);
+	    }
+=======
 	    graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
+<<<<<<< HEAD
+=======
+	    graphics().rootLayer().remove(demoLayer);	
+>>>>>>> 4ee43ee1c3af9e7241d094a52c03d92e38ba141b
+>>>>>>> add8809f754f5b63f8c416a1bfffc9d1faabc494
 	    pointer().setListener(null);
 	    keyboard().setListener(null);
 	}

@@ -5,7 +5,6 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 import static playn.core.PlayN.pointer;
-
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -41,6 +40,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	private Layer mBgLayer;
 	private Layer mPlayButton;
 	private UILevel mLevel;
+	private final int mLevelNumber;
 	private UIPallet mPallet;
 	int currPauseGoButtonImageIndex = 0;
 
@@ -71,6 +71,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		// Initialize the level we are going to try to solve
 		mLevel = new UILevel(l);
 		mLevel.setListener(this);
+		mLevelNumber=l.levelNumber;
 		
 		
 		// initalize the level controller buttons
@@ -194,20 +195,14 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusLayer.setVisible(false);
+				trainBox.setLevel(mLevelNumber+1);
 			}
 			
+			@Override
+			public void onPointerEnd(Event event) {}
 
 			@Override
-			public void onPointerEnd(Event event) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onPointerDrag(Event event) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onPointerDrag(Event event) {}
 			
 		});
 
@@ -242,7 +237,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		keyboard().setListener(this);
-	  	pointer().setListener(this);
+	    pointer().setListener(this);
 	}
 
 	@Override
