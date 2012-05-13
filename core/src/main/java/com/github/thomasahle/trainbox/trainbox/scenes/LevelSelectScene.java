@@ -170,7 +170,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	@Override
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
-	    graphics().rootLayer().remove(demoLayer);	
+	    graphics().rootLayer().remove(demoLayer);
 	}
 
 }
