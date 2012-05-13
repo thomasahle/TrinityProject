@@ -4,7 +4,9 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
+import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
@@ -19,16 +21,25 @@ public class UIComponentButton{
 	
 	private UIComposite mParent;
 	private Point mPosition = new Point();
-	private Dimension mSize = new Dimension(0,0);
+	private Dimension mSize = new Dimension(80,80);
+	private UIToken comp; 
+	private UILevel level;
 
 	
-	public UIComponentButton(UILevel level, UIComponent button){
-		Layer layer = button.getBackLayer();
+	public UIComponentButton(UILevel level, UIToken comp){
+		this.comp = comp;
+		this.level = level;
+		layer = graphics().createGroupLayer();
+
+		CanvasImage image = graphics().createImage((int)mSize.width, (int)mSize.height);
+		image.canvas().setFillColor(0xffaa00aa);
+		image.canvas().fillCircle(mSize.width/ 2.f, mSize.height / 2.f, mSize.width / 2.f);
+		layer = graphics().createImageLayer(image);
 		layer.addListener(new Listener() {
 
 			@Override
 			public void onPointerStart(Event event) {
-//				level.
+				UIComponentButton.this.level.setCompSel(UIComponentButton.this.comp);
 			}
 
 			@Override

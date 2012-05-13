@@ -3,9 +3,6 @@ package com.github.thomasahle.trainbox.trainbox.scenes;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
-
-import java.util.ArrayList;
-
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -13,7 +10,6 @@ import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
-
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
