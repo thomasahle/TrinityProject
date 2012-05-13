@@ -50,12 +50,15 @@ public class TrainBox implements Game{
 	}
 
 	private void addResources(){
-		//Insertresources here.
+		//Insert resources here.
 		watcher.add(assets().getImage("images/pngs/aboutButton.png"));
 		watcher.add(assets().getImage("images/pngs/aboutButtonPressed.png"));
 		watcher.add(assets().getImage("images/pngs/aboutPage.png"));
 		watcher.add(assets().getImage("images/pngs/backButton.png"));
+		watcher.add(assets().getImage("images/pngs/boxComponent.png"));
 		watcher.add(assets().getImage("images/pngs/changeLevelButton.png"));
+		watcher.add(assets().getImage("images/pngs/chooseLevelBlurb.png"));
+		watcher.add(assets().getImage("images/pngs/concatComponent.png"));
 		watcher.add(assets().getImage("images/pngs/demoButton.png"));
 		watcher.add(assets().getImage("images/pngs/demoButtonPressed.png"));
 		watcher.add(assets().getImage("images/pngs/demoPage1.png"));
@@ -64,8 +67,12 @@ public class TrainBox implements Game{
 		watcher.add(assets().getImage("images/pngs/demoPage4.png"));
 		watcher.add(assets().getImage("images/pngs/demoPage5.png"));
 		watcher.add(assets().getImage("images/pngs/doneButton.png"));
+		watcher.add(assets().getImage("images/pngs/dupComponent.png"));
+		watcher.add(assets().getImage("images/pngs/flipComponent.png"));
 		watcher.add(assets().getImage("images/pngs/goalBar.png"));
 		watcher.add(assets().getImage("images/pngs/goButton.png"));
+		watcher.add(assets().getImage("images/pngs/inaccessibleLevelButton.png"));
+		watcher.add(assets().getImage("images/pngs/levelButton.png"));
 		watcher.add(assets().getImage("images/pngs/levelCompleteBlurb.png"));
 		watcher.add(assets().getImage("images/pngs/levelFailedBlurb.png"));
 		watcher.add(assets().getImage("images/pngs/menuBackground.png"));

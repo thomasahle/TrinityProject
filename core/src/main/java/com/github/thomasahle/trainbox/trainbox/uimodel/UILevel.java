@@ -16,9 +16,10 @@ import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
+import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
-public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester {
+public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester, ToolListener {
 	
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
@@ -27,10 +28,12 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
-	boolean isCompSelected = true;
-	UIToken compSelected = UIToken.BOX;
+	boolean isCompSelected = false;
+	UIToken compSelected = null;
+	private LevelScene levelScene;
 	
-	public UILevel(Level level) {
+	public UILevel(LevelScene levelScene, Level level) {
+		this.levelScene = levelScene;
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
@@ -187,5 +190,16 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	
 	public Dimension getSize(){
 		return mTrack.getSize();
+	}
+
+	@Override
+	public void toolSelected(UIToken currentTool) {
+		compSelected = currentTool;
+		isCompSelected = true;
+	}
+
+	@Override
+	public void toolsUnselected() {
+		isCompSelected = false;
 	}
 }

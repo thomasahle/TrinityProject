@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 
+import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
+
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
@@ -25,9 +28,11 @@ public class UIPallet implements Listener, HitTester{
 	private Dimension mSize = new Dimension(0, 0);
 	private ImageLayer background;
 	private CanvasImage rect;
+	private LevelScene levelScene;
 	
 
-	public UIPallet() {
+	public UIPallet(LevelScene levelScene) {
+		this.levelScene = levelScene;
 		mLayer = graphics().createGroupLayer();
 
 		setBackground();
@@ -45,17 +50,11 @@ public class UIPallet implements Listener, HitTester{
 		mLayer.add(background);
 		background.setTranslation(-10, -10);
 	}
-
+	
 	public void add(UIComponentButton but){
 		compList.add(but);
 		mLayer.add(but.getLayer());
 		sizeChanged();
-	}
-	
-	public void setUnselected(){
-		for (UIComponentButton but : compList) {
-			but.setUnselected();
-		}
 	}
 	
 	@Override
