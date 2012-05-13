@@ -2,6 +2,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import java.util.List;
 
+import playn.core.Image;
 import playn.core.Layer;
 import pythagoras.f.Point;
 
@@ -9,6 +10,14 @@ import pythagoras.f.Point;
  * An interesting component that trains can go into and maybe come out.
  */
 public interface UIComponent extends TrainTaker {
+	
+//	/**
+//	 * Static backImage. This is used for the component pallet.	 
+//	 * If the component doesn't need to change it's graphics dynamically,
+//	 * please have it use this for consistency.
+//	 */
+//	public static Image staticImamge;
+//	
 	/**
 	 * We need a way to get hold of the trains from the top level. And as the
 	 * components can create more trains as we go along, we've got to collect
@@ -62,7 +71,8 @@ public interface UIComponent extends TrainTaker {
 	public void onAdded(UIComposite parent);
 	/**
 	 * Called when the component is removed from another one.
-	 * @param parent The parent that used to own us
+	 * @param parent The parent tha	public static void getImage();
+t used to own us
 	 */
 	public void onRemoved(UIComposite parent);
 	/**
@@ -89,4 +99,5 @@ public interface UIComponent extends TrainTaker {
 	 * it may also stem from automatic resizing to fit trains.
 	 */
 	public void setSizeChangedListener(SizeChangedListener listener);
+	
 }

@@ -15,6 +15,7 @@ import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester {
 	
@@ -25,6 +26,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIComposite mTrack;
 	private Level mLevel;
 	private LevelFinishedListener mListener;
+	private UIToken currentTok;
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -40,8 +42,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		UIHorizontalComponent track = new UIHorizontalComponent(100); 
 		mStart = new UIStartComponent(trains);
-		mGoal = new UIGoalComponent(400, mLevel.goal);
-		mGoal.addListener(this);
+//		mGoal = new UIGoalComponent(400, mLevel.goal);
+//		mGoal.addListener(this);
 		
 		
 		track.add(mStart);
@@ -131,6 +133,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		Point p = new Point(event.localX(), event.localY());
 //		mTrack.insertChildAt(new UIJoinComponent(80), p);
 		mTrack.insertChildAt(new UIDupComponent(80), p);
+		mTrack.insertChildAt(UIComponentFactory.fromTok(currentTok), p);
+
 	}
 	@Override public void onPointerEnd(Event event) {}
 	@Override public void onPointerDrag(Event event) {}
