@@ -67,6 +67,7 @@ public class UIGoalComponent extends BlackBoxComponent {
 	    textLayer = graphics().createImageLayer(textImage);
 	    textImage.canvas().setFillColor(0xff000000);
 	    mFrontLayer.add(textLayer);
+	    textImage.canvas().drawText(cargoGoalString, 10, HEIGHT/4);
 	}
 
 	public void addListener(LevelFinishedListener l){
@@ -144,6 +145,7 @@ public class UIGoalComponent extends BlackBoxComponent {
 		//Display the cargos delivered
 		textImage.canvas().clear();
 		textImage.canvas().drawText(deliveredCargoString, 10, HEIGHT/2);
+		textImage.canvas().drawText(cargoGoalString, 10, HEIGHT/4);
 		//Destroy the train.
 		fireTrainDestroyed(train);
 	}
