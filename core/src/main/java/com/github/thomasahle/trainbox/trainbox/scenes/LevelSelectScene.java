@@ -21,6 +21,7 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Keyboard;
 import playn.core.Keyboard.TypedEvent;
+import playn.core.PlayN;
 import playn.core.Pointer;
 import playn.core.Pointer.Event;
 
@@ -88,24 +89,25 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	        
 		}*/
 
+	
 
 	private void initializeLevelButtons() {
-		List<Level> levels =  getLevels();
+		int numberOfLevels = Level.levels.size();
+		int currentProgress = LevelTracker.getCurrentProgress();
+		
 		float x = 90;
 		float y = 200;
 		int j =0;
 	 	final Image levelButtonOk = assets().getImage("images/pngs/levelButton.png");
 		final Image levelButtonNotOk = assets().getImage("images/pngs/inaccessibleLevelButton.png");
 
-		for (int i=0; i< levels.size(); i++) {
+		for (int i=0; i<numberOfLevels; i++) {
 			 final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
-			 if (i<=LevelTracker.getCurrentProgress())  {
+			 if (i<=currentProgress) {
 				 levelButtonImageLayer.setImage(levelButtonOk);
-				 
 			 }
 			 else {
 				 levelButtonImageLayer.setImage(levelButtonNotOk);
-
 			 }
 		     demoLayer.add(levelButtonImageLayer);
 		     levelButtonImageLayer.setTranslation(x, y);
@@ -121,56 +123,44 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	}
 
 
-	public void startLevel(Level l){
-		// Each level will have a button that when clicked will call this method with the level to be launched.
-		UILevel level = new UILevel(l);
-		trainBox.setScene(trainBox.getLevelScene());
-	}
 	
 	@Override
 	public void onPointerStart(Event event) {
-		// TODO Auto-generated method stub
 		
+		
+		
+		int numberOfLevels = Level.levels.size();
+		int currentProgress = LevelTracker.getCurrentProgress(); //The level you're currently doing
+		
+		//TODO - if user clicks on button for level i, call trainBox.setLevel(i)
+		//TODO Delete the following code
+		
+		trainBox.setLevel(0);
+		PlayN.log().debug("Seting level 1");
 	}
 
 	@Override
 	public void onPointerEnd(Event event) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void onPointerDrag(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onPointerDrag(Event event) {}
 
 	@Override
-	public void onKeyDown(playn.core.Keyboard.Event event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onKeyDown(playn.core.Keyboard.Event event) {}
 
 	@Override
-	public void onKeyTyped(TypedEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onKeyTyped(TypedEvent event) {}
 
 	@Override
-	public void onKeyUp(playn.core.Keyboard.Event event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onKeyUp(playn.core.Keyboard.Event event) {}
 
 	@Override
-	public void update(float delta) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void update(float delta) {}
 
 	@Override
 	public void onAttach() {
+		//problem
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
 	    pointer().setListener(this);
@@ -181,18 +171,6 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);	
-	}
-
-	
-	/* LEVEL LIST */
-	
-	public List<Level> getLevels(){
-		List<Level> levels = new ArrayList<Level>();
-		levels.add(new Level(1,
-				ComponentFactory.parseTrains("1-5-9-13 2-6-10-14 3-7-11-15 4-8-12-16"),
-				ComponentFactory.parseTrains("1-2-3-4 5-6-7-8 9-10-11-12 13-14-15-16")
-				));
-		return levels;
 	}
 
 }
