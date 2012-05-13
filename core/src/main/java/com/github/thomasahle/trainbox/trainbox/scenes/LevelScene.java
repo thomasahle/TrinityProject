@@ -4,7 +4,6 @@ import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
-import static playn.core.PlayN.pointer;
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -241,7 +240,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		keyboard().setListener(this);
-	    pointer().setListener(this);
 	}
 
 	@Override
