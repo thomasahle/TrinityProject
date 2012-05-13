@@ -139,6 +139,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	
 	@Override
 	public void onPointerStart(Event event) {
+		/*
 		
 		
 		
@@ -150,6 +151,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		
 		trainBox.setLevel(0);
 		//PlayN.log().debug("Seting level 1 - (choosing other levels not implemented yet)");
+	 */
 	}
 
 	@Override
