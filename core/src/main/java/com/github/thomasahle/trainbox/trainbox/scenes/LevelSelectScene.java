@@ -31,7 +31,13 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
     ImageLayer bgLayer;
     GroupLayer demoLayer;
-    Image levelButtonImage;
+    final ImageLayer demoPageImageLayer;
+/*    Image levelButtonImage;
+
+	final Image LevelButtonOkImage = assets().getImage("images/pngs/inaccessibleLevelButton.png");
+	final Image LevelButtonNotOkImage = assets().getImage("images/pngs/levelButton.png");
+
+*/
 	public LevelSelectScene(final TrainBox trainBox ){
 		this.trainBox = trainBox;
 		
@@ -46,39 +52,72 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
         demoLayer.setTranslation(width/20+40, height/20);
 		
         final Image demoPageImage = assets().getImage("images/pngs/chooseLevelBlurb.png");
-        final ImageLayer demoPageImageLayer = graphics().createImageLayer(demoPageImage);
+        demoPageImageLayer = graphics().createImageLayer(demoPageImage);
     	demoLayer.add(demoPageImageLayer);
     	initializeLevelButtons();
-
-
 	}
-	
+/*	
 	private void initializeLevelButtons() {
 		List<Level> levels =  getLevels();
-		int x = 0;
-		int y = 0;
-		Image levelButtonImage = assets().getImage("images/pngs/inaccessibleLevelButton.png");
+		x = 0;
+		y = 50;
+		newX =0;
+		int j = 0;
 		for(int i =0; i <levels.size(); i++) {
+			final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
 			if (levels.get(i).isAccessible()) {
-				levelButtonImage = assets().getImage("images/pngs/levelButton.png");
+				levelButtonImageLayer.setImage(LevelButtonNotOkImage);
 			}
+			else {
+				levelButtonImageLayer.setImage(LevelButtonOkImage);
+			}
+		    demoLayer.add(levelButtonImageLayer);
+		    levelButtonImageLayer.setTranslation(x, y);
+		    j+=1;
 				
-			
-	        final ImageLayer levelButtonImageLayer = graphics().createImageLayer(levelButtonImage);
-	        levelButtonImageLayer.setTranslation(x, y);
-	    	demoLayer.add(levelButtonImageLayer);
+		    // initialize for the position of the next button
+		    newX=((x+LevelButtonOkImage.width()+10)%demoPageImageLayer.width());
+		    if (j ==6) {
+		        y+=LevelButtonOkImage.height()*5/4;
+		        j = 0;
+		     }
+		    x = (newX+LevelButtonOkImage.width()*1/4);
+	    }   
+	        
+	        
+		}*/
 
-	    	// initialize for the position of the next button
-	        int newX=(x+levelButtonImage.width())%graphics().width();
-	        if (newX < x) {
-	        	y+=levelButtonImage.height();
-	        }
-	        x = newX;
-	        
-		}   
-	        
-	        
+
+	private void initializeLevelButtons() {
+		List<Level> levels =  getLevels();
+		float x = 90;
+		float y = 200;
+		int j =0;
+	 	final Image levelButtonOk = assets().getImage("images/pngs/levelButton.png");
+		final Image levelButtonNotOk = assets().getImage("images/pngs/inaccessibleLevelButton.png");
+
+		for (int i=0; i< levels.size(); i++) {
+			 final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
+			 if (levels.get(i).isAccessible())  {
+				 levelButtonImageLayer.setImage(levelButtonOk);
+				 
+			 }
+			 else {
+				 levelButtonImageLayer.setImage(levelButtonNotOk);
+
+			 }
+		     demoLayer.add(levelButtonImageLayer);
+		     levelButtonImageLayer.setTranslation(x, y);
+		     j+=1;
+		     x+= levelButtonImageLayer.width()+10;
+		     if (j == 6) {
+		    	 x = 90;
+		    	 y+= levelButtonOk.height()+20;
+		    	 j = 0;
+		     }
 		}
+		
+	}
 
 
 	public void startLevel(Level l){
