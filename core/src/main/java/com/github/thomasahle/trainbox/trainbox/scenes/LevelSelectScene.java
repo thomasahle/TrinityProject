@@ -162,15 +162,16 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 	public void onAttach() {
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
-	   // pointer().setListener(this);
-	   // keyboard().setListener(this);
-	    trainBox.setLevel(0);
+	    pointer().setListener(this);
+	    keyboard().setListener(this);
 	}
 
 	@Override
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);	
+	    pointer().setListener(null);
+	    keyboard().setListener(null);
 	}
 
 }
