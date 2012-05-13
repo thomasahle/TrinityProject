@@ -20,13 +20,13 @@ public final class UIComponentFactory {
 		System.out.println(tok);
 		switch (tok) {
 		case BOX:
-			return new UIJoinComponent(80);
+			return new UIJoinComponent(114);
 		case DUP:
-			return new UIDupComponent(80);
+			return new UIDupComponent(33);
 		case CAT:
-			return new UISeparateComponent(80);
+			return new UISeparateComponent(93);
 		case FLIP:
-			return new UIFlipComponent(80);
+			return new UIFlipComponent(97);
 		case MERG:
 			return new UISplitMergeComponent(new UIHorizontalComponent(80), new UIHorizontalComponent(80));
 		default:
