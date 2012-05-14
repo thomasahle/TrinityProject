@@ -97,11 +97,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		initLevelStatus();
 		initLevelPopup();
 		
-		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
-		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
-		pauseButtonImageLayer.setTranslation(graphics().width()-146, graphics().height()-168);
-		pauseButtonImageLayer.setVisible(false);
-		
 		setView(0, 0);
 
 	}
@@ -228,12 +223,16 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 			}});
 		
 		
-		mPlayButton.setTranslation(graphics().width()-145, graphics().height()-150);
+		mPlayButton.setTranslation(graphics().width()-130, graphics().height()-125);
 				
+		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
+		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
+		pauseButtonImageLayer.setTranslation(graphics().width()-130, graphics().height()-143);
+		pauseButtonImageLayer.setVisible(false);
 		
 		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");
 		ImageLayer menuButtonImageImageLayer = graphics().createImageLayer(menuButtonImage);
-		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-150);
+		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-125);
 		menuButtonImageImageLayer.addListener(new Listener() {
 
 			@Override
@@ -268,7 +267,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		mPallet.add(catBut);
 		mPallet.add(mergBut);
 		
-		mPallet.getLayer().setTranslation(20, graphics().height() - 180);
+		mPallet.getLayer().setTranslation(20, graphics().height() - 100 - 30);
 		
 		levelControlLayer.add(mPallet.getLayer());
 		levelControlLayer.add(mPlayButton);

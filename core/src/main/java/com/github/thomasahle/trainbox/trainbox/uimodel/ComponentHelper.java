@@ -2,8 +2,10 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import playn.core.Canvas;
 import playn.core.Path;
+import pythagoras.f.FloatMath;
 
 import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
+import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
 
 public class ComponentHelper {
 	public final static int HEIGHT = 100;
@@ -56,5 +58,41 @@ public class ComponentHelper {
 				railY2+RAIL_HEIGHT, RAIL_R);
 		ctx.setFillColor(rail_color);
 		ctx.fillPath(path2);
+	}
+	
+	public static void drawBendTrack(Canvas ctx, QuadPath path) {
+		// FIXME: OK we put these the wrong way around, but until we
+		//		  can properly intersect the path stroking, there is no way around it
+		Path playnPath = path.paintPath(ctx.createPath());
+		ctx.setStrokeColor(0xff666666);
+		ctx.setStrokeWidth(RAIL_SPACE+2*RAIL_HEIGHT);
+		ctx.strokePath(playnPath);
+		ctx.setStrokeColor(0xffe9b96e);
+		ctx.setStrokeWidth(RAIL_SPACE);
+		ctx.strokePath(playnPath);
+		
+		
+		float width = path.length();
+		int nSleepers = (int)(width/(SLEEPER_WIDTH + SLEEPER_SPACE));
+		nSleepers = Math.max(nSleepers, 1);
+		float actualSpace = width/(float)nSleepers - SLEEPER_WIDTH;
+		
+		for (int i = 0; i < nSleepers; i++) {
+			float t = (i+0.5f) * (SLEEPER_WIDTH + actualSpace);
+			float[] pos = path.evaluate(t);
+			float[] slope = path.evaluateSlope(t);
+			Path rect = ctx.createPath();
+			CanvasHelper.roundRect(rect,
+					-SLEEPER_WIDTH/2,
+					-SLEEPER_HEIGHT/2,
+					SLEEPER_WIDTH/2,
+					SLEEPER_HEIGHT/2, SLEEPER_R);
+			ctx.save();
+			ctx.translate(pos[0], pos[1]);
+			ctx.rotate(FloatMath.atan2(slope[1], slope[0]));
+			ctx.setFillColor(0xff000000);
+			ctx.fillPath(rect);
+			ctx.restore();
+		}
 	}
 }

@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
@@ -77,15 +78,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 		return path;
 	}
 	
-	private void drawBendTrack(CanvasImage image, QuadPath path) {
-		Path playnPath = path.paintPath(image.canvas().createPath());
-		image.canvas().setStrokeColor(0xff000000);
-		image.canvas().setStrokeWidth(30);
-		image.canvas().strokePath(playnPath);
-		image.canvas().setStrokeColor(0xffffffff);
-		image.canvas().setStrokeWidth(24);
-		image.canvas().strokePath(playnPath);
-	}
 	private void updatePaths() {
 		mUpPathIn = createPath (
 				0, mSize.height/2,
@@ -103,21 +95,21 @@ public class UISplitMergeComponent extends AbstractComposite {
 	private void updateImages() {
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		if (mNextDirection == mUpgoing) {
-			drawBendTrack(imageLeft, mDownPathIn);
-			drawBendTrack(imageLeft, mUpPathIn);
+			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
+			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
 		} else {
-			drawBendTrack(imageLeft, mUpPathIn);
-			drawBendTrack(imageLeft, mDownPathIn);
+			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
+			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
 		}
 		mLeftLayer.setImage(imageLeft);
 		
 		CanvasImage imageRight = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		if (mNextTaker == mTopTaker) {
-			drawBendTrack(imageRight, mDownPathOut);
-			drawBendTrack(imageRight, mUpPathOut);
+			ComponentHelper.drawBendTrack(imageRight.canvas(), mDownPathOut);
+			ComponentHelper.drawBendTrack(imageRight.canvas(), mUpPathOut);
 		} else {
-			drawBendTrack(imageRight, mUpPathOut);
-			drawBendTrack(imageRight, mDownPathOut);
+			ComponentHelper.drawBendTrack(imageRight.canvas(), mUpPathOut);
+			ComponentHelper.drawBendTrack(imageRight.canvas(), mDownPathOut);
 		}
 		mRightLayer.setImage(imageRight);
 	}
