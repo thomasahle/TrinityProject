@@ -11,24 +11,29 @@ import playn.core.Layer;
 import playn.core.Layer.HitTester;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
+import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
+import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
-public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester {
+public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester, ToolListener {
 	
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
 	private UIStartComponent mStart;
 	private UIGoalComponent mGoal;
 	private UIComposite mTrack;
-	private Level mLevel;
+	private Level mLevel;	
 	private LevelFinishedListener mListener;
-	private UIToken currentTok;
+	boolean isCompSelected = false;
+	UIToken compSelected = null;
+	private ToolManager toolMan;
 	
-	public UILevel(Level level) {
+	public UILevel(ToolManager toolMan, Level level) {
+		this.toolMan = toolMan;
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
@@ -42,32 +47,37 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		UIHorizontalComponent track = new UIHorizontalComponent(100); 
 		mStart = new UIStartComponent(trains);
-		mGoal = new UIGoalComponent(400, mLevel.goal);
+		mGoal = new UIGoalComponent(mLevel.goal);
 		mGoal.addListener(this);
 		
 		
 		track.add(mStart);
+//		track.add(new UISeparateComponent(100));
+//		track.add(new UIIdentityComponent(100));
+//		track.add(new UIIdentityComponent(100));
+//		track.add(new UIIdentityComponent(100));
+//		
+//		UIHorizontalComponent top = new UIHorizontalComponent(60);
+//		UIHorizontalComponent bot = new UIHorizontalComponent(60);
+//		track.add(new UISplitMergeComponent(top, bot));
+//		
+//		UIHorizontalComponent top1 = new UIHorizontalComponent(40);
+//		UIHorizontalComponent bot1 = new UIHorizontalComponent(40);
+//		top.add(new UISplitMergeComponent(top1,bot1));
+//		top1.add(new UIJoinComponent(80));
+//		top1.add(new UIJoinComponent(80));
+//		bot1.add(new UIJoinComponent(80));
+//		bot1.add(new UIJoinComponent(80));
+//		
+//		UIHorizontalComponent top2 = new UIHorizontalComponent(40);
+//		UIHorizontalComponent bot2 = new UIHorizontalComponent(40);
+//		bot.add(new UISplitMergeComponent(top2,bot2));
+//		top2.add(new UIJoinComponent(80));
+//		top2.add(new UIJoinComponent(80));
+//		bot2.add(new UIJoinComponent(80));
+//		bot2.add(new UIJoinComponent(80));
+//
 		
-		UIHorizontalComponent top = new UIHorizontalComponent(60);
-		UIHorizontalComponent bot = new UIHorizontalComponent(60);
-		track.add(new UISplitMergeComponent(top, bot));
-		/*
-		UIHorizontalComponent top1 = new UIHorizontalComponent(40);
-		UIHorizontalComponent bot1 = new UIHorizontalComponent(40);
-		top.add(new UISplitMergeComponent(top1,bot1));
-		top1.add(new UINoGoComponent(80));
-		top1.add(new UIJoinComponent(80));
-		bot1.add(new UIJoinComponent(80));
-		bot1.add(new UIJoinComponent(80));
-		
-		UIHorizontalComponent top2 = new UIHorizontalComponent(40);
-		UIHorizontalComponent bot2 = new UIHorizontalComponent(40);
-		bot.add(new UISplitMergeComponent(top2,bot2));
-		top2.add(new UIJoinComponent(80));
-		top2.add(new UIJoinComponent(80));
-		bot2.add(new UIJoinComponent(80));
-		bot2.add(new UIJoinComponent(80));
-		*/
 		track.add(mGoal);
 		
 		
@@ -109,6 +119,14 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mTrack.paused(paused);
 	}
 	
+	public void setDragMode(){
+		isCompSelected = false;
+	}
+	
+	public void setCompSel(UIToken tok){
+		isCompSelected = true;
+		compSelected = tok;
+	}
 	
 	public void setListener(LevelFinishedListener listener) {
 		mListener = listener;
@@ -126,16 +144,19 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 
 	@Override
 	public void onPointerStart(Event event) {
-		Point p = new Point(event.localX(), event.localY());
-		mTrack.insertChildAt(new UIJoinComponent(80), p);
-//		try {
-//			mTrack.insertChildAt(UIComponentFactory.fromTok(currentTok), p);
-//		} catch (Exception e) {
-//		}
-
+		if (isCompSelected) {
+			Point p = new Point(event.localX(), event.localY());
+			mTrack.insertChildAt(UIComponentFactory.fromTok(compSelected), p);
+		}
 	}
-	@Override public void onPointerEnd(Event event) {}
-	@Override public void onPointerDrag(Event event) {}
+
+	@Override
+	public void onPointerEnd(Event event) {
+	}
+
+	@Override
+	public void onPointerDrag(Event event) {
+	}
 
 	@Override
 	public Layer hitTest(Layer layer, Point p) {
@@ -143,8 +164,43 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		float y = mTrack.getPosition().y + mTrack.getSize().height*0.85f;
 		float x1 = x + mTrack.getSize().width;
 		float y1 = y + mTrack.getSize().height;
-		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1)
+		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1 || !isCompSelected) {
+			toolMan.unselect();
 			return layer;
+		}
 		return mTrack.getBackLayer().hitTest(p);
+	}
+	
+	public void setTrainSpeed(float s){
+		for(UITrain t: mTrack.getTrains()){
+			t.setSpeed(s);
+		}
+	}
+	public void increaseTrainSpeed(float ds){
+		for(UITrain t: mTrack.getTrains()){
+			t.setSpeed(t.getSpeed()+ds);
+		}
+	}
+
+	public void decreaseTrainSpeed(float ds) {
+		for(UITrain t: mTrack.getTrains()){
+			if(t.getSpeed()-ds >= 0)
+			t.setSpeed(t.getSpeed()-ds);
+		}
+	}
+	
+	public Dimension getSize(){
+		return mTrack.getSize();
+	}
+
+	@Override
+	public void toolSelected(UIToken currentTool) {
+		compSelected = currentTool;
+		isCompSelected = true;
+	}
+
+	@Override
+	public void toolsUnselected() {
+		isCompSelected = false;
 	}
 }

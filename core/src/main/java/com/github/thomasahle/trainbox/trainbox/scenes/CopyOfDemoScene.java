@@ -21,7 +21,7 @@ import playn.core.Pointer;
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
-public class CopyOfDemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
+public class CopyOfDemoScene implements Scene, Pointer.Listener {
 
 	Image cloudImage = assets().getImage("images/cloud.png");
     ImageLayer cloudLayer = graphics().createImageLayer(cloudImage);
@@ -74,7 +74,6 @@ public class CopyOfDemoScene implements Scene, Keyboard.Listener, Pointer.Listen
 		graphics().rootLayer().add(textLayer);
 	    graphics().rootLayer().add(statsLayer);
 	    pointer().setListener(this);
-	    keyboard().setListener(this);	
 	}
 
 	@Override
@@ -103,33 +102,6 @@ public class CopyOfDemoScene implements Scene, Keyboard.Listener, Pointer.Listen
 		cloudLayer.setTranslation(x, y);
 		statsImage.canvas().clear();
 		statsImage.canvas().drawText("VEL: "+vy, 20, 30);
-	}
-	
-	@Override
-	public void onKeyDown(Event event) {
-		log().debug(event.key() + " Pressed");
-		if(event.key() == Key.DOWN){
-			vy += 1;
-		}
-		if(event.key() == Key.UP){
-			vy -= 1;
-		}
-		if(event.key() == Key.C){
-			menuVisible = !menuVisible;
-			compMenu.setVisible(menuVisible);
-		}
-		
-	}
-
-	@Override
-	public void onKeyTyped(TypedEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onKeyUp(Event event) {
-	
 	}
 
 	@Override

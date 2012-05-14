@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import playn.core.CanvasImage;
+import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
@@ -30,6 +33,9 @@ public class UISeparateComponent extends AbstractComponent {
 	private final static float KNIFE_CYCLE = 1000f;
 	private Layer mKnifeLayer;
 	private float mKnifeT = 0;
+	
+	private ImageLayer mSeeSawLayer;
+	
 
 	public UISeparateComponent(int width) {
 		mWidth = width;
@@ -38,6 +44,12 @@ public class UISeparateComponent extends AbstractComponent {
 		image.canvas().setFillColor(0xff009999);
 		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
 		mBackLayer = graphics().createImageLayer(image);
+		
+		Image concatComponentImage = assets().getImage("images/pngs/concatComponent.png");
+		mBackLayer = graphics().createImageLayer(concatComponentImage);
+		
+		mSeeSawLayer = (ImageLayer) mBackLayer;
+		
 		
 		CanvasImage knifeImage = graphics().createImage(KNIFE_WIDTH, HEIGHT);
 		playn.core.Path knifePath = knifeImage.canvas().createPath();
@@ -90,7 +102,6 @@ public class UISeparateComponent extends AbstractComponent {
 	public void update(float delta) {
 		if (paused())
 			return;
-		
 		mKnifeT += delta;
 		
 		float knifeX = getSize().width/2 + getDeepPosition().x;
@@ -110,17 +121,20 @@ public class UISeparateComponent extends AbstractComponent {
 				if (isUp(UP_LEVEL)) {
 					mLeftSide.poll();
 					train.getLayer().setVisible(false);
+					float oldSpeed = train.getSpeed();
 					fireTrainDestroyed(train);
 					
 					List<UICarriage> tailTrains = new ArrayList<UICarriage>(train.getCarriages());
 					tailTrains.remove(0);
 					UITrain tail = new UITrain(tailTrains);
 					fireTrainCreated(tail);
+					tail.setSpeed(oldSpeed); // set the speed of the remaining tail to the old speed of the total train.
 					tail.setPosition(new Point(trainLeft, train.getPosition().y));
 					mLeftSide.addFirst(tail);
 					
 					UITrain head = new UITrain(Arrays.asList(train.getCarriages().get(0)));
 					fireTrainCreated(head);
+					head.setSpeed(oldSpeed); // set the speed of the head to the old speed of the total train.
 					head.setPosition(new Point(carLeft, train.getPosition().y));
 					mLeftSide.addFirst(head);
 				}
@@ -157,7 +171,7 @@ public class UISeparateComponent extends AbstractComponent {
 			float trainRight = trainLeft + train.getSize().width;
 			float carLeft = trainLeft + train.getCarriages().get(0).getPosition().x;
 			
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
+			float newRight = Math.min(rightBorder, trainRight + train.speed*delta);
 			
 			// If we are already on the knife, hold it down
 			if (carLeft < knifeX && knifeX <= trainRight - 0.1f) {

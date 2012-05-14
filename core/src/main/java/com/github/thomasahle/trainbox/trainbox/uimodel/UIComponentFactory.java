@@ -7,15 +7,33 @@ import com.github.thomasahle.trainbox.trainbox.model.Component;
 
 public final class UIComponentFactory {
 
-	enum UIToken {
-		NULL("null"), BOX("box"), CAT("cat"), DUP("dup"), ID("id"), FLIP("flip"), DOT(" "), MERG(
-				"||"), PA1("("), PA2(")");
+	public enum UIToken {
+		BOX("box"), CAT("cat"), DUP("dup"), ID("id"), FLIP("flip"), MERG("||");
 		final String repr;
 
 		UIToken(String repr) {
 			this.repr = repr;
 		}
 	};
+	
+	public static UIComponent fromTok(UIToken tok){
+		System.out.println(tok);
+		switch (tok) {
+		case BOX:
+			return new UIJoinComponent(114);
+		case DUP:
+			return new UIDupComponent(33);
+		case CAT:
+			return new UISeparateComponent(93);
+		case FLIP:
+			return new UIFlipComponent(97);
+		case MERG:
+			return new UISplitMergeComponent(new UIHorizontalComponent(80), new UIHorizontalComponent(80));
+		default:
+			return null;
+		}
+		
+	}
 
 	public static UIComponent fromModel(Component component) {
 		// TODO: Create this factory. Perhaps using the visitor pattern.
@@ -32,10 +50,5 @@ public final class UIComponentFactory {
 			trains.add(new UITrain(cargo));
 		}
 		return trains;
-	}
-
-	public static UIComponent fromTok(UIToken currentTok) {
-
-		return null;
 	}
 }

@@ -35,7 +35,7 @@ import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
-public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
+public class DemoScene implements Scene, Pointer.Listener {
     int width = graphics().width();
 	int height = graphics().height();
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
@@ -221,7 +221,6 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
 	    pointer().setListener(this);
-	    keyboard().setListener(this);	
 	}
 
 	@Override
@@ -254,25 +253,6 @@ public class DemoScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void onKeyDown(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onKeyTyped(TypedEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onKeyUp(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 
 

@@ -142,7 +142,7 @@ public abstract class AbstractComponent implements UIComponent {
 				continue;
 			}
 			// See how far we can move it
-			float newRight = Math.min(rightBorder, trainRight + UITrain.SPEED*delta);
+			float newRight = Math.min(rightBorder, trainRight + train.speed*delta);
 			float newLeft = newRight-train.getSize().width;
 			train.setPosition(new Point(newLeft, train.getPosition().y));
 			// If it is now out in the right side, give it away

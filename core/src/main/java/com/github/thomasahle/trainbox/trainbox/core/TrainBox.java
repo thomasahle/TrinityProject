@@ -4,9 +4,10 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
 import playn.core.Game;
+import playn.core.PlayN;
 
+import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
-//import com.github.thomasahle.trainbox.trainbox.scenes.LevelChooserScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelSelectScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LoadingScene;
@@ -14,10 +15,10 @@ import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.NullScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
+import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
 
 public class TrainBox implements Game{
 	Scene demoScene; 
-	Scene levelScene;
 	Scene moveScene;
 	Scene startScene;
 	Scene levelSelectScene;
@@ -28,7 +29,6 @@ public class TrainBox implements Game{
 		public void done() {
 			startScene = new StartScene(TrainBox.this);
 			demoScene = new DemoScene(TrainBox.this);
-			levelScene = new LevelScene(TrainBox.this);
 			moveScene = new MoveScene(TrainBox.this);
 			levelSelectScene = new LevelSelectScene(TrainBox.this);
 			
@@ -51,12 +51,15 @@ public class TrainBox implements Game{
 	}
 
 	private void addResources(){
-		//Insertresources here.
+		//Insert resources here.
 		watcher.add(assets().getImage("images/pngs/aboutButton.png"));
 		watcher.add(assets().getImage("images/pngs/aboutButtonPressed.png"));
 		watcher.add(assets().getImage("images/pngs/aboutPage.png"));
 		watcher.add(assets().getImage("images/pngs/backButton.png"));
+		watcher.add(assets().getImage("images/pngs/boxComponent.png"));
 		watcher.add(assets().getImage("images/pngs/changeLevelButton.png"));
+		watcher.add(assets().getImage("images/pngs/chooseLevelBlurb.png"));
+		watcher.add(assets().getImage("images/pngs/concatComponent.png"));
 		watcher.add(assets().getImage("images/pngs/demoButton.png"));
 		watcher.add(assets().getImage("images/pngs/demoButtonPressed.png"));
 		watcher.add(assets().getImage("images/pngs/demoPage1.png"));
@@ -65,8 +68,12 @@ public class TrainBox implements Game{
 		watcher.add(assets().getImage("images/pngs/demoPage4.png"));
 		watcher.add(assets().getImage("images/pngs/demoPage5.png"));
 		watcher.add(assets().getImage("images/pngs/doneButton.png"));
+		watcher.add(assets().getImage("images/pngs/dupComponent.png"));
+		watcher.add(assets().getImage("images/pngs/flipComponent.png"));
 		watcher.add(assets().getImage("images/pngs/goalBar.png"));
 		watcher.add(assets().getImage("images/pngs/goButton.png"));
+		watcher.add(assets().getImage("images/pngs/inaccessibleLevelButton.png"));
+		watcher.add(assets().getImage("images/pngs/levelButton.png"));
 		watcher.add(assets().getImage("images/pngs/levelCompleteBlurb.png"));
 		watcher.add(assets().getImage("images/pngs/levelFailedBlurb.png"));
 		watcher.add(assets().getImage("images/pngs/menuBackground.png"));
@@ -108,10 +115,6 @@ public class TrainBox implements Game{
 		return demoScene;
 	}
 	
-	public Scene getLevelScene() {
-		return levelScene;
-	}
-	
 	public Scene getStartScene() {
 		return startScene;
 	}
@@ -132,6 +135,12 @@ public class TrainBox implements Game{
 	
 	public Scene getScene() {
 		return mScene;
+	}
+	
+	public void setLevel(int index){
+		LevelTracker.updateLevel(index);
+		setScene(new LevelScene(this,Level.levels.get(index)));
+		PlayN.log().debug("Setting Level "+index);
 	}
 
 
