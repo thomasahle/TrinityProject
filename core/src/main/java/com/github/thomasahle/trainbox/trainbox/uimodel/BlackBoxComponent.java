@@ -41,7 +41,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 		if (mSent != null) {
 			float trainLeft = mSent.getPosition().x;
 			
-			mSent.setCropLeft(compLeft-trainLeft);
+			mSent.setCropLeft(compRight-trainLeft);
 			
 			if (trainLeft >= compRight) {
 				mSent = null;
@@ -60,7 +60,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 				newLeft = Math.min(newLeft, compLeft+0.1f); // Don't move it too far
 				float newRight = newLeft + mIncomming.getSize().width;
 				mIncomming.setPosition(new Point(newLeft, mIncomming.getPosition().y));
-				mIncomming.setCropRight(newRight - compRight);
+				mIncomming.setCropRight(newRight - compLeft);
 			}
 		}
 		// Wait for the right moment to spit them out
@@ -71,13 +71,11 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 				log().debug("Sending a processed element to "+getTrainTaker());
 				
 				it.remove();
-				train.getLayer().setVisible(true);
 				train.setPosition(new Point(compRight-train.getSize().width, train.getPosition().y));
+				train.setCropLeft(compRight-train.getPosition().x);
 				train.setCropRight(0);
-				log().debug("compRight: "+compRight);
-				log().debug("Before it was: "+getTrainTaker().leftBlock());
+				train.getLayer().setVisible(true);
 				getTrainTaker().takeTrain(train);
-				log().debug("Now it is: "+getTrainTaker().leftBlock());
 				
 				assert mSent == null;
 				mSent = train;

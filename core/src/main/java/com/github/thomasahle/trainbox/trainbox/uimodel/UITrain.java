@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.log;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
@@ -60,9 +61,11 @@ public class UITrain {
 		mLayer = graphics().createGroupLayer();
 		
 		install(mCarriages);
-		this.setSpeed(old.getSpeed());
+		setSpeed(old.getSpeed());
+		setCropLeft(old.getCropLeft());
+		setCropRight(old.getCropRight());
 	}
-	
+
 	private static List<UICarriage> fromCargos (int[] cargos) {
 		List<UICarriage> carriages = new ArrayList<UICarriage>();
 		for (int cargo : cargos)
@@ -140,6 +143,7 @@ public class UITrain {
 	 */
 	public void setCropRight(float width) {
 		mRightCrop = width;
+		log().debug("Crop right is: "+width);
 		applyCrop();
 	}
 	
@@ -148,32 +152,45 @@ public class UITrain {
 	 */
 	public void setCropLeft(float width) {
 		mLeftCrop = width;
+		log().debug("Crop left is: "+width);
 		applyCrop();
+	}
+	
+	private float getCropRight() {
+		return mLeftCrop;
+	}
+
+	private float getCropLeft() {
+		return mRightCrop;
 	}
 	
 	private void applyCrop() {
 		// Resets the carriages to visible.
 		// This is (hopefully) done off the buffer, so no worries about glitches.
-		for (UICarriage car : mCarriages)
+		for (UICarriage car : mCarriages) {
 			car.getLayer().setVisible(true);
+			car.getLayer().setAlpha(1);
+		}
 		// Crop from right
 		float rightCrop = mRightCrop;
 		for (UICarriage car : mCarriages) {
-			if (rightCrop > 0) {
+			if (rightCrop >= car.getSize().width) {
 				car.getLayer().setVisible(false);
-				rightCrop -= car.getSize().width;
+			} else if (rightCrop > 0) {
+				car.getLayer().setAlpha(1-rightCrop/car.getSize().width);
 			}
-			else break;
+			rightCrop -= car.getSize().width;
 		}
 		// Crop from left
 		float leftCrop = mLeftCrop;
 		for (int i = mCarriages.size()-1; i >= 0; i--) {
 			UICarriage car = mCarriages.get(i);
-			if (leftCrop > 0) {
+			if (leftCrop >= car.getSize().width) {
 				car.getLayer().setVisible(false);
-				leftCrop -= car.getSize().width;
+			} else if (leftCrop > 0) {
+				car.getLayer().setAlpha(1-leftCrop/car.getSize().width);
 			}
-			else break;
+			leftCrop -= car.getSize().width;
 		}
 	}
 }

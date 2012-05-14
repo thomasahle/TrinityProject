@@ -67,10 +67,10 @@ public class UIJoinComponent extends BlackBoxComponent{
 			frontTrain = null;
 
 			newTrain.getLayer().setVisible(false);
-			newTrain.setCropLeft(newTrain.getSize().width - getSize().width);
 			currentTrains.add(newTrain);
 			fireTrainCreated(newTrain);
 			newTrain.setSpeed(oldSpeed);
+			
 		}
 		else {
 			frontTrain = train;
