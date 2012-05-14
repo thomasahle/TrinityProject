@@ -119,7 +119,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		
 		if(! allTrains.isEmpty()){
 			log().debug("EXTRA TRAINS");
-			this.levelFailed();
+			this.levelFailed("Too many trains");
 		}else{
 		
 		log().debug("LEVEL CLEARED !!!");
@@ -127,10 +127,10 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		}
 	}
 	@Override
-	public void levelFailed() {
+	public void levelFailed(String message) {
 		mTrack.paused(true);
 		log().debug("LEVEL FAILED !!!");
-		mListener.levelFailed();
+		mListener.levelFailed(message);
 	}
 
 	@Override
