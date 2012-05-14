@@ -14,8 +14,9 @@ public class LoadingScene implements Scene {
 
 	    CanvasImage textImage = graphics().createImage(640, 50);
 	    textLayer = graphics().createImageLayer(textImage);
-	    textImage.canvas().setFillColor(0xff000000);
+	    textImage.canvas().setFillColor(0x88888888);
 	    textImage.canvas().drawText("Loading assets...", 20, 30);
+	    textLayer.setScale(4);
 	}
 
 	@Override
