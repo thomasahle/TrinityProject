@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
+
 import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.Layer;
@@ -15,8 +17,7 @@ import pythagoras.f.Dimension;
 public class UIJoinComponent extends BlackBoxComponent{
 
 	
-	private final static int HEIGHT = 100;
-	private int mWidth;
+	private int mWidth, mHeight;
 	
 	private Layer mBackLayer, mFrontLayer;
 	private UITrain frontTrain;	
@@ -28,21 +29,19 @@ public class UIJoinComponent extends BlackBoxComponent{
 		return trains;
 	}
 	
-	public UIJoinComponent(int width) {
-		mWidth = width;
+	public UIJoinComponent() {
+		mBackLayer = CanvasHelper.newEmptyLayer();
 		
-		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
-		
-/*		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xff009999);
-		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);*/
 		Image joinComponentImage = assets().getImage("images/pngs/boxComponent.png");
 		mFrontLayer = graphics().createImageLayer(joinComponentImage);
+		
+		mWidth = joinComponentImage.width();
+		mHeight = joinComponentImage.height();
 	}
 	
 	@Override
 	public Dimension getSize() {
-		return new Dimension(mWidth,HEIGHT);
+		return new Dimension(mWidth,mHeight);
 	}
 
 	@Override

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
+
 import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.Layer;
@@ -15,8 +17,7 @@ import pythagoras.f.Dimension;
 public class UIFlipComponent extends BlackBoxComponent {
 
 	
-	private final static int HEIGHT = 100;
-	private int mWidth;
+	private int mWidth, mHeight;
 	
 	private Layer mBackLayer, mFrontLayer;
 	private UITrain unpairedTrain;	
@@ -28,17 +29,18 @@ public class UIFlipComponent extends BlackBoxComponent {
 		return trains;
 	}
 	
-	public UIFlipComponent(int width) {
-		mWidth = width;
-		
-		mBackLayer = graphics().createImageLayer(graphics().createImage(1,1));
+	public UIFlipComponent() {
+		mBackLayer = CanvasHelper.newEmptyLayer();
 
 		Image flipComponentImage = assets().getImage("images/pngs/flipComponent.png");
 		mFrontLayer = graphics().createImageLayer(flipComponentImage);
+		
+		mWidth = flipComponentImage.width();
+		mHeight = flipComponentImage.height();
 	}
 	
 	public Dimension getSize(){
-		return new Dimension(mWidth,HEIGHT);
+		return new Dimension(mWidth,mHeight);
 	}
 	@Override
 	public Layer getBackLayer() {

@@ -17,6 +17,7 @@ import pythagoras.f.Point;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.ToolListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester, ToolListener {

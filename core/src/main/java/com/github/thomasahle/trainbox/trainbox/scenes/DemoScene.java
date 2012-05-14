@@ -228,6 +228,9 @@ public class DemoScene implements Scene, Pointer.Listener {
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
 	    pointer().setListener(null);
+
+
+
 	}
 	
 	@Override

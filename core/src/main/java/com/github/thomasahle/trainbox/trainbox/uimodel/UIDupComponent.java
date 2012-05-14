@@ -5,6 +5,8 @@ import static playn.core.PlayN.graphics;
 
 import java.util.Queue;
 
+import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
+
 import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.Layer;
@@ -12,25 +14,27 @@ import pythagoras.f.Dimension;
 
 public class UIDupComponent extends BlackBoxComponent{
 
-	private final static int HEIGHT = 100;
-	private int mWidth;
+	private int mWidth, mHeight;
 	
 	private Layer mBackLayer, mFrontLayer;
 	
 
 	
-	public UIDupComponent(int width) {
-		mWidth = width;
-		mBackLayer = graphics().createGroupLayer();
+	public UIDupComponent() {
+		mBackLayer = CanvasHelper.newEmptyLayer();
+		
 		Image dupComponentImage = assets().getImage("images/pngs/dupComponent.png");
 		mFrontLayer = graphics().createImageLayer(dupComponentImage);
+		
+		mWidth = dupComponentImage.width();
+		mHeight = dupComponentImage.height();
 	}
 
 	
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(mWidth, HEIGHT);
+		return new Dimension(mWidth, mHeight);
 	}
 
 	@Override
