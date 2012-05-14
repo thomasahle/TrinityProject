@@ -49,7 +49,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		UIHorizontalComponent track = new UIHorizontalComponent(100); 
 		mStart = new UIStartComponent(trains);
 		mGoal = new UIGoalComponent(mLevel.goal);
-		mGoal.addListener(this);
+		mGoal.setListener(this);
 		
 		track.add(mStart);
 		track.add(mGoal);
