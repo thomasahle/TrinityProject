@@ -72,7 +72,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 			Layer l = train.getLayer();
 			l.setAlpha(0.4f);
 			// position expected trains.
-			l.setTranslation(compCtr * train.getSize().width + UITrain.PADDING,
+			l.setTranslation(compCtr * (train.getSize().width + UITrain.PADDING) + UITrain.PADDING,
 					-train.getSize().height);
 			mFrontLayer.add(l);
 			compCtr++;
