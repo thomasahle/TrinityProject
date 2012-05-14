@@ -26,7 +26,7 @@ import pythagoras.f.Point;
 
 
 
-public class UIGoalComponent extends BlackBoxComponent {
+public class UIGoalComponent extends AbstractComponent implements TrainTaker, UIComponent {
 
 	private final static int HEIGHT = 120;
 	private int mWidth;
@@ -40,6 +40,10 @@ public class UIGoalComponent extends BlackBoxComponent {
 	List<Integer> cargoGoalList= new ArrayList<Integer>();
 	List<LevelFinishedListener> listeners = new ArrayList<LevelFinishedListener>();
 	
+	private UITrain mIncomming = null;
+	private LinkedList<UITrain> currentTrains = new LinkedList<UITrain>();
+	private UITrain mSent = null;
+	
 
 	
 	public UIGoalComponent(List<Train> goal) {
@@ -51,7 +55,9 @@ public class UIGoalComponent extends BlackBoxComponent {
 			for(UICarriage c: uit.getCarriages()){
 				UITrain train = new UITrain(Arrays.asList(c));
 				mWidth+=train.getSize().width+padding;
-				trains.add(0,train);
+				trains.add(0,train); // TO BE DISPLAYED FIRST TRAIN EXPECTED ON THE RIGHT!
+				cargoGoalList.add(c.getCargo()); // FIRST ELEMENT EXPECTED FIRST
+				cargoGoalString = (c.getCargo()+" | ") + cargoGoalString;
 			}
 		}
 		mWidth+=padding;
@@ -70,13 +76,10 @@ public class UIGoalComponent extends BlackBoxComponent {
     		train.setSpeed(0f);
 			Layer l = train.getLayer();
 			l.setAlpha(0.4f);
+			// position expected trains.
 			l.setTranslation(compCtr*train.getSize().width+padding, 0);
 			mFrontLayer.add(l);
 			List<UICarriage> cs = train.getCarriages();
-			for(UICarriage c :cs){
-				cargoGoalList.add(c.getCargo());
-				cargoGoalString = (c.getCargo()+" | ") + cargoGoalString;
-			}
 			compCtr ++;
 		}
 	}
@@ -113,7 +116,8 @@ public class UIGoalComponent extends BlackBoxComponent {
 	}
 	
 	@Override
-	public void onTrainEntered(UITrain train, Queue<UITrain> currentTrains) {
+	public void takeTrain(UITrain train) {
+		currentTrains.add(train);
 		List<UICarriage> carriages = train.getCarriages();
 		// Unload the cargo from each carriage
 		for(UICarriage c:carriages){
@@ -153,6 +157,31 @@ public class UIGoalComponent extends BlackBoxComponent {
 		}
 		//Display the cargos delivered
 		//Destroy the train.
-		fireTrainDestroyed(train);
+	}
+
+	@Override
+	public List<UITrain> getTrains() {
+		return currentTrains;
+	}
+
+	@Override
+	public void update(float delta) {
+			
+			if (paused())
+				return;
+			
+			moveTrains(currentTrains, delta);
+		}	
+
+	@Override
+	public float leftBlock() {
+		// Channel leftBlock from previous component
+		float res = getTrainTaker().leftBlock();
+		// Don't allow trains to jump over us
+		res = Math.min(res, getDeepPosition().x+getSize().width-0.1f);
+		// Don't overlap trains we currently manage
+		if (!currentTrains.isEmpty())
+			res = Math.min(res, currentTrains.getLast().getPosition().x - UITrain.PADDING);
+		return res;
 	}
 }
