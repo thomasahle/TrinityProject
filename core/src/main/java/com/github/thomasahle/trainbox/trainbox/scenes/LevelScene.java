@@ -242,12 +242,12 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 			}});
 		
 		
-		mPlayButton.setTranslation(graphics().width()-145, graphics().height()-150);
+		mPlayButton.setTranslation(graphics().width()-130, graphics().height()-125);
 				
 		
 		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");
 		ImageLayer menuButtonImageImageLayer = graphics().createImageLayer(menuButtonImage);
-		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-150);
+		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-125);
 		menuButtonImageImageLayer.addListener(new Listener() {
 
 			@Override
@@ -282,7 +282,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		mPallet.add(catBut);
 		mPallet.add(mergBut);
 		
-		mPallet.getLayer().setTranslation(20, graphics().height() - 180);
+		mPallet.getLayer().setTranslation(20, graphics().height() - 100 - 30);
 		
 		levelControlLayer.add(mPallet.getLayer());
 		levelControlLayer.add(mPlayButton);
