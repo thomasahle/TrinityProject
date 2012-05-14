@@ -17,13 +17,12 @@ public class UICarriage {
 	public static final int WIDTH = 64;
 	
 	private Layer mLayer;
-	private Point mPosition;
+	private Point mPosition = new Point(0,0);
 	private int mCargo;
 	private float mDx = 1;
 	private float mDy = 0;
 	
 	public UICarriage(int cargo) {
-		mPosition = new Point(0,0);
 		mCargo = cargo;
 		drawLayer(cargo);
 	}
