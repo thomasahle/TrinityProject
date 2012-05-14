@@ -30,26 +30,40 @@ public class UIComponentButton implements ToolListener{
 	
 	private UIComposite mParent;
 	private Point mPosition = new Point();
-	private Dimension mSize = new Dimension(80,80);
+	private Dimension mSize = new Dimension(100,100);
 	
 	CanvasImage outline;
 
 	private boolean selected;
 
 	private Layer imageLayer;
+	private Layer imageSelLayer;
 
 	private Layer outlineLayer;
 
 	private ToolManager toolMan;
 
 	private UIToken tool;
+
 	
 	private static final Map<UIToken, Image> MAP = new HashMap<UIComponentFactory.UIToken, Image>();{{
 		MAP.put(UIToken.DUP, assets().getImage("images/pngs/dupComponentButtonImage.png"));
 		MAP.put(UIToken.BOX, assets().getImage("images/pngs/boxComponentButtonImage.png"));
 		MAP.put(UIToken.FLIP, assets().getImage("images/pngs/flipComponentButtonImage.png"));
 		MAP.put(UIToken.CAT, assets().getImage("images/pngs/concatComponentButtonImage.png"));
-		MAP.put(UIToken.MERG, assets().getImage("images/pngs/mergComponentButtonImage.png"));
+		MAP.put(UIToken.MERG, assets().getImage("images/pngs/dupComponentButtonImage.png"));
+//		MAP.put(UIToken.MERG, assets().getImage("images/pngs/mergComponentButtonImage.png"));
+		
+	}};
+	
+	private static final Map<UIToken, Image> MAPsel = new HashMap<UIComponentFactory.UIToken, Image>();{{
+		MAP.put(UIToken.DUP, assets().getImage("images/pngs/dupComponentButtonImagePressed.png"));
+		MAP.put(UIToken.BOX, assets().getImage("images/pngs/boxComponentButtonImagePressed.png"));
+		MAP.put(UIToken.FLIP, assets().getImage("images/pngs/flipComponentButtonImagePressed.png"));
+		MAP.put(UIToken.CAT, assets().getImage("images/pngs/concatComponentButtonImagePressed.png"));
+		MAP.put(UIToken.MERG, assets().getImage("images/pngs/dupComponentButtonImagePressed.png"));
+//		MAP.put(UIToken.MERG, assets().getImage("images/pngs/mergComponentButtonImagePressed.png"));
+
 	}};
 		
 	public UIComponentButton(final ToolManager toolMan, final UIToken comp){
@@ -68,19 +82,23 @@ public class UIComponentButton implements ToolListener{
 //		imageLayer.setScale((float) 0.5); 
 		
 		imageLayer = graphics().createImageLayer(MAP.get(comp));
+		imageLayer.setDepth(2);
 		
 		layer.add(imageLayer);
 		
-		outline = graphics().createImage((int)mSize.width, (int)mSize.height);
-		outline.canvas().setStrokeColor(0xaaffffff);
-		outline.canvas().setStrokeWidth(6);
-		outline.canvas().setLineJoin(LineJoin.ROUND);
+		imageSelLayer = graphics().createImageLayer(MAPsel.get(comp));
+
 		
-		outline.canvas().strokeRect(0, 0, mSize.width, mSize.height);
-		outlineLayer = graphics().createImageLayer(outline);
-		outlineLayer.setVisible(false);
+//		outline = graphics().createImage((int)mSize.width, (int)mSize.height);
+//		outline.canvas().setStrokeColor(0xaaffffff);
+//		outline.canvas().setStrokeWidth(6);
+//		outline.canvas().setLineJoin(LineJoin.ROUND);
+//		
+//		outline.canvas().strokeRect(0, 0, mSize.width, mSize.height);
+//		outlineLayer = graphics().createImageLayer(outline);
+//		outlineLayer.setVisible(false);
 		
-		layer.add(outlineLayer);
+		layer.add(imageSelLayer);
 		
 		imageLayer.addListener(new Listener() {
 
@@ -114,14 +132,14 @@ public class UIComponentButton implements ToolListener{
 	@Override
 	public void toolsUnselected() {
 		selected = false;
-		outlineLayer.setVisible(false);
+//		imageSelLayer.setVisible(false);
 	}
 
 	@Override
 	public void toolSelected(UIToken currentTool) {
 		if (currentTool == tool) {
 			selected = true;
-			outlineLayer.setVisible(true);
+//			imageSelLayer.setVisible(true);
 		}
 		else toolsUnselected();
 	}
