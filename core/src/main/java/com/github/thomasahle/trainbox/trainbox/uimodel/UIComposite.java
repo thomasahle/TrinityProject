@@ -13,4 +13,6 @@ import pythagoras.f.Point;
 public interface UIComposite extends UIComponent {
 	public List<UIComponent> getChildren();
 	public boolean insertChildAt(UIComponent child, Point position);
+	public boolean deleteChildAt(Point position);
+	public boolean shouldBeDeleted();
 }

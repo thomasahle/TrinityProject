@@ -66,6 +66,41 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		return false;
 	}
 	
+	@Override
+	public boolean deleteChildAt(Point position) {
+		for (int p = 0; p < mComponents.size(); p++) {
+			UIComponent c = mComponents.get(p);
+			if (c.getPosition().x <= position.x
+					&& position.x < c.getPosition().x+c.getSize().width
+					&& c.getPosition().y <= position.y
+					&& position.y < c.getPosition().y+c.getSize().height) {
+				// Okay, this is not terribly object oriented. But it works for now.
+				if (c instanceof UIComposite) {
+					Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
+					boolean res = ((UIComposite)c).deleteChildAt(recursivePoint);
+					if (c instanceof UIHorizontalComponent && ((UIComposite)c).shouldBeDeleted()) {
+						delete(p);
+						if (mComponents.size() > 0)
+							delete(p);
+					}
+					return res;
+				}
+				else if (!(c instanceof UIIdentityComponent)) {
+					delete(p);
+					if (mComponents.size() > 0)
+						delete(p);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean shouldBeDeleted() {
+		return mComponents.size() == 0;
+	}
+	
 	private void insert(UIComponent comp, int pos) {
 		assert 0 <= pos && pos <= mComponents.size();
 		
@@ -91,7 +126,36 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 		onSizeChanged(comp, new Dimension(0,0));
 		fireSizeChanged(oldSize);
 	}
-
+	
+	private void delete(int pos) {
+		if (pos == 0 && mComponents.size() == 1) {
+			mComponents.remove(0);
+			// Now we're fucked
+			return;
+		}
+		
+		Dimension oldSize = getSize();
+		UIComponent comp = mComponents.get(pos);
+		
+		// Remove component correctly in the 'TrainTaker' chain
+		if (pos+1 == mComponents.size())
+			mComponents.get(pos-1).setTrainTaker(getTrainTaker());
+		if (pos > 0 && pos+1 < mComponents.size())
+			mComponents.get(pos-1).setTrainTaker(mComponents.get(pos+1));
+		
+		// Remove the layer
+		mBackLayer.add(comp.getBackLayer());
+		mFrontLayer.add(comp.getFrontLayer());
+		
+		// Install in data structures
+		mComponents.remove(pos);
+		super.uninstall(comp);
+		
+		// Update size
+		onSizeChanged(comp, new Dimension(0,0));
+		fireSizeChanged(oldSize);
+	}
+	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
 		// Recalculate size

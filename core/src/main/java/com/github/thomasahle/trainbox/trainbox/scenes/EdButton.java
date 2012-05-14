@@ -25,7 +25,7 @@ import pythagoras.f.Point;
 import sun.tools.tree.NewArrayExpression;
 
 
-public class UIComponentButton implements ToolListener{
+public class EdButton implements ToolListener{
 	
 	private GroupLayer layer;
 	
@@ -55,6 +55,7 @@ public class UIComponentButton implements ToolListener{
 		MAP.put(UIToken.FLIP, assets().getImage("images/pngs/flipComponentButtonImage.png"));
 		MAP.put(UIToken.CAT, assets().getImage("images/pngs/concatComponentButtonImage.png"));
 		MAP.put(UIToken.MERG, assets().getImage("images/pngs/splitComponentButtonImage.png"));
+		
 	}};
 	
 	private static final Map<UIToken, Image> MAPsel = new HashMap<UIComponentFactory.UIToken, Image>();{{
@@ -66,7 +67,7 @@ public class UIComponentButton implements ToolListener{
 
 	}};
 		
-	public UIComponentButton(final ToolManager toolMan, final UIToken comp){
+	public EdButton(final ToolManager toolMan, final UIToken comp){
 		this.toolMan = toolMan;
 		toolMan.add(this);
 		this.tool = comp;

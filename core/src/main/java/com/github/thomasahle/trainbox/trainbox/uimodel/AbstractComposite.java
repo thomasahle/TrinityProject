@@ -28,6 +28,10 @@ public abstract class AbstractComposite extends AbstractComponent implements
 		child.paused(paused());
 		child.onAdded(this);
 	}
+	
+	protected void uninstall(UIComponent child) {
+		child.onRemoved(this);
+	}
 
 	public void onTrainCreated(UITrain train) {
 		fireTrainCreated(train);

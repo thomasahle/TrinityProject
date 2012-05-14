@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import static playn.core.PlayN.mouse;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
@@ -13,14 +14,19 @@ import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
+import playn.core.Mouse;
+import playn.core.Mouse.ButtonEvent;
+import playn.core.Mouse.MotionEvent;
+import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
 import playn.core.Pointer.Event;
-import playn.core.Pointer.Listener;
+import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 
@@ -31,7 +37,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
  *  - Components to add
  *  - The play button
  */
-public class LevelScene implements Scene, LevelFinishedListener, Listener, Keyboard.Listener {
+public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyboard.Listener {
 	private static final float SPEED_INCREASE = 0.005f;
 	private static final int MENU_HEIGHT = 200;
 	private final static int HEIGHT = graphics().screenHeight();
@@ -46,7 +52,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	private ToolManager toolMan;
 	int currPauseGoButtonImageIndex = 0;
 
-	GroupLayer goalBarLayer;
 	GroupLayer levelStatusLayer;
 	ImageLayer levelFailedBlurbImageLayer;
 	ImageLayer levelCompletedBlurbImageLayer;
@@ -56,27 +61,19 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	
 	public LevelScene(TrainBox trainBox, Level level) {
 		this.trainBox = trainBox;
-		toolMan = new ToolManager();
-
+		mLevel = new UILevel(level);
+		
 		// A background image. This should be really nice.
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
 		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
-		// Initialize the level we are going to try to solve
-		mLevel = new UILevel(toolMan, level);
-		toolMan.add(mLevel);
-		mLevel.setListener(this);
-		
 		// initalize the level controller buttons
+		initToolsAndDragging();
 		initLevelController();
 		initLevelStatus();
 		initLevelPopup();
-		
-		// Dragging of level
-		setLevelTranslation(0, 0);
-		mLevel.layer().addListener(this);
 	}
 	
 	@Override
@@ -90,11 +87,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().add(mLevel.layer());
 		graphics().rootLayer().add(levelControlLayer);
 		graphics().rootLayer().add(pauseButtonImageLayer);
-		graphics().rootLayer().add(goalBarLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		graphics().rootLayer().add(levelPopupLayer);
 		keyboard().setListener(this);
-	  	pointer().setListener(this);
+		mouse().setListener(this);
 	}
 
 	@Override
@@ -104,11 +100,22 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		graphics().rootLayer().remove(mLevel.layer());
 		graphics().rootLayer().remove(levelControlLayer);
 		graphics().rootLayer().remove(pauseButtonImageLayer);
-		graphics().rootLayer().remove(goalBarLayer);
 		graphics().rootLayer().remove(levelStatusLayer);
 		graphics().rootLayer().remove(levelPopupLayer);
 		keyboard().setListener(null);
-	    pointer().setListener(null);
+		mouse().setListener(null);
+	}
+	
+	private void setPaused(boolean paused) {
+		mLevel.paused(paused);
+		if (!paused) {
+			currPauseGoButtonImageIndex = 1;
+			pauseButtonImageLayer.setVisible(true);
+		}
+		else {
+			currPauseGoButtonImageIndex = 0;
+			pauseButtonImageLayer.setVisible(false);
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -133,7 +140,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		
 		changeLevelButtonImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
-				mLevel.paused(!mLevel.paused());
+				setPaused(!mLevel.paused());
 				trainBox.setScene(trainBox.getLevelSelectScene());
 			}
 		});
@@ -178,9 +185,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		// Connect the play button to the track
 		mPlayButton.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
-				mLevel.paused(!mLevel.paused());
-				currPauseGoButtonImageIndex = (1 + currPauseGoButtonImageIndex) % 2;
-				pauseButtonImageLayer.setVisible(!(currPauseGoButtonImageIndex ==0));
+				setPaused(!mLevel.paused());
 			}
 		});
 		
@@ -196,7 +201,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-125);
 		menuButtonImageImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
-				mLevel.paused(true);
+				setPaused(true);
 				levelPopupLayer.setVisible(true);
 			}
 		});
@@ -242,50 +247,84 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		ImageLayer nextButtonLeveLStatusImageLayer = graphics().createImageLayer(nextButtonImage);
 		levelStatusLayer.add(nextButtonLeveLStatusImageLayer);
 		nextButtonLeveLStatusImageLayer.setTranslation(680, 520);
-		nextButtonLeveLStatusImageLayer.addListener(new Listener() {
+		nextButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusLayer.setVisible(false);
 				trainBox.setLevel(mLevel.getLevel().levelNumber+1);
 			}
-			@Override public void onPointerEnd(Event event) {}
-			@Override public void onPointerDrag(Event event) {}
+		});
+		
+		mLevel.setListener(new LevelFinishedListener() {
+			@Override public void levelCleared() {
+				log().debug("Level Cleared!");
+				levelStatusLayer.setVisible(true);
+				levelCompletedBlurbImageLayer.setVisible(true);
+			}
+			@Override public void levelFailed(String message) {
+				log().debug("Level Failed :(");
+				levelStatusLayer.setVisible(true);
+				levelFailedBlurbImageLayer.setVisible(true);
+			}
 		});
 	}
-
-	@Override
-	public void levelCleared() {
-		log().debug("Level Cleared!");
-		levelStatusLayer.setVisible(true);
-		levelCompletedBlurbImageLayer.setVisible(true);
-	}
-
-	@Override
-	public void levelFailed(String message) {
-		log().debug("Level Failed :(");
-		levelStatusLayer.setVisible(true);
-		levelFailedBlurbImageLayer.setVisible(true);
-	}
 	
+	private void initToolsAndDragging() {
+		toolMan = new ToolManager();
+		// If the click has propagated to the root layer, we have unchecked our tool
+		mBgLayer.addListener(new Pointer.Adapter() {
+			@Override public void onPointerStart(Event event) {
+				log().debug("Fell through");
+				toolMan.unselect();
+			}
+		});
+		// A listener on the level
+		mLevel.layer().addListener((Pointer.Listener)this);
+		setLevelTranslation(
+				graphics().width()/2.f - mLevel.getSize().width/2.f,
+				(graphics().height()-MENU_HEIGHT)/2.f - mLevel.getSize().height/2.f);
+	}
+
 	///////////////////////////////////////////////////////////////////////////
 	// Input/Output
 	///////////////////////////////////////////////////////////////////////////
 	
+	private boolean mIsDragging = false;
 	private float mDragStartXPos;
 	private float mDragStartYPos;
 	@Override
 	public void onPointerStart(Event event) {
-		mDragStartXPos = event.localX();
-		mDragStartYPos = event.localY();
+		boolean didInsertSomething = false;
+		if (toolMan.isSelected()) {
+			Point p = new Point(event.localX(), event.localY());
+			didInsertSomething = mLevel.insertChildAt(UIComponentFactory.fromTok(toolMan.getCurrentTool()), p);
+		}
+		if (didInsertSomething) {
+			mIsDragging = false;
+			setLevelTranslation(
+					mLevel.layer().transform().tx(),
+					mLevel.layer().transform().ty());
+		}
+		else {
+			toolMan.unselect();
+			mIsDragging = true;
+			mDragStartXPos = event.localX();
+			mDragStartYPos = event.localY();
+		}
 	}
 	@Override
 	public void onPointerDrag(Event event) {
-		float x = event.x()-mDragStartXPos;
-		float y = event.y()-mDragStartYPos;
-		setLevelTranslation(x, y);
+		if (mIsDragging) {
+			float x = event.x()-mDragStartXPos;
+			float y = event.y()-mDragStartYPos;
+			setLevelTranslation(x, y);
+		}
 	}
-	@Override public void onPointerEnd(Event event) {}
+	@Override
+	public void onPointerEnd(Event event) {
+		mIsDragging = false;
+	}
 
 	private void setLevelTranslation(float x, float y) {
 		
@@ -331,4 +370,16 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	}
 	@Override public void onKeyTyped(TypedEvent event) {}
 	@Override public void onKeyUp(playn.core.Keyboard.Event event) {}
+
+	@Override public void onMouseDown(ButtonEvent event) {
+		// Unfortunately this doesn't quite work.
+		// The pointer listener will still register a click. Whatever.
+		if (event.button() != Mouse.BUTTON_LEFT) {
+			toolMan.unselect();
+			event.setPreventDefault(true);
+		}
+	}
+	@Override public void onMouseUp(ButtonEvent event) {}
+	@Override public void onMouseMove(MotionEvent event) {}
+	@Override public void onMouseWheelScroll(WheelEvent event) {}
 }

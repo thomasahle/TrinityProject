@@ -8,7 +8,7 @@ import com.github.thomasahle.trainbox.trainbox.model.Component;
 public final class UIComponentFactory {
 
 	public enum UIToken {
-		BOX("box"), CAT("cat"), DUP("dup"), ID("id"), FLIP("flip"), MERG("||");
+		BOX("box"), CAT("cat"), DUP("dup"), ID("id"), FLIP("flip"), MERG("||"), DEL("del");
 		final String repr;
 
 		UIToken(String repr) {

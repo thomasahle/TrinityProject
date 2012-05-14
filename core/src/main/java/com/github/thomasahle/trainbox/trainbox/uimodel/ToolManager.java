@@ -9,11 +9,9 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToke
 public class ToolManager {
 	
 	UIToken currentTool;
-	boolean isSelected;
 	List<ToolListener> list;
 	
 	public ToolManager() {
-		isSelected = false;
 		list = new ArrayList<ToolListener>();
 	}
 	
@@ -23,13 +21,11 @@ public class ToolManager {
 	
 	public void setTool(UIToken tool){
 		currentTool = tool;
-		isSelected = true;
 		notifySelect();
 	}
 	
 	public void unselect(){
 		currentTool = null;
-		isSelected = false;
 		notifyUnselect();
 	}
 	
@@ -43,6 +39,14 @@ public class ToolManager {
 		for(ToolListener lis : list){
 			lis.toolsUnselected();		
 		}
+	}
+
+	public UIToken getCurrentTool() {
+		return currentTool;
+	}
+
+	public boolean isSelected() {
+		return currentTool != null;
 	}
 		
 }

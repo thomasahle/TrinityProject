@@ -94,48 +94,44 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		demoLayerLevels = graphics().createGroupLayer();
 		int numberOfLevels = Level.levels.size();
 		int currentProgress = LevelTracker.getCurrentProgress();
-		
+
 		float x = 90;
 		float y = 200;
-		int j =0;
-	 	final Image levelButtonOk = assets().getImage("images/pngs/levelButton.png");
-		final Image levelButtonNotOk = assets().getImage("images/pngs/inaccessibleLevelButton.png");
+		int j = 0;
+		final Image levelButtonOk = assets().getImage(
+				"images/pngs/levelButton.png");
+		final Image levelButtonNotOk = assets().getImage(
+				"images/pngs/inaccessibleLevelButton.png");
 
-		for (int i=0; i<numberOfLevels; i++) {
-			 final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
-			 if (i<=currentProgress) {
-				 final int level = i;
-				 levelButtonImageLayer.setImage(levelButtonOk);
-         		 levelButtonImageLayer.addListener(new Pointer.Listener() {
-					
+		for (int i = 0; i < numberOfLevels; i++) {
+			final ImageLayer levelButtonImageLayer = graphics()
+					.createImageLayer();
+			if (i <= currentProgress) {
+				final int level = i;
+				levelButtonImageLayer.setImage(levelButtonOk);
+				levelButtonImageLayer.addListener(new Pointer.Adapter() {
+
 					@Override
 					public void onPointerStart(Event event) {
 						trainBox.setLevel(level);
 					}
-					
-					@Override
-					public void onPointerEnd(Event event) {}
-					
-					@Override
-					public void onPointerDrag(Event event) {}
-				});                                                               
-			 }
-			 else {
-				 levelButtonImageLayer.setImage(levelButtonNotOk);
-			 }
-		     demoLayerLevels.add(levelButtonImageLayer);
-		     levelButtonImageLayer.setTranslation(x, y);
-		     j+=1;
-		     x+= levelButtonImageLayer.width()+10;
-		     if (j == 6) {
-		    	 x = 90;
-		    	 y+= levelButtonOk.height()+20;
-		    	 j = 0;
-		     }
+				});
+			} else {
+				levelButtonImageLayer.setImage(levelButtonNotOk);
+			}
+			demoLayerLevels.add(levelButtonImageLayer);
+			levelButtonImageLayer.setTranslation(x, y);
+			j += 1;
+			x += levelButtonImageLayer.width() + 10;
+			if (j == 6) {
+				x = 90;
+				y += levelButtonOk.height() + 20;
+				j = 0;
+			}
 		}
-		
+
 		demoLayer.add(demoLayerLevels);
-		
+
 	}
 
 

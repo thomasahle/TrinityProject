@@ -135,7 +135,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mSize = newSize;
 			fireSizeChanged(ourOldSize);
 			
-			// Scale
+			// Scale: FIXME Doesn't work on components getting smaller
 			UIComponent topLeft = ((UIHorizontalComponent)mTopComp).getChildren().get(0);
 			UIComponent botLeft = ((UIHorizontalComponent)mBotComp).getChildren().get(0);
 			if (topLeft instanceof UIIdentityComponent && botLeft instanceof UIIdentityComponent) {
@@ -155,18 +155,27 @@ public class UISplitMergeComponent extends AbstractComposite {
 	public List<UIComponent> getChildren() {
 		return Arrays.asList(mTopComp, mBotComp);
 	}
-
+	
+	@Override
+	public boolean shouldBeDeleted() {
+		return ((UIComposite)mTopComp).getChildren().size() == 0
+				|| ((UIComposite)mBotComp).getChildren().size() == 0;
+	}
+	
 	@Override
 	public boolean insertChildAt(UIComponent child, Point position) {
 		if (position.y < mTopComp.getSize().height
-				&& position.x < mTopComp.getSize().width
+				&& SIDES_WIDTH < position.x
+				&& position.x <= SIDES_WIDTH + mTopComp.getSize().width
 				&& mTopComp instanceof UIComposite) {
-			return ((UIComposite)mTopComp).insertChildAt(child, position);
+			Point newPoint = new Point(position.x-SIDES_WIDTH, position.y);
+			return ((UIComposite)mTopComp).insertChildAt(child, newPoint);
 		}
 		else if (position.y >= mTopComp.getSize().height
-				&& position.x < mBotComp.getSize().width
+				&& SIDES_WIDTH < position.x
+				&& position.x <= SIDES_WIDTH + mBotComp.getSize().width
 				&& mBotComp instanceof UIComposite) {
-			Point newPoint = new Point(position.x, position.y - mTopComp.getSize().height);
+			Point newPoint = new Point(position.x-SIDES_WIDTH, position.y - mTopComp.getSize().height);
 			return ((UIComposite)mBotComp).insertChildAt(child, newPoint);
 		}
 		// We could also check if a identity component has been clicked, which
@@ -175,6 +184,12 @@ public class UISplitMergeComponent extends AbstractComposite {
 		return false;
 	}
 
+	@Override
+	public boolean deleteChildAt(Point position) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	@Override
 	public Dimension getSize() {
 		return mSize;

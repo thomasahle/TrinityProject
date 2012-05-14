@@ -9,18 +9,13 @@ import java.util.List;
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
-import playn.core.Pointer.Event;
-import playn.core.Pointer.Listener;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
-import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.ToolListener;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
-public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester, ToolListener {
+public class UILevel implements TrainsChangedListener, LevelFinishedListener, HitTester {
 	
 	private GroupLayer mLayer;
 	private GroupLayer mTrainLayer;
@@ -29,12 +24,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
-	boolean isCompSelected = false;
-	UIToken compSelected = null;
-	private ToolManager toolMan;
 	
-	public UILevel(ToolManager toolMan, Level level) {
-		this.toolMan = toolMan;
+	public UILevel(Level level) {
 		mLevel = level;
 		mLayer = graphics().createGroupLayer();
 		
@@ -67,8 +58,6 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mLayer.setHitTester(this);
 		
 		mTrack.setTrainsChangedListener(this);
-		mTrack.getBackLayer().addListener(this);
-		//mGoal.setListener(this);
 	}
 	
 	public void update(float delta) {
@@ -96,15 +85,6 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mTrack.paused(paused);
 	}
 	
-	public void setDragMode(){
-		isCompSelected = false;
-	}
-	
-	public void setCompSel(UIToken tok){
-		isCompSelected = true;
-		compSelected = tok;
-	}
-	
 	public void setListener(LevelFinishedListener listener) {
 		mListener = listener;
 	}
@@ -114,16 +94,15 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		// check all trains have arrived in the goalComponent
 		List<UITrain> trainsInGoalComp = mGoal.getTrains();
 		List<UITrain> allTrains = mTrack.getTrains();
-		
+
 		allTrains.removeAll(trainsInGoalComp);
-		
-		if(! allTrains.isEmpty()){
+
+		if (!allTrains.isEmpty()) {
 			log().debug("EXTRA TRAINS");
 			this.levelFailed("Too many trains");
-		}else{
-		
-		log().debug("LEVEL CLEARED !!!");
-		mListener.levelCleared();
+		} else {
+			log().debug("LEVEL CLEARED !!!");
+			mListener.levelCleared();
 		}
 	}
 	@Override
@@ -134,32 +113,11 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	}
 
 	@Override
-	public void onPointerStart(Event event) {
-		if (isCompSelected) {
-			Point p = new Point(event.localX(), event.localY());
-			mTrack.insertChildAt(UIComponentFactory.fromTok(compSelected), p);
-		}
-	}
-
-	@Override
-	public void onPointerEnd(Event event) {
-	}
-
-	@Override
-	public void onPointerDrag(Event event) {
-	}
-
-	@Override
 	public Layer hitTest(Layer layer, Point p) {
-		float x = mTrack.getPosition().x;
-		float y = mTrack.getPosition().y + mTrack.getSize().height*0.85f;
-		float x1 = x + mTrack.getSize().width;
-		float y1 = y + mTrack.getSize().height;
-		if (x <= p.x && p.x < x1 && y <= p.y && p.y < y1 || !isCompSelected) {
-			toolMan.unselect();
+		Layer res = mTrack.getBackLayer().hitTest(p);
+		if (res != null)
 			return layer;
-		}
-		return mTrack.getBackLayer().hitTest(p);
+		return res;
 	}
 	
 	public void setTrainSpeed(float s){
@@ -184,14 +142,11 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		return mTrack.getSize();
 	}
 
-	@Override
-	public void toolSelected(UIToken currentTool) {
-		compSelected = currentTool;
-		isCompSelected = true;
+	public Level getLevel() {
+		return mLevel;
 	}
-
-	@Override
-	public void toolsUnselected() {
-		isCompSelected = false;
+	
+	public boolean insertChildAt(UIComponent child, Point position) {
+		return mTrack.insertChildAt(child, position);
 	}
 }
