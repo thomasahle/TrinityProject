@@ -68,8 +68,7 @@ public class UIComponentButton implements ToolListener{
 		this.toolMan = toolMan;
 		toolMan.add(this);
 		this.tool = comp;
-		component = UIComponentFactory.fromTok(comp);
-		layer = graphics().createGroupLayer();
+//		component = UIComponentFactory.fromTok(comp);
 
 //		CanvasImage image = graphics().createImage((int)mSize.width, (int)mSize.height);
 //		image.canvas().setFillColor(0xffaa00aa);
@@ -79,8 +78,9 @@ public class UIComponentButton implements ToolListener{
 //		imageLayer = component.getBackLayer();
 //		imageLayer.setScale((float) 0.5); 
 		
+		layer = graphics().createGroupLayer();
+		
 		imageLayer = graphics().createImageLayer(MAP.get(comp));
-		imageLayer.setDepth(2);
 		
 		layer.add(imageLayer);
 		
