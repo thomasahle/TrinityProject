@@ -173,7 +173,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		final Image demoButtonImage = assets().getImage("images/pngs/demoButton.png");
 		final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
 		levelPopupLayer.add(demoButtonImageLayer);
-		demoButtonImageLayer.setTranslation(100, 40);
+		demoButtonImageLayer.setTranslation(120, 60);
 		levelPopulHomeButtonImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				trainBox.setScene(trainBox.getDemoScene());
@@ -198,7 +198,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 				
 		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
 		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
-		pauseButtonImageLayer.setTranslation(graphics().width()-130, graphics().height()-143);
+		pauseButtonImageLayer.setTranslation(graphics().width()-130, graphics().height()-125);
 		pauseButtonImageLayer.setVisible(false);
 		
 		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");

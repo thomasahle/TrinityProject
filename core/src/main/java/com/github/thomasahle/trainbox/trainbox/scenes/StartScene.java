@@ -116,7 +116,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final Image aboutButtonImage = assets().getImage("images/pngs/aboutButton.png");
         final ImageLayer aboutButtonImageLayer = graphics().createImageLayer(aboutButtonImage);
         menuLayer.add(aboutButtonImageLayer);
-        aboutButtonImageLayer.setTranslation(45,210);
+        aboutButtonImageLayer.setTranslation(205,240);
         aboutButtonImageLayer.addListener(new Mouse.Listener() {
 
 			@Override
@@ -151,7 +151,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final Image demoButtonImage = assets().getImage("images/pngs/demoButton.png");
         final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
         menuLayer.add(demoButtonImageLayer);
-        demoButtonImageLayer.setTranslation(100,40);
+        demoButtonImageLayer.setTranslation(110,80);
         demoButtonImageLayer.addListener(new Mouse.Listener() {
            Image demoButtonPressedImage = assets().getImage("images/pngs/demoButtonPressed.png");
             
