@@ -88,8 +88,6 @@ public class TrainBox implements Game{
 		watcher.add(assets().getImage("images/pngs/trains.png"));
 		watcher.add(assets().getImage("images/pngs/watermelonTr.png"));
 		watcher.add(assets().getImage("images/basicCarriage.png"));
-		watcher.add(assets().getImage("images/bg.png"));
-		watcher.add(assets().getImage("images/cloud.png"));
 		watcher.add(assets().getImage("images/emptyTrain.png"));
 		watcher.add(assets().getImage("images/fullTrain.png"));
 		watcher.add(assets().getImage("images/red_train.png"));
