@@ -93,9 +93,9 @@ public class UITrain {
 		}
 		mSize = new Dimension(x, y);
 		
-		CanvasImage image = graphics().createImage(mSize.width, mSize.height);
+		/*CanvasImage image = graphics().createImage(mSize.width, mSize.height);
 		image.canvas().setStrokeColor(0xffff0000).strokeRect(0, 0, mSize.width-1, mSize.height-1);
-		mLayer.add(graphics().createImageLayer(image));
+		mLayer.add(graphics().createImageLayer(image));*/
 	}
 	
 	public Point getPosition() {
