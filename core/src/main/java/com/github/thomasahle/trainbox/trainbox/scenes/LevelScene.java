@@ -1,8 +1,8 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
-import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.log;
 import static playn.core.PlayN.pointer;
 import playn.core.CanvasImage;
@@ -11,18 +11,13 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Key;
 import playn.core.Keyboard;
-import playn.core.Mouse;
 import playn.core.Keyboard.TypedEvent;
-import playn.core.Mouse.ButtonEvent;
-import playn.core.Mouse.MotionEvent;
-import playn.core.Mouse.WheelEvent;
 import playn.core.Layer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
 import pythagoras.f.Dimension;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
-import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
@@ -312,13 +307,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 
 	}
 
-	private void initGoalBar() {
-		Image goalBarImage = assets().getImage("images/pngs/clickNDropBar.png");	
-		ImageLayer goalBarImageLayer = graphics().createImageLayer(goalBarImage);
-		goalBarImageLayer.setDepth(-5);
-		goalBarLayer.add(goalBarImageLayer);
-	}
-
 	protected void updateGoPauseButtonImage() {
 			pauseButtonImageLayer.setVisible(!(currPauseGoButtonImageIndex ==0));	
 	}
@@ -368,7 +356,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	}
 
 	@Override
-	public void levelFailed() {
+	public void levelFailed(String message) {
 		log().debug("Level Failed :(");
 		levelStatusLayer.setVisible(true);
 		levelFailedBlurbImageLayer.setVisible(true);

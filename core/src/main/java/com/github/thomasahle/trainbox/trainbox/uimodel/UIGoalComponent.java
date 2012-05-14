@@ -150,7 +150,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 					}
 				} else {
 					if (mListener != null) {
-						mListener.levelFailed();
+						mListener.levelFailed("Bad prefix");
 					}
 				}
 			} else if (deliveredCargoList.size() < cargoGoalList.size()) {
@@ -158,14 +158,14 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 				log().debug("Current: " + deliveredCargoString);
 				if (!checkDelivered()) {
 					if (mListener != null) {
-						mListener.levelFailed();
+						mListener.levelFailed("You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString);
 					}
 				}
 
 			} else {
 				// LEVEL FAILED
 				if (mListener != null) {
-					mListener.levelFailed();
+					mListener.levelFailed("You sent in "+deliveredCargoList.size()+" trains but we wanted "+cargoGoalList.size());
 				}
 			}
 
