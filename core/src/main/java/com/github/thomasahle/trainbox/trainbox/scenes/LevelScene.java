@@ -32,6 +32,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
  *  - The play button
  */
 public class LevelScene implements Scene, LevelFinishedListener, Listener, Keyboard.Listener {
+	private static final int MENU_HEIGHT = 200;
 	TrainBox trainBox;
 	final int HEIGHT = graphics().screenHeight();
 	final int WIDTH = graphics().screenWidth();
@@ -381,15 +382,27 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 
 
 	private void setView(float x, float y) {
-		float ybot = -mLevel.getSize().height + graphics().height() - 200;
-		float ytop = 0;
-		if (y > ytop) y = ytop;
-		if (y < ybot) y = ybot;
 		
-		float xbot = -mLevel.getSize().width + graphics().width();
-		float xtop = 0;
-		if (x > xtop) x = xtop;
-		if (x < xbot) x = xbot;
+		float y0 = 0;
+		float y1 = graphics().height() - MENU_HEIGHT;
+		float x0 = 0;
+		float x1 = graphics().width();
+		
+		if (mLevel.getSize().width < x1-x0) {
+			x = Math.max(x, x0);
+			x = Math.min(x, x1 - mLevel.getSize().width);
+		}
+		else {
+			x = Math.max(x, x1 - mLevel.getSize().width);
+			x = Math.min(x, x0);
+		}
+		if (mLevel.getSize().height < y1-y0) {
+			y = y0 + (y1-y0)/2 - mLevel.getSize().height/2;
+		}
+		else {
+			y = Math.max(y, y1 - mLevel.getSize().height);
+			y = Math.min(y, y0);
+		}
 		
 		mLevel.layer().setTranslation(x,y);
 	}
