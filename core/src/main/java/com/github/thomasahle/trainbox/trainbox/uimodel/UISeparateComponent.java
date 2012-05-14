@@ -11,7 +11,6 @@ import java.util.List;
 
 import playn.core.CanvasImage;
 import playn.core.Image;
-import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
@@ -22,10 +21,8 @@ public class UISeparateComponent extends AbstractComponent {
 
 	private static final float UP_LEVEL = 0.95f;
 
-	private final static int HEIGHT = 100;
-	
 	private Layer mBackLayer, mFrontLayer;
-	private int mWidth;
+	private int mWidth, mHeight;
 	private LinkedList<UITrain> mLeftSide = new LinkedList<UITrain>();
 	private LinkedList<UITrain> mRightSide = new LinkedList<UITrain>();
 	
@@ -34,28 +31,18 @@ public class UISeparateComponent extends AbstractComponent {
 	private Layer mKnifeLayer;
 	private float mKnifeT = 0;
 	
-	private ImageLayer mSeeSawLayer;
-	
-
-	public UISeparateComponent(int width) {
-		mWidth = width;
-		
-		CanvasImage image = graphics().createImage(width, HEIGHT);
-		image.canvas().setFillColor(0xff009999);
-		image.canvas().fillCircle(width/2.f, HEIGHT/2.f, width/2.f);
-		mBackLayer = graphics().createImageLayer(image);
-		
+	public UISeparateComponent() {
 		Image concatComponentImage = assets().getImage("images/pngs/concatComponent.png");
 		mBackLayer = graphics().createImageLayer(concatComponentImage);
 		
-		mSeeSawLayer = (ImageLayer) mBackLayer;
+		mWidth = concatComponentImage.width();
+		mHeight = concatComponentImage.height();
 		
-		
-		CanvasImage knifeImage = graphics().createImage(KNIFE_WIDTH, HEIGHT);
+		CanvasImage knifeImage = graphics().createImage(KNIFE_WIDTH, mHeight);
 		playn.core.Path knifePath = knifeImage.canvas().createPath();
 		knifePath.moveTo(KNIFE_WIDTH/2, 0);
-		knifePath.lineTo(KNIFE_WIDTH, HEIGHT);
-		knifePath.lineTo(0, HEIGHT);
+		knifePath.lineTo(KNIFE_WIDTH, mHeight);
+		knifePath.lineTo(0, mHeight);
 		knifePath.lineTo(KNIFE_WIDTH/2, 0);
 		knifeImage.canvas().setFillColor(0xff000000).fillPath(knifePath);
 		mKnifeLayer = graphics().createImageLayer(knifeImage);
@@ -82,7 +69,7 @@ public class UISeparateComponent extends AbstractComponent {
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(mWidth, HEIGHT);
+		return new Dimension(mWidth, mHeight);
 	}
 	
 	@Override public void setPosition(Point position) {
@@ -95,7 +82,7 @@ public class UISeparateComponent extends AbstractComponent {
 	 * @return whether the gate is now that much up.
 	 */
 	private boolean isUp(float percentage) {
-		return percentage <= 1-gateY(mKnifeT)/HEIGHT;
+		return percentage <= 1-gateY(mKnifeT)/mHeight;
 	}
 	
 	@Override
@@ -200,11 +187,11 @@ public class UISeparateComponent extends AbstractComponent {
 		float x = getSize().width/2-KNIFE_WIDTH/2.f;
 		float y = gateY(mKnifeT);
 		mKnifeLayer.setTranslation(x + getPosition().x, y + getPosition().y);
-		mKnifeLayer.setScale(1, (HEIGHT-y)/HEIGHT+1e-9f);
+		mKnifeLayer.setScale(1, (mHeight-y)/mHeight+1e-9f);
 	}
 
 	private float gateY(float t) {
-		return (float)(HEIGHT*(Math.cos(t/KNIFE_CYCLE*(2*Math.PI))+1)/2);
+		return (float)(mHeight*(Math.cos(t/KNIFE_CYCLE*(2*Math.PI))+1)/2);
 	}
 	
 	@Override
