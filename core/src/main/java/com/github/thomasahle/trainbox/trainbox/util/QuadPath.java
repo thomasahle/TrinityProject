@@ -12,7 +12,13 @@ import pythagoras.f.PathIterator;
 public class QuadPath {
 	
 	private static final float SMOOTHNES = 0.2f;
+	
 	public final pythagoras.f.Path pytagPath;
+	
+	private float minx = Float.MAX_VALUE;
+	private float maxx = Float.MIN_VALUE;
+	
+	
 	
 	public QuadPath() {
 		pytagPath = new Path();
@@ -20,10 +26,18 @@ public class QuadPath {
 	
 	public void moveTo(float x, float y) {
 		pytagPath.moveTo(x, y);
+		minx = Math.min(minx, x);
+		maxx = Math.max(maxx, x);
 	}
 
 	public void quadraticCurveTo(float cpx, float cpy, float x, float y) {
 		pytagPath.quadTo(cpx, cpy, x, y);
+		minx = Math.min(minx, x);
+		maxx = Math.max(maxx, x);
+	}
+	
+	public float length() {
+		return calculateT(maxx);
 	}
 	
 	public playn.core.Path paintPath(playn.core.Path path) {
