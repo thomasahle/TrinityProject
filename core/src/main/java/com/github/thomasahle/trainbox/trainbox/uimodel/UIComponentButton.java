@@ -51,8 +51,7 @@ public class UIComponentButton implements ToolListener{
 		MAP.put(UIToken.BOX, assets().getImage("images/pngs/boxComponentButtonImage.png"));
 		MAP.put(UIToken.FLIP, assets().getImage("images/pngs/flipComponentButtonImage.png"));
 		MAP.put(UIToken.CAT, assets().getImage("images/pngs/concatComponentButtonImage.png"));
-		MAP.put(UIToken.MERG, assets().getImage("images/pngs/dupComponentButtonImage.png"));
-//		MAP.put(UIToken.MERG, assets().getImage("images/pngs/mergComponentButtonImage.png"));
+		MAP.put(UIToken.MERG, assets().getImage("images/pngs/splitComponentButtonImage.png"));
 		
 	}};
 	
@@ -61,8 +60,7 @@ public class UIComponentButton implements ToolListener{
 		MAP.put(UIToken.BOX, assets().getImage("images/pngs/boxComponentButtonImagePressed.png"));
 		MAP.put(UIToken.FLIP, assets().getImage("images/pngs/flipComponentButtonImagePressed.png"));
 		MAP.put(UIToken.CAT, assets().getImage("images/pngs/concatComponentButtonImagePressed.png"));
-		MAP.put(UIToken.MERG, assets().getImage("images/pngs/dupComponentButtonImagePressed.png"));
-//		MAP.put(UIToken.MERG, assets().getImage("images/pngs/mergComponentButtonImagePressed.png"));
+		MAP.put(UIToken.MERG, assets().getImage("images/pngs/splitComponentButtonImagePressed.png"));
 
 	}};
 		
