@@ -1,4 +1,4 @@
-package com.github.thomasahle.trainbox.trainbox.uimodel;
+package com.github.thomasahle.trainbox.trainbox.scenes;
 
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
@@ -6,7 +6,10 @@ import static playn.core.PlayN.graphics;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComposite;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 import playn.core.Canvas.LineJoin;

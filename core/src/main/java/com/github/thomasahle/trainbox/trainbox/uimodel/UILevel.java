@@ -17,6 +17,7 @@ import pythagoras.f.Point;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
+import com.github.thomasahle.trainbox.trainbox.scenes.ToolListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 public class UILevel implements TrainsChangedListener, LevelFinishedListener, Listener, HitTester, ToolListener {
@@ -48,38 +49,14 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		UIHorizontalComponent track = new UIHorizontalComponent(100); 
 		mStart = new UIStartComponent(trains);
 		mGoal = new UIGoalComponent(mLevel.goal);
-		mGoal.addListener(this);
-		
+		mGoal.setListener(this);
 		
 		track.add(mStart);
-//		track.add(new UISeparateComponent(100));
-//		track.add(new UIIdentityComponent(100));
-//		track.add(new UIIdentityComponent(100));
-//		track.add(new UIIdentityComponent(100));
-//		
-//		UIHorizontalComponent top = new UIHorizontalComponent(60);
-//		UIHorizontalComponent bot = new UIHorizontalComponent(60);
-//		track.add(new UISplitMergeComponent(top, bot));
-//		
-//		UIHorizontalComponent top1 = new UIHorizontalComponent(40);
-//		UIHorizontalComponent bot1 = new UIHorizontalComponent(40);
-//		top.add(new UISplitMergeComponent(top1,bot1));
-//		top1.add(new UIJoinComponent(80));
-//		top1.add(new UIJoinComponent(80));
-//		bot1.add(new UIJoinComponent(80));
-//		bot1.add(new UIJoinComponent(80));
-//		
-//		UIHorizontalComponent top2 = new UIHorizontalComponent(40);
-//		UIHorizontalComponent bot2 = new UIHorizontalComponent(40);
-//		bot.add(new UISplitMergeComponent(top2,bot2));
-//		top2.add(new UIJoinComponent(80));
-//		top2.add(new UIJoinComponent(80));
-//		bot2.add(new UIJoinComponent(80));
-//		bot2.add(new UIJoinComponent(80));
-//
-		
 		track.add(mGoal);
 		
+		// Small hack to make start and goal the actual ends
+		((UIIdentityComponent)track.getChildren().get(0)).setWidth(1);
+		((UIIdentityComponent)track.getChildren().get(track.getChildren().size()-1)).setWidth(1);
 		
 		mTrack = track;
 		mTrack.paused(true);
@@ -133,13 +110,27 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	}
 	@Override
 	public void levelCleared() {
+		mTrack.paused(true);
+		// check all trains have arrived in the goalComponent
+		List<UITrain> trainsInGoalComp = mGoal.getTrains();
+		List<UITrain> allTrains = mTrack.getTrains();
+		
+		allTrains.removeAll(trainsInGoalComp);
+		
+		if(! allTrains.isEmpty()){
+			log().debug("EXTRA TRAINS");
+			this.levelFailed("Too many trains");
+		}else{
+		
 		log().debug("LEVEL CLEARED !!!");
 		mListener.levelCleared();
+		}
 	}
 	@Override
-	public void levelFailed() {
+	public void levelFailed(String message) {
+		mTrack.paused(true);
 		log().debug("LEVEL FAILED !!!");
-		mListener.levelFailed();
+		mListener.levelFailed(message);
 	}
 
 	@Override

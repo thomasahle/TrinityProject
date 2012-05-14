@@ -3,6 +3,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.thomasahle.trainbox.trainbox.scenes.ToolListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 public class ToolManager {

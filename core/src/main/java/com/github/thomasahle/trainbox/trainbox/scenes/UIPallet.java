@@ -1,4 +1,4 @@
-package com.github.thomasahle.trainbox.trainbox.uimodel;
+package com.github.thomasahle.trainbox.trainbox.scenes;
 
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 
-import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 import playn.core.CanvasImage;

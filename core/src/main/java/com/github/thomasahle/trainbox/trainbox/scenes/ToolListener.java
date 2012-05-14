@@ -1,5 +1,6 @@
-package com.github.thomasahle.trainbox.trainbox.uimodel;
+package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 public interface ToolListener {
