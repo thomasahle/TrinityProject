@@ -144,13 +144,14 @@ public class UISplitMergeComponent extends AbstractComposite {
 			fireSizeChanged(ourOldSize);
 			
 			// Scale
-			log().debug(mSize.toString());
 			UIComponent topLeft = ((UIHorizontalComponent)mTopComp).getChildren().get(0);
 			UIComponent botLeft = ((UIHorizontalComponent)mBotComp).getChildren().get(0);
 			if (topLeft instanceof UIIdentityComponent && botLeft instanceof UIIdentityComponent) {
-				((UIIdentityComponent)topLeft).setWidth((int)(newSize.width - (mTopComp.getSize().width - topLeft.getSize().width) - 2*SIDES_WIDTH));
-				((UIIdentityComponent)botLeft).setWidth((int)(newSize.width - (mBotComp.getSize().width - botLeft.getSize().width) - 2*SIDES_WIDTH));
-				log().debug(topLeft.getSize().width+" "+botLeft.getSize().width);
+				float newSizeTop = newSize.width - (mTopComp.getSize().width - topLeft.getSize().width) - 2*SIDES_WIDTH;
+				float newSizeBot = newSize.width - (mBotComp.getSize().width - botLeft.getSize().width) - 2*SIDES_WIDTH;
+				float dontGrowTooBig = Math.min(newSizeTop, newSizeBot) - 100;
+				((UIIdentityComponent)topLeft).setWidth((int)(newSizeTop - dontGrowTooBig));
+				((UIIdentityComponent)botLeft).setWidth((int)(newSizeBot - dontGrowTooBig));
 			}
 			
 			updatePaths();
