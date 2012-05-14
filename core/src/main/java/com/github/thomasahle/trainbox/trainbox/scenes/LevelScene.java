@@ -302,6 +302,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		}
 		if (didInsertSomething) {
 			mIsDragging = false;
+			toolMan.unselect();
 			setLevelTranslation(
 					mLevel.layer().transform().tx(),
 					mLevel.layer().transform().ty());
