@@ -119,6 +119,9 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 			pauseButtonImageLayer.setVisible(false);
 		}
 	}
+	private boolean isPaused(){
+		return mLevel.paused();
+	}
 	
 	///////////////////////////////////////////////////////////////////////////
 	// UI Initialization
@@ -277,6 +280,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 			@Override public void levelCleared() {
 				log().debug("Level Cleared!");
 				levelStatusLayer.setVisible(true);
+				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(true);
 				nextButtonLeveLStatusImageLayer.setVisible(true);
 				retryButtonLeveLStatusImageLayer.setVisible(false);
@@ -284,6 +288,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 			@Override public void levelFailed(String message) {
 				log().debug("Level Failed :(");
 				levelStatusLayer.setVisible(true);
+				levelCompletedBlurbImageLayer.setVisible(false);
 				levelFailedBlurbImageLayer.setVisible(true);
 				nextButtonLeveLStatusImageLayer.setVisible(false);
 				retryButtonLeveLStatusImageLayer.setVisible(true);
@@ -384,6 +389,9 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 			mLevel.decreaseTrainSpeed(SPEED_INCREASE);
 			log().debug("DECREASING SPEED");
 
+		}
+		if(event.key() == Key.ENTER || event.key() == Key.SPACE || event.key() == Key.P){
+			setPaused(!isPaused());
 		}
 		
 		if(event.key() == Key.ESCAPE){
