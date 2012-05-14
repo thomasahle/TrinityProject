@@ -7,20 +7,20 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
-
-import playn.core.Canvas;
 import playn.core.CanvasImage;
+import playn.core.ImageLayer;
 import playn.core.Layer;
-import playn.core.Path;
 import pythagoras.f.Dimension;
+
+import com.github.thomasahle.trainbox.trainbox.util.CanvasHelper;
 
 public class UIIdentityComponent extends AbstractComponent implements UIComponent, TrainTaker {
 
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
-	private Layer mBackLayer, mFrontLayer;
+	private Layer mFrontLayer;
+	private ImageLayer mBackLayer;
 	private LinkedList<UITrain> mTrains = new LinkedList<UITrain>();
 	
 	@Override
@@ -33,11 +33,23 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 		
 		mFrontLayer = CanvasHelper.newEmptyLayer();
 		
-		int imageWidth = width+(int)Math.ceil(2*ComponentHelper.RAIL_EXTRA);
-		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
-		ComponentHelper.drawTracks(image.canvas(), width);
-		mBackLayer = graphics().createImageLayer(image);
+		mBackLayer = graphics().createImageLayer();
+		updateTracks();
 		xpadding(ComponentHelper.RAIL_EXTRA);
+	}
+
+	private void updateTracks() {
+		int imageWidth = mWidth+(int)Math.ceil(2*ComponentHelper.RAIL_EXTRA);
+		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
+		ComponentHelper.drawTracks(image.canvas(), mWidth);
+		mBackLayer.setImage(image);
+	}
+	
+	public void setWidth(int width) {
+		Dimension oldSize = getSize();
+		mWidth = width;
+		updateTracks();
+		fireSizeChanged(oldSize);
 	}
 	
 	@Override
