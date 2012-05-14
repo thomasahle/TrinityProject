@@ -51,36 +51,12 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		mGoal = new UIGoalComponent(mLevel.goal);
 		mGoal.addListener(this);
 		
-		
 		track.add(mStart);
-//		track.add(new UISeparateComponent(100));
-//		track.add(new UIIdentityComponent(100));
-//		track.add(new UIIdentityComponent(100));
-//		track.add(new UIIdentityComponent(100));
-//		
-//		UIHorizontalComponent top = new UIHorizontalComponent(60);
-//		UIHorizontalComponent bot = new UIHorizontalComponent(60);
-//		track.add(new UISplitMergeComponent(top, bot));
-//		
-//		UIHorizontalComponent top1 = new UIHorizontalComponent(40);
-//		UIHorizontalComponent bot1 = new UIHorizontalComponent(40);
-//		top.add(new UISplitMergeComponent(top1,bot1));
-//		top1.add(new UIJoinComponent(80));
-//		top1.add(new UIJoinComponent(80));
-//		bot1.add(new UIJoinComponent(80));
-//		bot1.add(new UIJoinComponent(80));
-//		
-//		UIHorizontalComponent top2 = new UIHorizontalComponent(40);
-//		UIHorizontalComponent bot2 = new UIHorizontalComponent(40);
-//		bot.add(new UISplitMergeComponent(top2,bot2));
-//		top2.add(new UIJoinComponent(80));
-//		top2.add(new UIJoinComponent(80));
-//		bot2.add(new UIJoinComponent(80));
-//		bot2.add(new UIJoinComponent(80));
-//
-		
 		track.add(mGoal);
 		
+		// Small hack to make start and goal the actual ends
+		((UIIdentityComponent)track.getChildren().get(0)).setWidth(1);
+		((UIIdentityComponent)track.getChildren().get(track.getChildren().size()-1)).setWidth(1);
 		
 		mTrack = track;
 		mTrack.paused(true);
