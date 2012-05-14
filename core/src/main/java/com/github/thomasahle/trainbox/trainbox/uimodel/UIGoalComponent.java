@@ -15,6 +15,7 @@ import com.github.thomasahle.trainbox.trainbox.model.Train;
 import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
@@ -28,10 +29,11 @@ import pythagoras.f.Point;
 
 public class UIGoalComponent extends AbstractComponent implements TrainTaker, UIComponent {
 
-	private final static int HEIGHT = 120;
+	private final static int HEIGHT = 100;
 	private int mWidth;
 	
-	private Layer mBackLayer, mImageLayer, textLayer;
+	private Layer mImageLayer, textLayer;
+	private ImageLayer mBackLayer;
 	private GroupLayer mFrontLayer;
 	private String deliveredCargoString = "";
 	String cargoGoalString = "";
@@ -62,7 +64,9 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker, UI
 		}
 		mWidth+=padding;
 		
-		mBackLayer = graphics().createGroupLayer();
+		mBackLayer = graphics().createImageLayer();
+		updateTracks();
+		xpadding(ComponentHelper.RAIL_EXTRA);
 		
 		CanvasImage image = graphics().createImage(mWidth, HEIGHT);
 		image.canvas().setFillColor(0x33775577);
@@ -77,11 +81,17 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker, UI
 			Layer l = train.getLayer();
 			l.setAlpha(0.4f);
 			// position expected trains.
-			l.setTranslation(compCtr*train.getSize().width+padding, 0);
+			l.setTranslation(compCtr*train.getSize().width+padding, -train.getSize().height);
 			mFrontLayer.add(l);
 			List<UICarriage> cs = train.getCarriages();
 			compCtr ++;
 		}
+	}
+	private void updateTracks() {
+		int imageWidth = mWidth+(int)Math.ceil(2*ComponentHelper.RAIL_EXTRA);
+		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
+		ComponentHelper.drawTracks(image.canvas(), mWidth);
+		mBackLayer.setImage(image);
 	}
 
 	public void addListener(LevelFinishedListener l){
