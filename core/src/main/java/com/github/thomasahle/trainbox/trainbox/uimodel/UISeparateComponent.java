@@ -11,6 +11,7 @@ import java.util.List;
 
 import playn.core.CanvasImage;
 import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
@@ -32,6 +33,9 @@ public class UISeparateComponent extends AbstractComponent {
 	private final static float KNIFE_CYCLE = 1000f;
 	private Layer mKnifeLayer;
 	private float mKnifeT = 0;
+	
+	private ImageLayer mSeeSawLayer;
+	
 
 	public UISeparateComponent(int width) {
 		mWidth = width;
@@ -43,6 +47,8 @@ public class UISeparateComponent extends AbstractComponent {
 		
 		Image concatComponentImage = assets().getImage("images/pngs/concatComponent.png");
 		mBackLayer = graphics().createImageLayer(concatComponentImage);
+		
+		mSeeSawLayer = (ImageLayer) mBackLayer;
 		
 		
 		CanvasImage knifeImage = graphics().createImage(KNIFE_WIDTH, HEIGHT);
@@ -96,7 +102,6 @@ public class UISeparateComponent extends AbstractComponent {
 	public void update(float delta) {
 		if (paused())
 			return;
-		
 		mKnifeT += delta;
 		
 		float knifeX = getSize().width/2 + getDeepPosition().x;
