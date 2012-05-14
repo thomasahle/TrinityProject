@@ -29,7 +29,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
-	boolean isCompSelected = false;
+	private boolean isCompSelected = false;
 	UIToken compSelected = null;
 	private ToolManager toolMan;
 	
@@ -138,6 +138,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		if (isCompSelected) {
 			Point p = new Point(event.localX(), event.localY());
 			mTrack.insertChildAt(UIComponentFactory.fromTok(compSelected), p);
+			toolMan.unselect();
 		}
 	}
 
