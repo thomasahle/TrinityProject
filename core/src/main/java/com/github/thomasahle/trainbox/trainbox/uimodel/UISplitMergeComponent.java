@@ -234,7 +234,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 				float carLeft = car.getPosition().x + trainLeft - compLeft;
 				float carRight = carLeft + car.WIDTH;
 				float tCenter = path.calculateT((carRight+carLeft)/2.f);
-				tCenter = Math.min(tBorder - car.WIDTH/2.f, tCenter + UITrain.SPEED*delta);
+				tCenter = Math.min(tBorder - car.WIDTH/2.f, tCenter + train.getSpeed()*delta);
 				if (carRight >= 0 || !car.touched()) {
 					float[] slope = path.evaluateSlope(tCenter);
 					float[] pos = path.evaluate(tCenter);
