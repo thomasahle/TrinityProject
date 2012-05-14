@@ -55,6 +55,8 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	GroupLayer levelStatusLayer;
 	ImageLayer levelFailedBlurbImageLayer;
 	ImageLayer levelCompletedBlurbImageLayer;
+	ImageLayer retryButtonLeveLStatusImageLayer;
+	ImageLayer nextButtonLeveLStatusImageLayer;
 	GroupLayer levelControlLayer;
 	ImageLayer pauseButtonImageLayer;
 	GroupLayer levelPopupLayer;
@@ -69,7 +71,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
-		// initalize the level controller buttons
+		// initialise the level controller buttons
 		initToolsAndDragging();
 		initLevelController();
 		initLevelStatus();
@@ -242,9 +244,9 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		levelCompletedBlurbImageLayer.setVisible(false);
 		levelStatusLayer.setVisible(false);
 		
-		//initialize the next button image layer
+		//initialise the next button image layer
 		Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
-		ImageLayer nextButtonLeveLStatusImageLayer = graphics().createImageLayer(nextButtonImage);
+		nextButtonLeveLStatusImageLayer = graphics().createImageLayer(nextButtonImage);
 		levelStatusLayer.add(nextButtonLeveLStatusImageLayer);
 		nextButtonLeveLStatusImageLayer.setTranslation(680, 520);
 		nextButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
@@ -256,13 +258,30 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 			}
 		});
 		
+		//initialise the retry button image layer
+		//TODO create an image called retryButton and replace the text below VVVV
+			Image retryButtonImage = assets().getImage("images/pngs/nextButton.png");
+			retryButtonLeveLStatusImageLayer = graphics().createImageLayer(retryButtonImage);
+			levelStatusLayer.add(retryButtonLeveLStatusImageLayer);
+			retryButtonLeveLStatusImageLayer.setTranslation(200, 520);
+			retryButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
+				@Override public void onPointerStart(Event event) {
+					levelFailedBlurbImageLayer.setVisible(false);
+					levelCompletedBlurbImageLayer.setVisible(false);
+					levelStatusLayer.setVisible(false);
+					trainBox.setLevel(mLevel.getLevel().levelNumber);
+				}
+			});
+	
 		mLevel.setListener(new LevelFinishedListener() {
 			@Override public void levelCleared() {
+				nextButtonLeveLStatusImageLayer.setVisible(true);
 				log().debug("Level Cleared!");
 				levelStatusLayer.setVisible(true);
 				levelCompletedBlurbImageLayer.setVisible(true);
 			}
 			@Override public void levelFailed(String message) {
+				nextButtonLeveLStatusImageLayer.setVisible(false);
 				log().debug("Level Failed :(");
 				levelStatusLayer.setVisible(true);
 				levelFailedBlurbImageLayer.setVisible(true);
