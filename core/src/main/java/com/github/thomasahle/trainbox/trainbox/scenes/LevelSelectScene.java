@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
+import static playn.core.PlayN.log;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
@@ -13,6 +14,7 @@ import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
+import com.sun.tools.javac.util.Log;
 
 import playn.core.Canvas;
 import playn.core.CanvasImage;
@@ -102,17 +104,21 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 				"images/pngs/levelButton.png");
 		final Image levelButtonNotOk = assets().getImage(
 				"images/pngs/inaccessibleLevelButton.png");
-
+		final Image levelButtonActive = assets().getImage(
+				"images/pngs/levelButtonActive.png");
+		
 		for (int i = 0; i < numberOfLevels; i++) {
-			final ImageLayer levelButtonImageLayer = graphics()
-					.createImageLayer();
+			final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
 			if (i <= currentProgress) {
 				final int level = i;
 				levelButtonImageLayer.setImage(levelButtonOk);
 				levelButtonImageLayer.addListener(new Pointer.Adapter() {
-
 					@Override
 					public void onPointerStart(Event event) {
+						levelButtonImageLayer.setImage(levelButtonActive);
+					}
+					@Override
+					public void onPointerEnd(Event event) {
 						trainBox.setLevel(level);
 					}
 				});
