@@ -124,7 +124,13 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker, UI
 		}
 		return match;
 	}
-	
+	/**
+	 * Checks if the level has been won. Should only be called after checkDelivered.
+	 * Notifies all listeners on win.
+	 */
+	public void checkWin(){
+		
+	}
 	@Override
 	public void takeTrain(UITrain train) {
 		currentTrains.add(train);
