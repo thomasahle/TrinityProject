@@ -97,11 +97,6 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		initLevelStatus();
 		initLevelPopup();
 		
-		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
-		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
-		pauseButtonImageLayer.setTranslation(graphics().width()-146, graphics().height()-168);
-		pauseButtonImageLayer.setVisible(false);
-		
 		setView(0, 0);
 
 	}
@@ -244,6 +239,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		
 		mPlayButton.setTranslation(graphics().width()-130, graphics().height()-125);
 				
+		Image pauseButtonImage = assets().getImage("images/pngs/pauseButton.png");	
+		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
+		pauseButtonImageLayer.setTranslation(graphics().width()-130, graphics().height()-143);
+		pauseButtonImageLayer.setVisible(false);
 		
 		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");
 		ImageLayer menuButtonImageImageLayer = graphics().createImageLayer(menuButtonImage);
