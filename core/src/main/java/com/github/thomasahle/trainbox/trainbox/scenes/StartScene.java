@@ -5,6 +5,8 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
 
+import java.awt.Point;
+
 
 import playn.core.Canvas;
 import playn.core.CanvasImage;
@@ -336,8 +338,14 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
-		// TODO Auto-generated method stub
-		
+		float x = event.x();
+		float y = event.y();
+		float h = watermelon.height()/2;
+		float w = watermelon.width()/2;
+		if(x>px-w && x< px+w && y>py-h && y<py+h){
+			graphics().rootLayer().setScale(-1, 1);
+			graphics().rootLayer().setTranslation(graphics().width(), 0);
+		}
 	}
 
 	@Override
