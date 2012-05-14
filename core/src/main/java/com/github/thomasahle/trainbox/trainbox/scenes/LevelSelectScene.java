@@ -56,7 +56,6 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
         final Image demoPageImage = assets().getImage("images/pngs/chooseLevelBlurb.png");
         demoPageImageLayer = graphics().createImageLayer(demoPageImage);
     	demoLayer.add(demoPageImageLayer);
-    	initializeLevelButtons();
 	}
 /*	
 	private void initializeLevelButtons() {
@@ -175,6 +174,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	@Override
 	public void onAttach() {
+    	initializeLevelButtons();
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
 	    pointer().setListener(this);
