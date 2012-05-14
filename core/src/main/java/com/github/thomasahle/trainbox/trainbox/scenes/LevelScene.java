@@ -296,7 +296,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	@Override
 	public void onPointerStart(Event event) {
 		boolean didInsertSomething = false;
-		if (toolMan.isSelected()) {
+		if (toolMan.isSelected() && mLevel.paused()) {
 			Point p = new Point(event.localX(), event.localY());
 			didInsertSomething = mLevel.insertChildAt(UIComponentFactory.fromTok(toolMan.getCurrentTool()), p);
 		}
