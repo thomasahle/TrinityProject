@@ -26,10 +26,8 @@ import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentButton;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIPallet;
 
 
 /**
