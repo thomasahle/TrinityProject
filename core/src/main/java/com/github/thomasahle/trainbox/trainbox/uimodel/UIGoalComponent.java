@@ -41,20 +41,19 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 
 	public UIGoalComponent(List<Train> goal) {
 		mWidth = 0;
-		int padding = 5;
 		List<UITrain> trains = new ArrayList<UITrain>();
 		for (Train t : goal) {
 			UITrain uit = new UITrain(t);
 			for (UICarriage c : uit.getCarriages()) {
 				UITrain train = new UITrain(Arrays.asList(c));
-				mWidth += train.getSize().width + padding;
+				mWidth += train.getSize().width + UITrain.PADDING;
 				trains.add(0, train); // TO BE DISPLAYED FIRST TRAIN EXPECTED ON
 										// THE RIGHT!
 				cargoGoalList.add(c.getCargo()); // FIRST ELEMENT EXPECTED FIRST
 				cargoGoalString = (c.getCargo() + " | ") + cargoGoalString;
 			}
 		}
-		mWidth += padding;
+		mWidth += UITrain.PADDING;
 
 		mBackLayer = graphics().createImageLayer();
 		updateTracks();
