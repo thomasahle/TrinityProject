@@ -84,7 +84,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 		image.canvas().setStrokeWidth(24);
 		image.canvas().strokePath(playnPath);
 	}
-	private void updateImagesAndPaths() {
+	private void updatePaths() {
 		mUpPathIn = createPath (
 				0, mSize.height/2,
 				SIDES_WIDTH, mTopComp.getSize().height/2);
@@ -97,15 +97,26 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mDownPathOut = createPath (
 				0, mBotComp.getPosition().y + mBotComp.getSize().height/2,
 				SIDES_WIDTH, mSize.height/2);
-		
+	}
+	private void updateImages() {
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
-		drawBendTrack(imageLeft, mUpPathIn);
-		drawBendTrack(imageLeft, mDownPathIn);
+		if (mNextDirection == mUpgoing) {
+			drawBendTrack(imageLeft, mDownPathIn);
+			drawBendTrack(imageLeft, mUpPathIn);
+		} else {
+			drawBendTrack(imageLeft, mUpPathIn);
+			drawBendTrack(imageLeft, mDownPathIn);
+		}
 		mLeftLayer.setImage(imageLeft);
 		
 		CanvasImage imageRight = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
-		drawBendTrack(imageRight, mUpPathOut);
-		drawBendTrack(imageRight, mDownPathOut);
+		if (mNextTaker == mTopTaker) {
+			drawBendTrack(imageRight, mDownPathOut);
+			drawBendTrack(imageRight, mUpPathOut);
+		} else {
+			drawBendTrack(imageRight, mUpPathOut);
+			drawBendTrack(imageRight, mDownPathOut);
+		}
 		mRightLayer.setImage(imageRight);
 	}
 	
@@ -131,7 +142,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mSize = newSize;
 			fireSizeChanged(ourOldSize);
 			
-			updateImagesAndPaths();
+			updatePaths();
+			updateImages();
 		}
 	}
 	
@@ -286,6 +298,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 		}
 		
 		mNextDirection = (mNextDirection==mUpgoing) ? mDowngoing : mUpgoing;
+		updateImages();
 	}
 
 	@Override
@@ -299,6 +312,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mUpgoing.add(train);
 			mOutgoing.add(train);
 			mNextTaker = mBotTaker;
+			updateImages();
 		}
 		@Override
 		public float leftBlock() {
@@ -315,6 +329,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mDowngoing.add(train);
 			mOutgoing.add(train);
 			mNextTaker = mTopTaker;
+			updateImages();
 		}
 		@Override
 		public float leftBlock() {
