@@ -93,7 +93,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		// adding a goal bar
 		goalBarLayer = graphics().createGroupLayer();
 		goalBarLayer.setTranslation(10, HEIGHT*2/3+20);
-		initGoalBar();
+//		initGoalBar();
 		initLevelStatus();
 		initLevelPopup();
 		
@@ -332,6 +332,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	private void initGoalBar() {
 		Image goalBarImage = assets().getImage("images/pngs/clickNDropBar.png");	
 		ImageLayer goalBarImageLayer = graphics().createImageLayer(goalBarImage);
+		goalBarImageLayer.setDepth(-5);
 		goalBarLayer.add(goalBarImageLayer);
 	}
 

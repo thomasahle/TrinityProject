@@ -86,19 +86,22 @@ public class UIComponentButton implements ToolListener{
 		
 		layer.add(imageLayer);
 		
-		imageSelLayer = graphics().createImageLayer(MAPsel.get(comp));
+//		imageSelLayer = graphics().createImageLayer(MAPsel.get(comp));
 
 		
-//		outline = graphics().createImage((int)mSize.width, (int)mSize.height);
-//		outline.canvas().setStrokeColor(0xaaffffff);
-//		outline.canvas().setStrokeWidth(6);
-//		outline.canvas().setLineJoin(LineJoin.ROUND);
-//		
-//		outline.canvas().strokeRect(0, 0, mSize.width, mSize.height);
-//		outlineLayer = graphics().createImageLayer(outline);
-//		outlineLayer.setVisible(false);
+		outline = graphics().createImage((int)mSize.width, (int)mSize.height);
+		outline.canvas().setStrokeColor(0xaaffffff);
+		outline.canvas().setStrokeWidth(6);
+		outline.canvas().setLineJoin(LineJoin.ROUND);
 		
-		layer.add(imageSelLayer);
+		outline.canvas().strokeRect(0, 0, mSize.width, mSize.height);
+		outlineLayer = graphics().createImageLayer(outline);
+		outlineLayer.setVisible(false);
+		
+		layer.add(outlineLayer);
+
+		
+//		layer.add(imageSelLayer);
 		
 		imageLayer.addListener(new Listener() {
 
@@ -132,6 +135,7 @@ public class UIComponentButton implements ToolListener{
 	@Override
 	public void toolsUnselected() {
 		selected = false;
+		outlineLayer.setVisible(false);
 //		imageSelLayer.setVisible(false);
 	}
 
@@ -139,6 +143,7 @@ public class UIComponentButton implements ToolListener{
 	public void toolSelected(UIToken currentTool) {
 		if (currentTool == tool) {
 			selected = true;
+			outlineLayer.setVisible(true);
 //			imageSelLayer.setVisible(true);
 		}
 		else toolsUnselected();
