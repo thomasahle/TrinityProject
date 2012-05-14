@@ -35,9 +35,9 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	private int deliveredCount = 0;
 	List<Integer> deliveredCargoList = new ArrayList<Integer>();
 	List<Integer> cargoGoalList = new ArrayList<Integer>();
-	List<LevelFinishedListener> listeners = new ArrayList<LevelFinishedListener>();
 
 	private LinkedList<UITrain> currentTrains = new LinkedList<UITrain>();
+	private LevelFinishedListener mListener;
 
 	public UIGoalComponent(List<Train> goal) {
 		mWidth = 0;
@@ -88,8 +88,8 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		mBackLayer.setImage(image);
 	}
 
-	public void addListener(LevelFinishedListener l) {
-		listeners.add(l);
+	public void setListener(LevelFinishedListener l) {
+		mListener = l;
 	}
 
 	@Override
@@ -145,27 +145,27 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 			// TODO Tidy up this code.
 			if (deliveredCargoList.size() == cargoGoalList.size()) {
 				if (checkDelivered()) {
-					for (LevelFinishedListener l : listeners) {
-						l.levelCleared();
+					if (mListener != null) {
+						mListener.levelCleared();
 					}
 				} else {
-					for (LevelFinishedListener l : listeners) {
-						l.levelFailed();
+					if (mListener != null) {
+						mListener.levelFailed();
 					}
 				}
 			} else if (deliveredCargoList.size() < cargoGoalList.size()) {
 				log().debug("Goal: " + cargoGoalString);
 				log().debug("Current: " + deliveredCargoString);
 				if (!checkDelivered()) {
-					for (LevelFinishedListener l : listeners) {
-						l.levelFailed();
+					if (mListener != null) {
+						mListener.levelFailed();
 					}
 				}
 
 			} else {
 				// LEVEL FAILED
-				for (LevelFinishedListener l : listeners) {
-					l.levelFailed();
+				if (mListener != null) {
+					mListener.levelFailed();
 				}
 			}
 
