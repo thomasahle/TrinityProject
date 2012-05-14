@@ -34,6 +34,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
     ImageLayer bgLayer;
     GroupLayer demoLayer;
     final ImageLayer demoPageImageLayer;
+	private GroupLayer demoLayerLevels;
 /*    Image levelButtonImage;
 
 	final Image LevelButtonOkImage = assets().getImage("images/pngs/inaccessibleLevelButton.png");
@@ -90,6 +91,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 
 	private void initializeLevelButtons() {
+		demoLayerLevels = graphics().createGroupLayer();
 		int numberOfLevels = Level.levels.size();
 		int currentProgress = LevelTracker.getCurrentProgress();
 		
@@ -121,7 +123,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 			 else {
 				 levelButtonImageLayer.setImage(levelButtonNotOk);
 			 }
-		     demoLayer.add(levelButtonImageLayer);
+		     demoLayerLevels.add(levelButtonImageLayer);
 		     levelButtonImageLayer.setTranslation(x, y);
 		     j+=1;
 		     x+= levelButtonImageLayer.width()+10;
@@ -131,6 +133,8 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		    	 j = 0;
 		     }
 		}
+		
+		demoLayer.add(demoLayerLevels);
 		
 	}
 
@@ -183,6 +187,8 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	@Override
 	public void onDetach() {
+		demoLayer.remove(demoLayerLevels);
+		demoLayerLevels.destroy();
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
 	    pointer().setListener(null);

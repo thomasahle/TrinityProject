@@ -60,6 +60,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 		
 		top.setTrainTaker(mTopTaker);
 		bot.setTrainTaker(mBotTaker);
+		assert top instanceof UIHorizontalComponent;
+		assert bot instanceof UIHorizontalComponent;
 		
 		mBackLayer.add(mLeftLayer);
 		mBackLayer.add(mRightLayer);
@@ -137,10 +139,20 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mBotComp.setPosition(new Point(SIDES_WIDTH, mTopComp.getSize().height));
 			mRightLayer.setTranslation(newSize.width-SIDES_WIDTH, 0);
 			
-			
 			Dimension ourOldSize = mSize;
 			mSize = newSize;
 			fireSizeChanged(ourOldSize);
+			
+			// Scale
+			UIComponent topLeft = ((UIHorizontalComponent)mTopComp).getChildren().get(0);
+			UIComponent botLeft = ((UIHorizontalComponent)mBotComp).getChildren().get(0);
+			if (topLeft instanceof UIIdentityComponent && botLeft instanceof UIIdentityComponent) {
+				float newSizeTop = newSize.width - (mTopComp.getSize().width - topLeft.getSize().width) - 2*SIDES_WIDTH;
+				float newSizeBot = newSize.width - (mBotComp.getSize().width - botLeft.getSize().width) - 2*SIDES_WIDTH;
+				float dontGrowTooBig = Math.min(newSizeTop, newSizeBot) - 100;
+				((UIIdentityComponent)topLeft).setWidth((int)(newSizeTop - dontGrowTooBig));
+				((UIIdentityComponent)botLeft).setWidth((int)(newSizeBot - dontGrowTooBig));
+			}
 			
 			updatePaths();
 			updateImages();

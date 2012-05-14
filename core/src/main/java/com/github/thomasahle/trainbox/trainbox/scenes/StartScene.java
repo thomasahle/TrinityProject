@@ -242,8 +242,8 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         graphics().rootLayer().remove(menuLayer);
 	    graphics().rootLayer().remove(watermelon);
 	    graphics().rootLayer().remove(aboutLayer);
-		keyboard().setListener(null);
 	    pointer().setListener(null);
+	    keyboard().setListener(null);	
 	}
 	
 	@Override
