@@ -1,5 +1,6 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.log;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.CanvasImage;
@@ -18,8 +19,8 @@ public class UICarriage {
 	private Layer mLayer;
 	private Point mPosition;
 	private int mCargo;
-	private float mDx;
-	private float mDy;
+	private float mDx = 1;
+	private float mDy = 0;
 	
 	public UICarriage(int cargo) {
 		mPosition = new Point(0,0);
@@ -47,8 +48,12 @@ public class UICarriage {
 		return mPosition;
 	}
 	public void setPosition(Point position) {
+		float dx = mDx;
+		float dy = mDy;
+		setRotation(1, 0);
 		getLayer().setOrigin(-position.x, -position.y);
 		mPosition = position;
+		setRotation(dx, dy);
 	}
 	public void setRotation(float dx, float dy) {
 		mDx = dx;
@@ -57,6 +62,14 @@ public class UICarriage {
 		tr.translate(WIDTH/2.f+mPosition.x, HEIGHT/2.f+mPosition.y);
 		tr.setRotation(FloatMath.atan2(dy, dx));
 		tr.translate(-WIDTH/2.f-mPosition.x, -HEIGHT/2.f-mPosition.y);
+	}
+	/**
+	 * This is fucking ugly.
+	 * We use this hack to check if the component is currently being handled by a splitmerg'er
+	 * @return a type of Santorium
+	 */
+	public boolean touched() {
+		return mDx != 1 || mDy != 0;
 	}
 	public float[] getRotation() {
 		return new float[] {mDx, mDy};
