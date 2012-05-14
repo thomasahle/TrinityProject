@@ -7,6 +7,7 @@ import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 
 import playn.core.CanvasImage;
+import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Layer;
@@ -16,38 +17,52 @@ import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 
-public class UIComponentButton{
+public class UIComponentButton implements ToolListener{
 	
-	private Layer layer;
+	private GroupLayer layer;
 	
 	private UIComposite mParent;
 	private Point mPosition = new Point();
 	private Dimension mSize = new Dimension(80,80);
+	
+	CanvasImage outline;
 
 	private boolean selected;
 
-	private ImageLayer outlinelayer;
-	
-	public UIComponentButton(final UILevel level, final UIToken comp){
+	private ImageLayer imageLayer;
 
+	private ImageLayer outlineLayer;
+
+	private ToolManager toolMan;
+
+	private UIToken tool;
+	
+	public UIComponentButton(final ToolManager toolMan, final UIToken comp){
+		this.toolMan = toolMan;
+		toolMan.add(this);
+		this.tool = comp;
 		layer = graphics().createGroupLayer();
 
 		CanvasImage image = graphics().createImage((int)mSize.width, (int)mSize.height);
 		image.canvas().setFillColor(0xffaa00aa);
 		image.canvas().fillCircle(mSize.width/ 2.f, mSize.height / 2.f, mSize.width / 2.f);
-		layer = graphics().createImageLayer(image);
+		imageLayer = graphics().createImageLayer(image);
+		layer.add(imageLayer);
 		
-		CanvasImage outline = graphics().createImage((int)mSize.width, (int)mSize.height);
-		image.canvas().setStrokeColor(0x00000000);
-		image.canvas().setStrokeWidth(2);
-		image.canvas().strokeRect(5, 5, mSize.width-5, mSize.height-5);
-		outlinelayer = graphics().createImageLayer(image);
+		outline = graphics().createImage((int)mSize.width, (int)mSize.height);
+		outline.canvas().setStrokeColor(0xff000000);
+		outline.canvas().setStrokeWidth(4);
+		outline.canvas().strokeRect(5, 5, mSize.width-5, mSize.height-5);
+		outlineLayer = graphics().createImageLayer(outline);
+		outlineLayer.setVisible(false);
 		
-		layer.addListener(new Listener() {
+		layer.add(outlineLayer);
+		
+		imageLayer.addListener(new Listener() {
 
 			@Override
 			public void onPointerStart(Event event) {
-				level.setCompSel(comp);
+				toolMan.setTool(tool);
 			}
 
 			@Override
@@ -72,13 +87,18 @@ public class UIComponentButton{
 		layer.setTranslation(point.x, point.y);
 	}
 
-	public void setUnselected() {
+	@Override
+	public void toolsUnselected() {
 		selected = false;
-		
-	}
-	
-	public void setSelected() {
-		selected = true;
+		outlineLayer.setVisible(false);
 	}
 
+	@Override
+	public void toolSelected(UIToken currentTool) {
+		if (currentTool == tool) {
+			selected = true;
+			outlineLayer.setVisible(true);
+		}
+		else toolsUnselected();
+	}
 }

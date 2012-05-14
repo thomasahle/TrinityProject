@@ -25,6 +25,7 @@ import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
+import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentButton;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
@@ -61,12 +62,13 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 	GroupLayer levelControlLayer;
 
 	ImageLayer pauseButtonImageLayer;
+	private ToolManager toolMan;
 	
 	GroupLayer levelPopupLayer;
 	
 	public LevelScene(TrainBox trainBox, Level l) {
 		this.trainBox = trainBox;
-		
+		toolMan = new ToolManager();
 
 		// A background image. This should be really nice.
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
@@ -75,7 +77,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
 		// Initialize the level we are going to try to solve
-		mLevel = new UILevel(l);
+		mLevel = new UILevel(toolMan, l);
+		toolMan.add(mLevel);
 		mLevel.setListener(this);
 		mLevelNumber=l.levelNumber;
 		
@@ -98,6 +101,8 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		pauseButtonImageLayer = graphics().createImageLayer(pauseButtonImage);
 		pauseButtonImageLayer.setTranslation(graphics().width()-146, graphics().height()-168);
 		pauseButtonImageLayer.setVisible(false);
+		
+		setView(0, 0);
 
 	}
 	
@@ -263,13 +268,13 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		
 		
 		// add the component pallet.
-		mPallet = new UIPallet();
+		mPallet = new UIPallet(this);
 		
-		UIComponentButton dupBut = new UIComponentButton(mLevel, UIToken.DUP);
-		UIComponentButton boxBut = new UIComponentButton(mLevel, UIToken.BOX);
-		UIComponentButton flipBut = new UIComponentButton(mLevel, UIToken.FLIP);
-		UIComponentButton catBut = new UIComponentButton(mLevel, UIToken.CAT);
-		UIComponentButton mergBut = new UIComponentButton(mLevel, UIToken.MERG);
+		UIComponentButton dupBut = new UIComponentButton(toolMan, UIToken.DUP);
+		UIComponentButton boxBut = new UIComponentButton(toolMan, UIToken.BOX);
+		UIComponentButton flipBut = new UIComponentButton(toolMan, UIToken.FLIP);
+		UIComponentButton catBut = new UIComponentButton(toolMan, UIToken.CAT);
+		UIComponentButton mergBut = new UIComponentButton(toolMan, UIToken.MERG);
 
 		mPallet.add(dupBut);
 		mPallet.add(boxBut);
@@ -399,6 +404,11 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		float x = event.x()-mDragStartXPos;
 		float y = event.y()-mDragStartYPos;
 		
+		setView(x, y);
+	}
+
+
+	private void setView(float x, float y) {
 		float ybot = -mLevel.getSize().height + graphics().height() - 200;
 		float ytop = 0;
 		if (y > ytop) y = ytop;
@@ -427,10 +437,10 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 		}
 		
 		if(event.key() == Key.ESCAPE){
-			mLevel.setDragMode();
-			mPallet.setUnselected();
+			toolMan.unselect();
 		}
 	}
+	
 
 
 	@Override
