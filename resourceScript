@@ -1,12 +1,12 @@
-cd ./core/src/main/java/com/github/thomasahle/trainbox/trainbox/
+cd ./core/src/main/java/com/github/thomasahle/trainbox/trainbox/resources/
 
-FILES=./resources/images/pngs/*.png
+FILES=./images/pngs/*.png
 for f in $FILES
 do
   echo "watcher.add(assets().getImage(\"" $f "\"));"
 done
 
-FILES=./resources/images/*.png
+FILES=./images/*.png
 for f in $FILES
 do
   echo "watcher.add(assets().getImage(\"" $f "\"));"
