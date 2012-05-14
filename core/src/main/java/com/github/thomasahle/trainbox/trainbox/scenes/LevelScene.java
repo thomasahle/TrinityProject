@@ -254,7 +254,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusLayer.setVisible(false);
-				trainBox.setLevel(mLevel.getLevel().levelNumber);
+				trainBox.setLevel(mLevel.getLevel().levelNumber+1);
 			}
 		});
 		
