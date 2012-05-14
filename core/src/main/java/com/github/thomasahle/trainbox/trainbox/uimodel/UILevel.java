@@ -110,6 +110,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 	}
 	@Override
 	public void levelCleared() {
+		mTrack.paused(true);
 		// check all trains have arrived in the goalComponent
 		List<UITrain> trainsInGoalComp = mGoal.getTrains();
 		List<UITrain> allTrains = mTrack.getTrains();
@@ -119,13 +120,15 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 		if(! allTrains.isEmpty()){
 			log().debug("EXTRA TRAINS");
 			this.levelFailed();
-		}
+		}else{
 		
 		log().debug("LEVEL CLEARED !!!");
 		mListener.levelCleared();
+		}
 	}
 	@Override
 	public void levelFailed() {
+		mTrack.paused(true);
 		log().debug("LEVEL FAILED !!!");
 		mListener.levelFailed();
 	}
