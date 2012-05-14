@@ -13,7 +13,6 @@ import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
-import com.sun.tools.javac.sym.CreateSymbols;
 
 import playn.core.Canvas;
 import playn.core.CanvasImage;

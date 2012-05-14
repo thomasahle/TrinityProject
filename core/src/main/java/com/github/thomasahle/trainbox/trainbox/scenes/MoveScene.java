@@ -118,6 +118,8 @@ public class MoveScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().remove(trainLayer);
 		graphics().rootLayer().remove(textLayer);
 		graphics().rootLayer().remove(statsLayer);
+	    pointer().setListener(null);
+	    keyboard().setListener(null);	
 	}
 	
 	@Override
