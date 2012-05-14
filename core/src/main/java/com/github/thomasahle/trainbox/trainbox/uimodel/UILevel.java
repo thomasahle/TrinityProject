@@ -121,7 +121,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Li
 			log().debug("EXTRA TRAINS");
 			this.levelFailed("Too many trains");
 		}else{
-		
+		mTrack.paused(false);
 		log().debug("LEVEL CLEARED !!!");
 		mListener.levelCleared();
 		}

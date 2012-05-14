@@ -295,7 +295,7 @@ public class LevelScene implements Scene, LevelFinishedListener, Listener, Keybo
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusLayer.setVisible(false);
-				trainBox.setLevel(mLevelNumber+1);
+				trainBox.setLevel(mLevelNumber);
 			}
 			
 			@Override
