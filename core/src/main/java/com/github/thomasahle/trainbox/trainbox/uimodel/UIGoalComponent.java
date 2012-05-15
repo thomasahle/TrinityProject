@@ -38,8 +38,8 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	private String deliveredCargoString = "";
 	String cargoGoalString = "";
 	private int deliveredCount = 0;
-	List<Integer> deliveredCargoList = new ArrayList<Integer>();
-	List<Integer> cargoGoalList = new ArrayList<Integer>();
+	List<Train> deliveredCargoList = new ArrayList<Train>();
+	List<Train> cargoGoalList = new ArrayList<Train>();
 
 	private LinkedList<UITrain> currentTrains = new LinkedList<UITrain>();
 	private LevelFinishedListener mListener;
@@ -48,16 +48,12 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		mWidth = 0;
 		List<UITrain> trains = new ArrayList<UITrain>();
 		for (Train t : goal) {
-			UITrain uit = new UITrain(t);
-			for (UICarriage c : uit.getCarriages()) {
-				UITrain train = new UITrain(Arrays.asList(c));
-				mWidth += train.getSize().width + UITrain.PADDING;
-				trains.add(0, train); // TO BE DISPLAYED FIRST TRAIN EXPECTED ON
-										// THE RIGHT!
-				cargoGoalList.add(c.getCargo()); // FIRST ELEMENT EXPECTED FIRST
-				cargoGoalString = (c.getCargo() + " | ") + cargoGoalString;
-			}
+			UITrain train = new UITrain(t);
+			mWidth += train.getSize().width + UITrain.PADDING;
+			trains.add(0, train); // TO BE DISPLAYED FIRST TRAIN EXPECTED ON THE RIGHT!
+			cargoGoalString = t.toString() + " " + cargoGoalString;
 		}
+		cargoGoalList = goal;
 		mWidth += UITrain.PADDING;
 
 		
@@ -125,12 +121,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	 * @return true on match, false on mismatch.
 	 */
 	public boolean checkDelivered() {
-		boolean match = true;
-		for (int i = 0; i < deliveredCargoList.size(); i++) {
-			match = match
-					&& deliveredCargoList.get(i).equals(cargoGoalList.get(i));
-		}
-		return match;
+		return cargoGoalString.endsWith(deliveredCargoString);
 	}
 
 	/**
@@ -142,45 +133,43 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	}
 
 	@Override
-	public void takeTrain(UITrain train) {
-		currentTrains.add(train);
-		List<UICarriage> carriages = train.getCarriages();
-		// Unload the cargo from each carriage
-		for (UICarriage c : carriages) {
-			int cargo = c.getCargo();
-			deliveredCargoList.add(cargo);
-			deliveredCount++;
-			deliveredCargoString = cargo + " | " + deliveredCargoString;
-			// log().debug("Cargo: "+cargo+" delivered sucessfully!");
+	public void takeTrain(UITrain uitrain) {
+		currentTrains.add(uitrain);
+		
+		Train train = uitrain.train();
+		deliveredCargoList.add(train);
+		deliveredCount++;
+		deliveredCargoString = train + " " + deliveredCargoString;
+		// log().debug("Cargo: "+cargo+" delivered sucessfully!");
 
-			// TODO Tidy up this code.
-			if (deliveredCargoList.size() == cargoGoalList.size()) {
-				if (checkDelivered()) {
-					if (mListener != null) {
-						mListener.levelCleared();
-					}
-				} else {
-					if (mListener != null) {
-						mListener.levelFailed("Bad prefix");
-					}
-				}
-			} else if (deliveredCargoList.size() < cargoGoalList.size()) {
-				log().debug("Goal: " + cargoGoalString);
-				log().debug("Current: " + deliveredCargoString);
-				if (!checkDelivered()) {
-					if (mListener != null) {
-						mListener.levelFailed("You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString);
-					}
-				}
-
-			} else {
-				// LEVEL FAILED
+		// TODO Tidy up this code.
+		if (deliveredCargoList.size() == cargoGoalList.size()) {
+			if (checkDelivered()) {
 				if (mListener != null) {
-					mListener.levelFailed("You sent in "+deliveredCargoList.size()+" trains but we wanted "+cargoGoalList.size());
+					mListener.levelCleared();
+				}
+			} else {
+				if (mListener != null) {
+					mListener.levelFailed("Bad prefix");
 				}
 			}
-
+		} else if (deliveredCargoList.size() < cargoGoalList.size()) {
+			log().debug("Goal: " + cargoGoalString);
+			log().debug("Current: " + deliveredCargoString);
+			if (!checkDelivered()) {
+				if (mListener != null) {
+					mListener.levelFailed("You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString);
+				}
+			}
+		} else {
+			log().debug("Too many trains");
+			// LEVEL FAILED
+			if (mListener != null) {
+				mListener.levelFailed("You sent in "+deliveredCargoList.size()+" trains but we wanted "+cargoGoalList.size());
+			}
 		}
+
+		
 		// Display the cargos delivered
 		// Destroy the train.
 	}

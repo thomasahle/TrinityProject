@@ -143,7 +143,6 @@ public class UITrain {
 	 */
 	public void setCropRight(float width) {
 		mRightCrop = width;
-		log().debug("Crop right is: "+width);
 		applyCrop();
 	}
 	
@@ -152,7 +151,6 @@ public class UITrain {
 	 */
 	public void setCropLeft(float width) {
 		mLeftCrop = width;
-		log().debug("Crop left is: "+width);
 		applyCrop();
 	}
 	
