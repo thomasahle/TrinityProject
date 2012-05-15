@@ -84,7 +84,7 @@ public class Level {
 	
 	private static final List<Level> mLevels = new ArrayList<Level>();
 	public static final List<Level> levels = Collections.unmodifiableList(mLevels);
-	static{
+	static {
 		/** Here we code all of the levels */
 		
 		mLevels.add(new Level(
@@ -128,19 +128,19 @@ public class Level {
 			0,0,0,1,0
 		));
 		mLevels.add(new Level(
-			8, "But, it's odd? (track-split)",
+			8, "Even one out",
+			"1 2", "1 2 1",
+			1,0,0,0,1
+		));
+		mLevels.add(new Level(
+			9, "But, it's odd? (track-split)",
 			"1", "1 1 1",
 			2,0,0,0,1
 		));
 		mLevels.add(new Level(
-			9, "Odd one out",
-			"2 1", "1 2 1",
-			1,0,0,1,1
-		));
-		mLevels.add(new Level(
-			10, "Really Twisted Train Builder",
-			"2 1", "1-2-1-2 1-2-1-2",
-			2,2,0,1,0
+			10, "Flip or mirror",
+			"2 1", "1 2 2 1",
+			1,1,1,1,1
 		));
 		mLevels.add(new Level(
 			11, "Reverse Express",
@@ -166,7 +166,7 @@ public class Level {
 			0,0,0,7,3
 		));
 		mLevels.add(new Level(
-			15, "Are they just random?",
+			15, "Not just random",
 			"1 2 3 4 5 6 7 8", "1 5 2 6 3 7 4 8",
 			0,2,2,0,1
 		));
@@ -192,7 +192,7 @@ public class Level {
 			1,1,0,1,1
 		));
 		mLevels.add(new Level(
-			20, "There are seven in case you missed them",
+			20, "There are seven",
 			"1", "1 1 1 1 1 1 1",
 			5,0,0,0,2
 		));
@@ -236,7 +236,22 @@ public class Level {
 			"0 1", "0-0 0-1 1-0 1-1",
 			3,8,1,0,4
 		));
-
+		// The following might not be solvable
+		mLevels.add(new Level(
+			29, "Autsch! meiner Schwänze!",
+			"1-2-3-4", "1 1-2 1-2-3-4",
+			10,8,10,10,10
+		));
+		/*mLevels.add(new Level(
+			30, "Single cut",
+			"1-2-3-4-5-6", "1-2-3 4-5-6",
+			10,8,10,10,10
+		));
+		mLevels.add(new Level(
+			30, "Call me with the solution",
+			"1-4-7 2-5-8 3-6-9", "1-2-3 4-5-6 7-8-9",
+			10,8,10,10,10
+		));*/
 	}
 	
 }
