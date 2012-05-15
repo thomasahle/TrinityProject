@@ -6,26 +6,26 @@ import static playn.core.PlayN.graphics;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponent;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComposite;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
-
 import playn.core.Canvas.LineJoin;
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Layer;
+import playn.core.Pointer;
 import playn.core.Pointer.Event;
 import playn.core.Pointer.Listener;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
-import sun.tools.tree.NewArrayExpression;
+
+import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComposite;
 
 
-public class UIComponentButton implements ToolListener{
+public class UIComponentButton implements ToolListener, Pointer.Listener {
 	
 	private GroupLayer layer;
 	
@@ -39,7 +39,7 @@ public class UIComponentButton implements ToolListener{
 
 	private boolean selected;
 
-	private Layer imageLayer;
+	private ImageLayer imageLayer;
 	private Layer imageSelLayer;
 
 	private Layer outlineLayer;
@@ -47,6 +47,10 @@ public class UIComponentButton implements ToolListener{
 	private ToolManager toolMan;
 
 	private UIToken tool;
+
+	private boolean mEnabled;
+
+	private Image mImage;
 
 	
 	private static final Map<UIToken, Image> MAP = new HashMap<UIComponentFactory.UIToken, Image>();{{
@@ -63,9 +67,10 @@ public class UIComponentButton implements ToolListener{
 		MAP.put(UIToken.FLIP, assets().getImage("images/pngs/flipComponentButtonImagePressed.png"));
 		MAP.put(UIToken.CAT, assets().getImage("images/pngs/concatComponentButtonImagePressed.png"));
 		MAP.put(UIToken.MERG, assets().getImage("images/pngs/splitComponentButtonImagePressed.png"));
-
 	}};
-		
+	
+	private static final Image mDisabledImage = graphics().createImage(1, 1);
+	
 	public UIComponentButton(final ToolManager toolMan, final UIToken comp){
 		this.toolMan = toolMan;
 		toolMan.add(this);
@@ -82,7 +87,8 @@ public class UIComponentButton implements ToolListener{
 		
 		layer = graphics().createGroupLayer();
 		
-		imageLayer = graphics().createImageLayer(MAP.get(comp));
+		mImage = MAP.get(comp);
+		imageLayer = graphics().createImageLayer(mImage);
 		
 		layer.add(imageLayer);
 		
@@ -103,22 +109,11 @@ public class UIComponentButton implements ToolListener{
 		
 //		layer.add(imageSelLayer);
 		
-		imageLayer.addListener(new Listener() {
-
-			@Override
-			public void onPointerStart(Event event) {
-				toolMan.setTool(tool);
-			}
-
-			@Override
-			public void onPointerEnd(Event event) {
-			}
-
-			@Override
-			public void onPointerDrag(Event event) {
-			}});
+		imageLayer.addListener(this);
 	}
-
+	
+	
+	
 	public Dimension getSize() {
 		return mSize;
 	}
@@ -147,5 +142,34 @@ public class UIComponentButton implements ToolListener{
 //			imageSelLayer.setVisible(true);
 		}
 		else toolsUnselected();
+	}
+	
+	public void enabled(boolean enabled) {
+		mEnabled = enabled;
+		if (enabled)
+			imageLayer.setImage(mImage);
+		if (!enabled)
+			imageLayer.setImage(mDisabledImage);
+	}
+	public boolean enabled() {
+		return mEnabled;
+	}
+	
+	@Override
+	public void onPointerStart(Event event) {
+		if (enabled())
+			toolMan.setTool(tool);
+	}
+
+	@Override
+	public void onPointerEnd(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPointerDrag(Event event) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -20,19 +20,17 @@ import playn.core.Pointer.Listener;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
-public class UIPallet implements Listener, HitTester{
+public class UIPallet implements HitTester{
 	
 	private GroupLayer mLayer;
 	private List<UIComponentButton> compList;
 	private Dimension mSize = new Dimension(0, 0);
 	private ImageLayer background;
 	private CanvasImage rect;
-	private LevelScene levelScene;
 	private float padding = 5.0f;
 	
 
-	public UIPallet(LevelScene levelScene) {
-		this.levelScene = levelScene;
+	public UIPallet() {
 		mLayer = graphics().createGroupLayer();
 
 		setBackground();
@@ -61,24 +59,6 @@ public class UIPallet implements Listener, HitTester{
 		sizeChanged();
 	}
 	
-	@Override
-	public void onPointerStart(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPointerEnd(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPointerDrag(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public Layer hitTest(Layer layer, Point p) {
 		// TODO Auto-generated method stub

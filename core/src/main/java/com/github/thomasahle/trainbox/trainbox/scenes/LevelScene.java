@@ -6,6 +6,9 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.log;
 import static playn.core.PlayN.pointer;
+
+import java.util.Arrays;
+
 import playn.core.CanvasImage;
 import playn.core.Font;
 import playn.core.GroupLayer;
@@ -224,19 +227,27 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		});
 		
 		// add the component pallet.
-		mPallet = new UIPallet(this);
+		mPallet = new UIPallet();
 		
 		UIComponentButton dupBut = new UIComponentButton(toolMan, UIToken.DUP);
 		UIComponentButton boxBut = new UIComponentButton(toolMan, UIToken.BOX);
 		UIComponentButton flipBut = new UIComponentButton(toolMan, UIToken.FLIP);
 		UIComponentButton catBut = new UIComponentButton(toolMan, UIToken.CAT);
 		UIComponentButton mergBut = new UIComponentButton(toolMan, UIToken.MERG);
-
-		mPallet.add(dupBut);
-		mPallet.add(boxBut);
-		mPallet.add(flipBut);
-		mPallet.add(catBut);
-		mPallet.add(mergBut);
+		
+		for (UIComponentButton but : Arrays.asList(dupBut, boxBut, flipBut, catBut, mergBut)) {
+			mPallet.add(but);
+		}
+		// We want to hide unused components for the first levels, as it makes the
+		// game easier to play. However it also makes it easier to win, so for the
+		// harder levels we always show everything.
+		if (mLevel.getLevel().levelNumber < 18) {
+			dupBut.enabled(mLevel.getLevel().dupsBest > 0);
+			boxBut.enabled(mLevel.getLevel().chainsBest > 0);
+			flipBut.enabled(mLevel.getLevel().flipsBest > 0);
+			catBut.enabled(mLevel.getLevel().unchainsBest > 0);
+			mergBut.enabled(mLevel.getLevel().splitsBest > 0);
+		}
 		
 		mPallet.getLayer().setTranslation(20, graphics().height() - 100 - 30);
 		
