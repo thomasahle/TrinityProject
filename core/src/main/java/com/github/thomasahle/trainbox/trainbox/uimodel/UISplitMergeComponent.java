@@ -95,7 +95,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	}
 	private void updateImages() {
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
-		if ((!mIngoing.isEmpty() && mUpgoing.contains(mIngoing.peekLast())) || (mIngoing.isEmpty() && mNextDirection == mUpgoing)) {
+		if ((!mIngoing.isEmpty() && mUpgoing.contains(mIngoing.get(mIngoing.size()-1))) || (mIngoing.isEmpty() && mNextDirection == mUpgoing)) {
 		//if (mNextDirection == mUpgoing) {
 			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
 			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
