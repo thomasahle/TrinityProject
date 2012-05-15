@@ -64,12 +64,30 @@ public class DemoScene implements Scene, Pointer.Listener {
         final Image demoPage3Image = assets().getImage("images/pngs/demoPage3.png");
         final Image demoPage4Image = assets().getImage("images/pngs/demoPage4.png");
         final Image demoPage5Image = assets().getImage("images/pngs/demoPage5.png");
+        final Image demoPage6Image = assets().getImage("images/pngs/demoPage6.png");
+        final Image demoPage7Image = assets().getImage("images/pngs/demoPage7.png");
+        final Image demoPage8Image = assets().getImage("images/pngs/demoPage8.png");
+        final Image demoPage9Image = assets().getImage("images/pngs/demoPage9.png");
 
+        
+        
+        
+        
+
+        
         final ImageLayer demoPage1ImageLayer = graphics().createImageLayer(demoPage1Image);
         final ImageLayer demoPage2ImageLayer = graphics().createImageLayer(demoPage2Image);
         final ImageLayer demoPage3ImageLayer = graphics().createImageLayer(demoPage3Image);
         final ImageLayer demoPage4ImageLayer = graphics().createImageLayer(demoPage4Image);
         final ImageLayer demoPage5ImageLayer = graphics().createImageLayer(demoPage5Image);
+        final ImageLayer demoPage6ImageLayer = graphics().createImageLayer(demoPage6Image);
+        final ImageLayer demoPage7ImageLayer = graphics().createImageLayer(demoPage7Image);
+        final ImageLayer demoPage8ImageLayer = graphics().createImageLayer(demoPage8Image);
+        final ImageLayer demoPage9ImageLayer = graphics().createImageLayer(demoPage9Image);
+
+        
+        
+        
 
         
         demoPages = new ArrayList();
@@ -78,6 +96,10 @@ public class DemoScene implements Scene, Pointer.Listener {
         demoPages.add(demoPage3ImageLayer);
         demoPages.add(demoPage4ImageLayer);
         demoPages.add(demoPage5ImageLayer);
+        demoPages.add(demoPage6ImageLayer);
+        demoPages.add(demoPage7ImageLayer);
+        demoPages.add(demoPage8ImageLayer);
+        demoPages.add(demoPage9ImageLayer);
 
 
 
