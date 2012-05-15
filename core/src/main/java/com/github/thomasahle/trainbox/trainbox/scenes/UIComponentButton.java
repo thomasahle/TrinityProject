@@ -48,7 +48,7 @@ public class UIComponentButton implements ToolListener, Pointer.Listener {
 
 	private UIToken tool;
 
-	private boolean mEnabled;
+	private boolean mEnabled = true;
 
 	private Image mImage;
 
