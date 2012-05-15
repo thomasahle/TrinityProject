@@ -192,7 +192,8 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		demoButtonImageLayer.setTranslation(120, 60);
 		levelPopulHomeButtonImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
-				trainBox.setScene(trainBox.getDemoScene());
+				trainBox.setScene(trainBox.getStartScene());
+
 			}
 		});
 	}
