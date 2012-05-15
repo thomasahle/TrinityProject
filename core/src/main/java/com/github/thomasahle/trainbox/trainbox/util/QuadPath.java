@@ -60,6 +60,16 @@ public class QuadPath {
 		return path;
 	}
 	
+	public void print12() {
+		PathIterator iter = pytagPath.pathIterator(new IdentityTransform(), SMOOTHNES);
+		float[] buffer = new float[6];
+		while (!iter.isDone()) {
+			log().debug(""+iter.currentSegment(buffer));
+			log().debug(Arrays.toString(buffer));
+			iter.next();
+		}
+	}
+	
 	/**
 	 * @param t how far to walk along the path
 	 * @return the position on the path that we are at after distance t
@@ -67,7 +77,8 @@ public class QuadPath {
 	public float[] evaluate(float t) {
 		PathIterator iter = pytagPath.pathIterator(new IdentityTransform(), SMOOTHNES);
 		float[] buffer = new float[6];
-		assert iter.currentSegment(buffer) == PathIterator.SEG_MOVETO;
+		int type = iter.currentSegment(buffer);
+		assert type == PathIterator.SEG_MOVETO;
 		float lastx = buffer[0];
 		float lasty = buffer[1];
 		if (t <= 0) {
@@ -76,7 +87,8 @@ public class QuadPath {
 		}
 		iter.next();
 		while (!iter.isDone()) {
-			assert iter.currentSegment(buffer) == PathIterator.SEG_LINETO;
+			int type2 = iter.currentSegment(buffer);
+			assert type2 == PathIterator.SEG_LINETO;
 			float segLength = dist(lastx-buffer[0], lasty-buffer[1]);
 			if (segLength >= t)
 				return lineCut(lastx, lasty, buffer, t);
@@ -94,12 +106,14 @@ public class QuadPath {
 			return new float[] {1, 0};
 		PathIterator iter = pytagPath.pathIterator(new IdentityTransform(), SMOOTHNES);
 		float[] buffer = new float[6];
-		assert iter.currentSegment(buffer) == PathIterator.SEG_MOVETO;
+		int type = iter.currentSegment(buffer);
+		assert type == PathIterator.SEG_MOVETO;
 		float lastx = buffer[0];
 		float lasty = buffer[1];
 		iter.next();
 		while (!iter.isDone()) {
-			assert iter.currentSegment(buffer) == PathIterator.SEG_LINETO;
+			int type2 = iter.currentSegment(buffer);
+			assert type2 == PathIterator.SEG_LINETO;
 			float segLength = dist(lastx-buffer[0], lasty-buffer[1]);
 			if (segLength >= t) {
 				float dx = (buffer[0]-lastx)/segLength;
@@ -131,7 +145,8 @@ public class QuadPath {
 		float t = 0;
 		PathIterator iter = pytagPath.pathIterator(new IdentityTransform(), SMOOTHNES);
 		float[] buffer = new float[6];
-		assert iter.currentSegment(buffer) == PathIterator.SEG_MOVETO;
+		int type = iter.currentSegment(buffer);
+		assert type == PathIterator.SEG_MOVETO;
 		float lastx = buffer[0];
 		float lasty = buffer[1];
 		// If we haven't reached the path yet
@@ -141,7 +156,8 @@ public class QuadPath {
 		// If it is in the path
 		iter.next();
 		while (!iter.isDone()) {
-			assert iter.currentSegment(buffer) == PathIterator.SEG_LINETO;
+			int type2 = iter.currentSegment(buffer);
+			assert type2 == PathIterator.SEG_LINETO;
 			float segLength = dist(lastx-buffer[0], lasty-buffer[1]);
 			if (buffer[0] >= x) {
 				//log().debug("Xs "+buffer[0]+" "+x+" "+lastx);

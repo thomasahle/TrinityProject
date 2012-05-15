@@ -17,6 +17,7 @@ import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Path;
 import pythagoras.f.Dimension;
+import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
@@ -94,7 +95,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 	}
 	private void updateImages() {
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
-		if (mNextDirection == mUpgoing) {
+		if ((!mIngoing.isEmpty() && mUpgoing.contains(mIngoing.get(mIngoing.size()-1))) || (mIngoing.isEmpty() && mNextDirection == mUpgoing)) {
+		//if (mNextDirection == mUpgoing) {
 			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
 			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
 		} else {
@@ -104,7 +106,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mLeftLayer.setImage(imageLeft);
 		
 		CanvasImage imageRight = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
-		if (mNextTaker == mTopTaker) {
+		if ((!mOutgoing.isEmpty() && mUpgoing.contains(mOutgoing.peek())) || (mOutgoing.isEmpty() && mNextTaker == mTopTaker)) {
 			ComponentHelper.drawBendTrack(imageRight.canvas(), mDownPathOut);
 			ComponentHelper.drawBendTrack(imageRight.canvas(), mUpPathOut);
 		} else {
@@ -122,6 +124,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		
 		Dimension newSize = new Dimension(
 				Math.max(mTopComp.getSize().width, mBotComp.getSize().width) + 2*SIDES_WIDTH,
 				mTopComp.getSize().height + mBotComp.getSize().height);
@@ -135,15 +138,28 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mSize = newSize;
 			fireSizeChanged(ourOldSize);
 			
-			// Scale: FIXME Doesn't work on components getting smaller
-			UIComponent topLeft = ((UIHorizontalComponent)mTopComp).getChildren().get(0);
-			UIComponent botLeft = ((UIHorizontalComponent)mBotComp).getChildren().get(0);
-			if (topLeft instanceof UIIdentityComponent && botLeft instanceof UIIdentityComponent) {
-				float newSizeTop = newSize.width - (mTopComp.getSize().width - topLeft.getSize().width) - 2*SIDES_WIDTH;
-				float newSizeBot = newSize.width - (mBotComp.getSize().width - botLeft.getSize().width) - 2*SIDES_WIDTH;
-				float dontGrowTooBig = Math.min(newSizeTop, newSizeBot) - 100;
-				((UIIdentityComponent)topLeft).setWidth((int)(newSizeTop - dontGrowTooBig));
-				((UIIdentityComponent)botLeft).setWidth((int)(newSizeBot - dontGrowTooBig));
+			// Scale
+			int diff = (int)(mTopComp.getSize().width - mBotComp.getSize().width);
+			if (Math.abs(diff) > 1) {
+				UIComposite biggest = (UIComposite)(diff > 0 ? mTopComp : mBotComp);
+				UIComposite smallest = (UIComposite)(diff < 0 ? mTopComp : mBotComp);
+				diff = Math.abs(diff);
+				// See how small we can make the biggest
+				for (UIComponent comp : biggest.getChildren())
+					if (comp instanceof UIIdentityComponent) {
+						UIIdentityComponent icomp = (UIIdentityComponent)comp;
+						int take = Math.max((int)icomp.getSize().width-100, 0);
+						take = Math.min(take, diff);
+						icomp.setWidth((int)icomp.getSize().width - take);
+						diff -= take;
+					}
+				// Scale the smallest one up
+				for (UIComponent comp : smallest.getChildren())
+					if (comp instanceof UIIdentityComponent) {
+						UIIdentityComponent icomp = (UIIdentityComponent)comp;
+						icomp.setWidth((int)icomp.getSize().width + diff);
+						break;
+					}
 			}
 			
 			updatePaths();
@@ -210,20 +226,19 @@ public class UISplitMergeComponent extends AbstractComposite {
 		if (paused())
 			return;
 		
-		moveAmazingTrains(mIngoing, delta, getDeepPosition().x, mUpPathIn, mDownPathIn, mTopComp, mBotComp);
+		float tBorder = Math.min(mUpPathIn.calculateT(mTopComp.leftBlock()), mDownPathIn.calculateT(mBotComp.leftBlock()));
+		moveAmazingTrains(mIngoing, delta, getDeepPosition().x, mUpPathIn, mDownPathIn, tBorder, mTopComp, mBotComp);
 		
 		// Update children
 		super.update(delta);
 		
-		moveAmazingTrains(mOutgoing, delta, getDeepPosition().x + getSize().width - SIDES_WIDTH, mUpPathOut, mDownPathOut, getTrainTaker(), getTrainTaker());
+		//tBorder = mUpPathOut.calculateT(getTrainTaker().leftBlock());
+		tBorder = Float.MAX_VALUE;
+		moveAmazingTrains(mOutgoing, delta, getDeepPosition().x + getSize().width - SIDES_WIDTH, mUpPathOut, mDownPathOut, tBorder, getTrainTaker(), getTrainTaker());
 		
 	}
 	
-	private void moveAmazingTrains(List<UITrain> trains, float delta, float compLeft, QuadPath uppath, QuadPath downpath, TrainTaker top, TrainTaker bot) {
-		// Left side
-		float tBorder = uppath.calculateT(mTopComp.leftBlock());
-		//float botBorder = mDownPathIn.calculateT(mBotComp.leftBlock());
-		
+	private void moveAmazingTrains(List<UITrain> trains, float delta, float compLeft, QuadPath uppath, QuadPath downpath, float tBorder, TrainTaker top, TrainTaker bot) {
 		for (Iterator<UITrain> it = trains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
@@ -290,7 +305,18 @@ public class UISplitMergeComponent extends AbstractComposite {
 			}
 			
 			if (newRight > compRight) {
+				Point oldPos = train.getPosition();
 				taker.takeTrain(train);
+				// Hack to avoid flicker
+				if (trains == mOutgoing) {
+					float shifty = oldPos.y - train.getPosition().y;
+					for (UICarriage car : train.getCarriages()) {
+						car.setPosition(new Point(
+								car.getPosition().x,
+								car.getPosition().y+shifty));
+					}
+				}
+				updateImages();
 			}
 			
 			tBorder -= UITrain.PADDING;
@@ -303,6 +329,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mIngoing.add(train);
 		mNextDirection.add(train);
 		
+		// Hack to avoid flicker
 		Point oldPos = train.getPosition();
 		if (mNextDirection == mUpgoing) {
 			train.vertCenterOn(mTopComp);
@@ -328,6 +355,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	private TrainTaker mTopTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
+			assert mOutgoing.isEmpty();
 			mUpgoing.add(train);
 			mOutgoing.add(train);
 			mNextTaker = mBotTaker;
@@ -336,7 +364,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 		@Override
 		public float leftBlock() {
 			float end = mTopComp.getDeepPosition().x + mTopComp.getSize().width;
-			if (mNextTaker == this)
+			if (mNextTaker == this && mOutgoing.isEmpty())
 				return Math.max(getTrainTaker().leftBlock(), end);
 			return end;
 		}
@@ -345,6 +373,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	private TrainTaker mBotTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
+			assert mOutgoing.isEmpty();
 			mDowngoing.add(train);
 			mOutgoing.add(train);
 			mNextTaker = mTopTaker;
@@ -352,8 +381,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 		}
 		@Override
 		public float leftBlock() {
-			float end = mTopComp.getDeepPosition().x + mTopComp.getSize().width;
-			if (mNextTaker == this)
+			float end = mBotComp.getDeepPosition().x + mBotComp.getSize().width;
+			if (mNextTaker == this && mOutgoing.isEmpty())
 				return Math.max(getTrainTaker().leftBlock(), end);
 			return end;
 		}

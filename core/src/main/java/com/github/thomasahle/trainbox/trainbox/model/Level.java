@@ -84,12 +84,12 @@ public class Level {
 	
 	private static final List<Level> mLevels = new ArrayList<Level>();
 	public static final List<Level> levels = Collections.unmodifiableList(mLevels);
-	static{
+	static {
 		/** Here we code all of the levels */
 		
 		mLevels.add(new Level(
 			0, "Seeing double",
-			"2 1", "2 2 1 1",
+			"1 2", "1 1 2 2",
 			1,0,0,0,0
 		));
 		mLevels.add(new Level(
@@ -100,17 +100,17 @@ public class Level {
 		mLevels.add(new Level(
 			2, "Twins", // what do they call it on school trips when everyone partners up, that could be the title here too.
 			"1 1", "1-1 1-1",
-			2,1,0,0,0
+			1,1,0,0,0
 		));
 		mLevels.add(new Level(
 			3, "Quads",
 			"1 1", "1-1-1-1 1-1-1-1",
-			3,2,0,0,0
+			2,2,0,0,0
 		));
 		mLevels.add(new Level(
 			4, "Twisted Train Builder",
 			"2 1", "2-1-2-1 2-1-2-1",
-			3,2,0,0,0
+			2,2,0,0,0
 		));
 		mLevels.add(new Level(
 			5, "Break it up",
@@ -119,28 +119,28 @@ public class Level {
 		));
 		mLevels.add(new Level(
 			6, "Re-twist",
-			"2 1", "2 1 2 1 2 1 2 1",
-			3,1,1,0,0
+			"1 2", "1 2 1 2",
+			1,1,1,0,0
 		));
 		mLevels.add(new Level(
-			7, "Warm-up (track-split)",
-			"2 1", "1 2 1",
-			1,0,0,1,1
+			7, "Warm-up (flip)",
+			"2 1 4 3", "1 2 3 4",
+			0,0,0,1,0
 		));
 		mLevels.add(new Level(
-			8, "Odd one out",
+			8, "Even one out",
+			"1 2", "1 2 1",
+			1,0,0,0,1
+		));
+		mLevels.add(new Level(
+			9, "But, it's odd? (track-split)",
 			"1", "1 1 1",
 			2,0,0,0,1
 		));
 		mLevels.add(new Level(
-			9, "Warm-up (flip)",
-			"4 3 2 1", "3 4 1 2",
-			0,0,0,1,0
-		));
-		mLevels.add(new Level(
-			10, "Really Twisted Train Builder",
-			"2 1", "1-2-1-2 1-2-1-2",
-			3,2,0,1,0
+			10, "Flip or mirror",
+			"2 1", "1 2 2 1",
+			1,1,1,1,1
 		));
 		mLevels.add(new Level(
 			11, "Reverse Express",
@@ -149,13 +149,13 @@ public class Level {
 			0,1,1,2,0
 		));
 		mLevels.add(new Level(
-			12, "Reverse Small-Train",
+			12, "Same same, but smaller?",
 			"3 2 1", "1 2 3",
 			0,0,0,1,1
 		));
 		mLevels.add(new Level(
-			13, "Small Reshuffle",
-			"4-3 2-1", "4-2 3-1",
+			13, "Know your matrix",
+			"1-2 3-4", "1-3 2-4",
 			0,2,1,0,1,
 			0,1,2,0,1
 		));
@@ -166,44 +166,44 @@ public class Level {
 			0,0,0,7,3
 		));
 		mLevels.add(new Level(
-			15, "Gigantic Reshuffle",
-			"8-7-6-5 4-3-2-1", "8-4 7-3 6-2 5-1",
-			0,1,2,0,1
+			15, "Not just random",
+			"1 2 3 4 5 6 7 8", "1 5 2 6 3 7 4 8",
+			0,2,2,0,1
 		));
 		mLevels.add(new Level(
-			16, "Rotate Express",
-			"4 3 2 1", "1 4 3 2",
+			16, "Overtaking",
+			"2 3 4 1", "1 2 3 4",
 			0,1,1,3,1
 		));
 		mLevels.add(new Level(
-			17, "Titanic Reshuffle",
-			"8-7 6-5 4-3 2-1", "8-6-4-2 7-5-3-1",
+			17, "Montgomery Reshuffle",
+			"1-2 3-4 5-6 7-8", "1-3-5-7 2-4-6-8",
 			0,1,4,0,3
 		));
 		mLevels.add(new Level(
-			18, "Prime Train Builder (5)",
+			18, "Bigger and Better Builder",
 			"1", "1 1 1 1 1",
 			3,1,1,0,1,
 			4,0,0,0,2
 		));
 		mLevels.add(new Level(
-			19, "Warm-up (dup)",
-			"2 1", "2 2 1 1",
-			3,2,0,1,0
+			19, "Mirror Reshuffle",
+			"1-2-3-4", "1-4 2-3 3-2 4-1",
+			1,1,0,1,1
 		));
 		mLevels.add(new Level(
-			20, "Triangle Number Builder (7)",
+			20, "There are seven",
 			"1", "1 1 1 1 1 1 1",
 			5,0,0,0,2
 		));
 		mLevels.add(new Level(
 			21, "Rotate Small-Train",
 			"3 2 1", "1 3 2",
-			0,2,2,2,2
+			0,1,1,1,1
 		));
 		mLevels.add(new Level(
 			22, "Rotate Mega-Freight",
-			"8 7 6 5 4 3 2 1", "1 8 7 6 5 4 3 2",
+			"2 3 4 5 6 7 8 1", "1 2 3 4 5 6 7 8",
 			0,3,2,6,2
 		));
 		mLevels.add(new Level(
@@ -231,8 +231,27 @@ public class Level {
 			"5 4 3 2 1", "5-4-3-2-1",
 			0,6,3,0,6
 		));
-
-
+		mLevels.add(new Level(
+			28, "Zero to Three",
+			"0 1", "0-0 0-1 1-0 1-1",
+			3,8,1,0,4
+		));
+		// The following might not be solvable
+		mLevels.add(new Level(
+			29, "Autsch! meiner Schwänze!",
+			"1-2-3-4", "1 1-2 1-2-3-4",
+			10,8,10,10,10
+		));
+		/*mLevels.add(new Level(
+			30, "Single cut",
+			"1-2-3-4-5-6", "1-2-3 4-5-6",
+			10,8,10,10,10
+		));
+		mLevels.add(new Level(
+			30, "Call me with the solution",
+			"1-4-7 2-5-8 3-6-9", "1-2-3 4-5-6 7-8-9",
+			10,8,10,10,10
+		));*/
 	}
 	
 }

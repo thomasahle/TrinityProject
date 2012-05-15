@@ -8,10 +8,14 @@ import playn.core.Font;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Key;
+import playn.core.Keyboard;
+import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
+import playn.core.PlayN;
 import playn.core.Pointer;
-import playn.core.TextFormat;
 import playn.core.Pointer.Event;
+import playn.core.TextFormat;
 import playn.core.TextFormat.Alignment;
 import playn.core.TextLayout;
 
@@ -19,7 +23,7 @@ import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
 
-public class LevelSelectScene implements Scene {
+public class LevelSelectScene implements Scene, Keyboard.Listener {
 	
 	private final TrainBox trainBox;
 	int width = graphics().width();
@@ -29,6 +33,7 @@ public class LevelSelectScene implements Scene {
     GroupLayer demoLayer;
     final ImageLayer demoPageImageLayer;
 	private GroupLayer demoLayerLevels;
+	private boolean tPressed;
 	
 	public LevelSelectScene(final TrainBox trainBox ){
 		this.trainBox = trainBox;
@@ -69,6 +74,14 @@ public class LevelSelectScene implements Scene {
 				levelButton = createPlayableButton(levelButtonOk, levelButtonActive, i);
 			} else {
 				levelButton = createUnPlayableButton(levelButtonNotOk);
+				final int level = i;
+				levelButton.addListener(new Pointer.Adapter() {
+					@Override
+					public void onPointerStart(Event event) {
+						if (tPressed)
+							trainBox.setLevel(level);
+					}
+				});
 			}
 			demoLayerLevels.add(levelButton);
 			levelButton.setTranslation(x, y);
@@ -130,6 +143,7 @@ public class LevelSelectScene implements Scene {
     	initializeLevelButtons();
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
+	    PlayN.keyboard().setListener(this);
 	}
 
 	@Override
@@ -138,6 +152,18 @@ public class LevelSelectScene implements Scene {
 		demoLayerLevels.destroy();
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
+	    PlayN.keyboard().setListener(null);
+	}
+
+	@Override
+	public void onKeyDown(playn.core.Keyboard.Event event) {
+		tPressed = event.key() == Key.T;
+	}
+	@Override
+	public void onKeyTyped(TypedEvent event) {}
+	@Override
+	public void onKeyUp(playn.core.Keyboard.Event event) {
+		tPressed = false;
 	}
 
 }

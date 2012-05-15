@@ -25,12 +25,14 @@ import playn.core.Mouse.MotionEvent;
 import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
 import playn.core.Pointer.Event;
+import playn.core.TextFormat.Alignment;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
@@ -58,7 +60,6 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	int currPauseGoButtonImageIndex = 0;
 
 	GroupLayer levelStatusLayer;
-	ImageLayer levelCompletedBlurbImageLayer;
 	GroupLayer levelControlLayer;
 	ImageLayer pauseButtonImageLayer;
 	GroupLayer levelPopupLayer;
@@ -99,12 +100,12 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	@Override
 	public void onAttach() {
 		graphics().rootLayer().add(mBgLayer);
+		graphics().rootLayer().add(titleLayer);
 		graphics().rootLayer().add(mLevel.layer());
 		graphics().rootLayer().add(levelControlLayer);
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		graphics().rootLayer().add(levelPopupLayer);
-		graphics().rootLayer().add(titleLayer);
 		keyboard().setListener(this);
 		mouse().setListener(this);
 	}
@@ -113,12 +114,12 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	public void onDetach() {
 		// This helps us avoid a memory leak
 		graphics().rootLayer().remove(mBgLayer);
+		graphics().rootLayer().remove(titleLayer);
 		graphics().rootLayer().remove(mLevel.layer());
 		graphics().rootLayer().remove(levelControlLayer);
 		graphics().rootLayer().remove(pauseButtonImageLayer);
 		graphics().rootLayer().remove(levelStatusLayer);
 		graphics().rootLayer().remove(levelPopupLayer);
-		graphics().rootLayer().remove(titleLayer);
 		keyboard().setListener(null);
 		mouse().setListener(null);
 	}
@@ -261,15 +262,20 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		levelStatusLayer = graphics().createGroupLayer();
 		levelStatusLayer.setTranslation(WIDTH/20+40, HEIGHT/20);
 
+		// 
+		
 		Image levelFailedBlurbImage = assets().getImage("images/pngs/levelFailedBlurb.png");
 		Image levelCompletedBlurb = assets().getImage("images/pngs/levelCompleteBlurb.png");
 		final Layer levelFailedBlurbImageLayer = graphics().createImageLayer(levelFailedBlurbImage);
-		levelCompletedBlurbImageLayer = graphics().createImageLayer(levelCompletedBlurb);
+		final Layer levelCompletedBlurbImageLayer = graphics().createImageLayer(levelCompletedBlurb);
+		final ImageLayer levelStatusText = graphics().createImageLayer();
 		levelStatusLayer.add(levelCompletedBlurbImageLayer);
 		levelStatusLayer.add(levelFailedBlurbImageLayer);
+		levelStatusLayer.add(levelStatusText);
 		levelFailedBlurbImageLayer.setVisible(false);
 		levelCompletedBlurbImageLayer.setVisible(false);
 		levelStatusLayer.setVisible(false);
+		levelStatusText.setVisible(false);
 		
 		//initialise the next button image layer
 		Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
@@ -281,6 +287,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusLayer.setVisible(false);
+				levelStatusText.setVisible(false);
 				trainBox.setLevel(mLevel.getLevel().levelNumber+1);
 			}
 		});
@@ -295,6 +302,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 			@Override public void onPointerStart(Event event) {
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(false);
+				levelStatusText.setVisible(false);
 				levelStatusLayer.setVisible(false);
 				trainBox.setLevel(mLevel.getLevel().levelNumber);
 			}
@@ -308,16 +316,38 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 				levelCompletedBlurbImageLayer.setVisible(true);
 				nextButtonLeveLStatusImageLayer.setVisible(true);
 				retryButtonLeveLStatusImageLayer.setVisible(false);
+				levelStatusText.setVisible(true);
+				
+				int used = mLevel.countUserComponents();
+				int needed = mLevel.getLevel().dupsBest + mLevel.getLevel().chainsBest + mLevel.getLevel().flipsBest + mLevel.getLevel().unchainsBest + mLevel.getLevel().splitsBest;
+				String comment = used == needed ? "You found the perfect solution!" : "Your solution used " + (used-needed) + " more\ncomponents than needed";
+				levelStatusText.setImage(createCommentImage(comment));
+				levelStatusText.setTranslation(100, 425);
 			}
 			@Override public void levelFailed(String message) {
-				log().debug("Level Failed :(");
 				levelStatusLayer.setVisible(true);
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelFailedBlurbImageLayer.setVisible(true);
 				nextButtonLeveLStatusImageLayer.setVisible(false);
 				retryButtonLeveLStatusImageLayer.setVisible(true);
+				levelStatusText.setVisible(true);
+				
+				levelStatusText.setImage(createCommentImage(message));
+				levelStatusText.setTranslation(50, 500);
 			}
 		});
+	}
+	
+	private Image createCommentImage(String comment) {
+		CanvasImage textImage = graphics().createImage(graphics().screenWidth(), 400);
+		Font font = graphics().createFont("Sans", Font.Style.BOLD, 30);
+		TextFormat format = new TextFormat().withFont(font)
+				.withAlignment(Alignment.CENTER)
+				.withEffect(TextFormat.Effect.outline(0xff000000))
+				.withTextColor(0xfffdd99b);
+		textImage.canvas().drawText(graphics().layoutText(comment, format), 0,
+				0);
+		return textImage;
 	}
 	
 	private void initToolsAndDragging() {

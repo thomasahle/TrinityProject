@@ -153,4 +153,21 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	public boolean insertChildAt(UIComponent child, Point position) {
 		return mTrack.insertChildAt(child, position);
 	}
+	
+	public int countUserComponents() {
+		return countChildrenRecursively(mTrack);
+	}
+	private int countChildrenRecursively(UIComponent comp) {
+		if (comp instanceof UIComposite) {
+			int res = 0;
+			for (UIComponent child : ((UIComposite)comp).getChildren())
+				res += countChildrenRecursively(child);
+			if (comp instanceof UISplitMergeComponent)
+				res += 1;
+			return res;
+		}
+		if (comp instanceof UIIdentityComponent || comp instanceof UIStartComponent || comp instanceof UIGoalComponent)
+			return 0;
+		return 1;
+	}
 }
