@@ -88,22 +88,22 @@ public class Level {
 		/** Here we code all of the levels */
 		
 		mLevels.add(new Level(
-			0, "Warm-up (dup)",
+			0, "Seeing double",
 			"2 1", "2 2 1 1",
 			1,0,0,0,0
 		));
 		mLevels.add(new Level(
-			1, "Warm-up (chain)",
+			1, "Pre-paired",
 			"1 1 1 1", "1-1 1-1",
 			0,1,0,0,0
 		));
 		mLevels.add(new Level(
-			2, "Express Train Builder",
+			2, "Twins", // what do they call it on school trips when everyone partners up, that could be the title here too.
 			"1 1", "1-1 1-1",
 			2,1,0,0,0
 		));
 		mLevels.add(new Level(
-			3, "Freight Train Builder",
+			3, "Quads",
 			"1 1", "1-1-1-1 1-1-1-1",
 			3,2,0,0,0
 		));
@@ -113,7 +113,7 @@ public class Level {
 			3,2,0,0,0
 		));
 		mLevels.add(new Level(
-			5, "Warm-up (unchain)",
+			5, "Break it up",
 			"7 6-5 4 3-2-1", "7 6 5 4 3 2 1",
 			0,0,1,0,0
 		));
@@ -125,10 +125,10 @@ public class Level {
 		mLevels.add(new Level(
 			7, "Warm-up (track-split)",
 			"2 1", "1 2 1",
-			1,0,0,0,1
+			1,0,0,1,1
 		));
 		mLevels.add(new Level(
-			8, "Odd Train Builder",
+			8, "Odd one out",
 			"1", "1 1 1",
 			2,0,0,0,1
 		));
