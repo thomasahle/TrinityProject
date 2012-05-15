@@ -74,15 +74,15 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		updateTracks();
 		xpadding(ComponentHelper.RAIL_EXTRA);
 
-		int compCtr = 0;
+		float x = UITrain.PADDING;
 		for (UITrain train : trains) {
 			train.setSpeed(0f);
 			Layer l = train.getLayer();
-			l.setAlpha(0.4f);
+			l.setAlpha(0.5f);
 			// position expected trains.
-			l.setTranslation(compCtr * (train.getSize().width + UITrain.PADDING) + UITrain.PADDING, -train.getSize().height);
+			l.setTranslation(x, -train.getSize().height);
 			mFrontLayer.add(l);
-			compCtr++;
+			x += train.getSize().width + UITrain.PADDING;
 		}
 	}
 
