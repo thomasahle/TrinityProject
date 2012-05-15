@@ -6,9 +6,12 @@ import static playn.core.PlayN.log;
 import java.util.ArrayList;
 import java.util.List;
 
+import playn.core.CanvasImage;
+import playn.core.Font;
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
+import playn.core.TextFormat;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 

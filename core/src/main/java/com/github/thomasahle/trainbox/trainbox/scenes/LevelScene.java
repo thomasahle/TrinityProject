@@ -7,11 +7,13 @@ import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.log;
 import static playn.core.PlayN.pointer;
 import playn.core.CanvasImage;
+import playn.core.Font;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Key;
 import playn.core.Keyboard;
+import playn.core.TextFormat;
 import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
 import playn.core.Mouse;
@@ -53,13 +55,11 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	int currPauseGoButtonImageIndex = 0;
 
 	GroupLayer levelStatusLayer;
-	ImageLayer levelFailedBlurbImageLayer;
 	ImageLayer levelCompletedBlurbImageLayer;
-	ImageLayer retryButtonLeveLStatusImageLayer;
-	ImageLayer nextButtonLeveLStatusImageLayer;
 	GroupLayer levelControlLayer;
 	ImageLayer pauseButtonImageLayer;
 	GroupLayer levelPopupLayer;
+	ImageLayer titleLayer;
 	
 	public LevelScene(TrainBox trainBox, Level level) {
 		this.trainBox = trainBox;
@@ -75,9 +75,19 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		initToolsAndDragging();
 		initLevelController();
 		initLevelStatus();
+		initLevelText();
 		initLevelPopup();
 	}
 	
+	private void initLevelText() {
+		CanvasImage textImage = graphics().createImage(graphics().screenWidth(), 400);
+		Font font = graphics().createFont("Sans", Font.Style.BOLD, 30);
+		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff565248)).withTextColor(0xffffffff);
+		textImage.canvas().drawText(graphics().layoutText(mLevel.getLevel().title, format), 0, 0);
+		titleLayer = graphics().createImageLayer(textImage);
+		titleLayer.setTranslation(50, 35);
+	}
+
 	@Override
 	public void update(float delta) {
 		mLevel.update(delta);
@@ -91,6 +101,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		graphics().rootLayer().add(pauseButtonImageLayer);
 		graphics().rootLayer().add(levelStatusLayer);
 		graphics().rootLayer().add(levelPopupLayer);
+		graphics().rootLayer().add(titleLayer);
 		keyboard().setListener(this);
 		mouse().setListener(this);
 	}
@@ -104,6 +115,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		graphics().rootLayer().remove(pauseButtonImageLayer);
 		graphics().rootLayer().remove(levelStatusLayer);
 		graphics().rootLayer().remove(levelPopupLayer);
+		graphics().rootLayer().remove(titleLayer);
 		keyboard().setListener(null);
 		mouse().setListener(null);
 	}
@@ -239,7 +251,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 
 		Image levelFailedBlurbImage = assets().getImage("images/pngs/levelFailedBlurb.png");
 		Image levelCompletedBlurb = assets().getImage("images/pngs/levelCompleteBlurb.png");
-		levelFailedBlurbImageLayer = graphics().createImageLayer(levelFailedBlurbImage);
+		final Layer levelFailedBlurbImageLayer = graphics().createImageLayer(levelFailedBlurbImage);
 		levelCompletedBlurbImageLayer = graphics().createImageLayer(levelCompletedBlurb);
 		levelStatusLayer.add(levelCompletedBlurbImageLayer);
 		levelStatusLayer.add(levelFailedBlurbImageLayer);
@@ -249,7 +261,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		
 		//initialise the next button image layer
 		Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
-		nextButtonLeveLStatusImageLayer = graphics().createImageLayer(nextButtonImage);
+		final Layer nextButtonLeveLStatusImageLayer = graphics().createImageLayer(nextButtonImage);
 		levelStatusLayer.add(nextButtonLeveLStatusImageLayer);
 		nextButtonLeveLStatusImageLayer.setTranslation(680, 520);
 		nextButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
@@ -264,7 +276,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		//initialise the retry button image layer
 		//TODO create an image called retryButton and replace the text below VVVV
 		Image retryButtonImage = assets().getImage("images/pngs/retryButton.png");
-		retryButtonLeveLStatusImageLayer = graphics().createImageLayer(retryButtonImage);
+		final Layer retryButtonLeveLStatusImageLayer = graphics().createImageLayer(retryButtonImage);
 		levelStatusLayer.add(retryButtonLeveLStatusImageLayer);
 		retryButtonLeveLStatusImageLayer.setTranslation(680, 520);
 		retryButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
