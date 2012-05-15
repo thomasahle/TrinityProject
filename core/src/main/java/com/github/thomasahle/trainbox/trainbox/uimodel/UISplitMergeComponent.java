@@ -17,6 +17,7 @@ import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.Path;
 import pythagoras.f.Dimension;
+import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
@@ -122,6 +123,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
+		
 		Dimension newSize = new Dimension(
 				Math.max(mTopComp.getSize().width, mBotComp.getSize().width) + 2*SIDES_WIDTH,
 				mTopComp.getSize().height + mBotComp.getSize().height);
@@ -135,15 +137,27 @@ public class UISplitMergeComponent extends AbstractComposite {
 			mSize = newSize;
 			fireSizeChanged(ourOldSize);
 			
-			// Scale: FIXME Doesn't work on components getting smaller
-			UIComponent topLeft = ((UIHorizontalComponent)mTopComp).getChildren().get(0);
-			UIComponent botLeft = ((UIHorizontalComponent)mBotComp).getChildren().get(0);
-			if (topLeft instanceof UIIdentityComponent && botLeft instanceof UIIdentityComponent) {
-				float newSizeTop = newSize.width - (mTopComp.getSize().width - topLeft.getSize().width) - 2*SIDES_WIDTH;
-				float newSizeBot = newSize.width - (mBotComp.getSize().width - botLeft.getSize().width) - 2*SIDES_WIDTH;
-				float dontGrowTooBig = Math.min(newSizeTop, newSizeBot) - 100;
-				((UIIdentityComponent)topLeft).setWidth((int)(newSizeTop - dontGrowTooBig));
-				((UIIdentityComponent)botLeft).setWidth((int)(newSizeBot - dontGrowTooBig));
+			// Scale
+			float diff = mTopComp.getSize().width - mBotComp.getSize().width;
+			if (Math.abs(diff) > 2) {
+				UIComposite biggest = (UIComposite)(diff > 0 ? mTopComp : mBotComp);
+				UIComposite smallest = (UIComposite)(diff < 0 ? mTopComp : mBotComp);
+				diff = Math.abs(diff);
+				// See how small we can make the biggest
+				for (UIComponent comp : biggest.getChildren())
+					if (comp instanceof UIIdentityComponent) {
+						UIIdentityComponent icomp = (UIIdentityComponent)comp;
+						int take = Math.max((int)icomp.getSize().width-100, 0);
+						icomp.setWidth((int)icomp.getSize().width - take);
+						diff -= take;
+					}
+				// Scale the smallest one up
+				for (UIComponent comp : smallest.getChildren())
+					if (comp instanceof UIIdentityComponent) {
+						UIIdentityComponent icomp = (UIIdentityComponent)comp;
+						icomp.setWidth((int)(icomp.getSize().width + diff));
+						break;
+					}
 			}
 			
 			updatePaths();
