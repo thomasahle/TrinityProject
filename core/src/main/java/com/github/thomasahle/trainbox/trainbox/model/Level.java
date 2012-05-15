@@ -199,7 +199,7 @@ public class Level {
 		mLevels.add(new Level(
 			21, "Rotate Small-Train",
 			"3 2 1", "1 3 2",
-			0,2,2,2,2
+			0,1,1,1,1
 		));
 		mLevels.add(new Level(
 			22, "Rotate Mega-Freight",
