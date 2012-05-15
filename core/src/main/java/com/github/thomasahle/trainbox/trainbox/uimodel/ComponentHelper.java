@@ -83,7 +83,6 @@ public class ComponentHelper {
 		for (int i = 0; i < nSleepers; i++) {
 			float t = (i+0.5f) * (SLEEPER_WIDTH + actualSpace);
 			float[] pos = path.evaluate(t);
-			PlayN.log().debug("Putting sleeper at "+Arrays.toString(pos));
 			float[] slope = path.evaluateSlope(t);
 			Path rect = ctx.createPath();
 			CanvasHelper.roundRect(rect,
