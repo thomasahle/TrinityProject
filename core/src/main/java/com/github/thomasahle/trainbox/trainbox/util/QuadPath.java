@@ -89,7 +89,6 @@ public class QuadPath {
 		while (!iter.isDone()) {
 			int type2 = iter.currentSegment(buffer);
 			assert type2 == PathIterator.SEG_LINETO;
-			log().debug("Any ys?: "+Arrays.toString(buffer));
 			float segLength = dist(lastx-buffer[0], lasty-buffer[1]);
 			if (segLength >= t)
 				return lineCut(lastx, lasty, buffer, t);
