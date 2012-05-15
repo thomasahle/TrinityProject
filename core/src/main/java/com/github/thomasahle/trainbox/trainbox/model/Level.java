@@ -166,70 +166,70 @@ public class Level {
 			0,0,0,7,3
 		));
 		mLevels.add(new Level(
-			15, "Not just random",
+			15, "The small difference",
+			"0 1", "0-0-1-1 0-1-0-1",
+			3,4,0,0,1
+		));
+		mLevels.add(new Level(
+			16, "Not just random",
 			"1 2 3 4 5 6 7 8", "1 5 2 6 3 7 4 8",
 			0,2,2,0,1
 		));
 		mLevels.add(new Level(
-			16, "Overtaking",
+			17, "Overtaking",
 			"2 3 4 1", "1 2 3 4",
 			0,1,1,3,1
 		));
 		mLevels.add(new Level(
-			17, "Montgomery Reshuffle",
+			18, "Montgomery Reshuffle",
 			"1-2 3-4 5-6 7-8", "1-3-5-7 2-4-6-8",
 			0,1,4,0,3
 		));
 		mLevels.add(new Level(
-			18, "Bigger and Better Builder",
+			19, "Bigger and Better Builder",
 			"1", "1 1 1 1 1",
 			3,1,1,0,1,
 			4,0,0,0,2
 		));
 		mLevels.add(new Level(
-			19, "Mirror Reshuffle",
+			20, "Mirror Reshuffle",
 			"1-2-3-4", "1-4 2-3 3-2 4-1",
 			1,1,0,1,1
 		));
 		mLevels.add(new Level(
-			20, "There are seven",
+			21, "There are seven",
 			"1", "1 1 1 1 1 1 1",
 			5,0,0,0,2
 		));
 		mLevels.add(new Level(
-			21, "Rotate Small-Train",
+			22, "Rotate Small-Train",
 			"3 2 1", "1 3 2",
 			0,1,1,1,1
 		));
 		mLevels.add(new Level(
-			22, "Rotate Mega-Freight",
-			"2 3 4 5 6 7 8 1", "1 2 3 4 5 6 7 8",
-			0,3,2,6,2
-		));
-		mLevels.add(new Level(
-			23, "Lame Octopus",
-			"7 6 5 4 3 2 1", "1 2 3 4 5 6 7",
-			0,1,1,3,2
-		));
-		mLevels.add(new Level(
-			24, "Triple Team",
+			23, "Triple Team",
 			"3 2 1", "3-2-1",
 			0,3,1,0,2
 		));
 		mLevels.add(new Level(
-			25, "Permutations",
-			"0 1", "0-0-0-0 1-0-0-0 0-1-0-0 0-0-1-0 0-0-0-1",
-			4,5,1,0,1
+			24, "Lame Octopus",
+			"7 6 5 4 3 2 1", "1 2 3 4 5 6 7",
+			0,1,1,3,2
 		));
 		mLevels.add(new Level(
-			26, "Permutations",
-			"0 0 0 1", "0-0-0-0 1-0-0-0 0-1-0-0 0-0-1-0 0-0-0-1",
-			3,5,1,0,2
+			25, "Rotate Mega-Freight",
+			"2 3 4 5 6 7 8 1", "1 2 3 4 5 6 7 8",
+			0,3,2,6,2
 		));
 		mLevels.add(new Level(
-			27, "Mafia Gang",
+			26, "Mafia Gang",
 			"5 4 3 2 1", "5-4-3-2-1",
 			0,6,3,0,6
+		));
+		mLevels.add(new Level(
+			27, "Permutations",
+			"0 0 0 1", "0-0-0-0 1-0-0-0 0-1-0-0 0-0-1-0 0-0-0-1",
+			3,5,1,0,2
 		));
 		mLevels.add(new Level(
 			28, "Zero to Three",
