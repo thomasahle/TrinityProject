@@ -40,6 +40,6 @@ public class LevelTracker {
 			int prevLevel = Integer.parseInt(s);
 			if(prevLevel>=STARTLEVEL) return prevLevel;
 		}catch(Exception e){}
-		return 0;
+		return STARTLEVEL;
 	}
 }
