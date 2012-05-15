@@ -1,33 +1,25 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
-import static playn.core.PlayN.log;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
-import static playn.core.PlayN.keyboard;
-import static playn.core.PlayN.pointer;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
-import com.github.thomasahle.trainbox.trainbox.model.ComponentFactory;
-import com.github.thomasahle.trainbox.trainbox.model.Level;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
-import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
-import com.sun.tools.javac.util.Log;
-
 import playn.core.Canvas;
 import playn.core.CanvasImage;
+import playn.core.Font;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.Keyboard;
-import playn.core.Keyboard.TypedEvent;
-import playn.core.PlayN;
+import playn.core.Layer;
 import playn.core.Pointer;
+import playn.core.TextFormat;
 import playn.core.Pointer.Event;
+import playn.core.TextFormat.Alignment;
+import playn.core.TextLayout;
 
-public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Listener{
+import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+import com.github.thomasahle.trainbox.trainbox.model.Level;
+import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
+
+public class LevelSelectScene implements Scene {
 	
 	private final TrainBox trainBox;
 	int width = graphics().width();
@@ -37,12 +29,7 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
     GroupLayer demoLayer;
     final ImageLayer demoPageImageLayer;
 	private GroupLayer demoLayerLevels;
-/*    Image levelButtonImage;
-
-	final Image LevelButtonOkImage = assets().getImage("images/pngs/inaccessibleLevelButton.png");
-	final Image LevelButtonNotOkImage = assets().getImage("images/pngs/levelButton.png");
-
-*/
+	
 	public LevelSelectScene(final TrainBox trainBox ){
 		this.trainBox = trainBox;
 		
@@ -60,37 +47,6 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
         demoPageImageLayer = graphics().createImageLayer(demoPageImage);
     	demoLayer.add(demoPageImageLayer);
 	}
-/*	
-	private void initializeLevelButtons() {
-		List<Level> levels =  getLevels();
-		x = 0;
-		y = 50;
-		newX =0;
-		int j = 0;
-		for(int i =0; i <levels.size(); i++) {
-			final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
-			if (levels.get(i).isAccessible()) {
-				levelButtonImageLayer.setImage(LevelButtonNotOkImage);
-			}
-			else {
-				levelButtonImageLayer.setImage(LevelButtonOkImage);
-			}
-		    demoLayer.add(levelButtonImageLayer);
-		    levelButtonImageLayer.setTranslation(x, y);
-		    j+=1;
-				
-		    // initialize for the position of the next button
-		    newX=((x+LevelButtonOkImage.width()+10)%demoPageImageLayer.width());
-		    if (j ==6) {
-		        y+=LevelButtonOkImage.height()*5/4;
-		        j = 0;
-		     }
-		    x = (newX+LevelButtonOkImage.width()*1/4);
-	    }   
-	        
-	        
-		}*/
-
 
 	private void initializeLevelButtons() {
 		demoLayerLevels = graphics().createGroupLayer();
@@ -108,27 +64,16 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 				"images/pngs/levelButtonActive.png");
 		
 		for (int i = 0; i < numberOfLevels; i++) {
-			final ImageLayer levelButtonImageLayer = graphics().createImageLayer();
+			Layer levelButton;
 			if (i <= currentProgress) {
-				final int level = i;
-				levelButtonImageLayer.setImage(levelButtonOk);
-				levelButtonImageLayer.addListener(new Pointer.Adapter() {
-					@Override
-					public void onPointerStart(Event event) {
-						levelButtonImageLayer.setImage(levelButtonActive);
-					}
-					@Override
-					public void onPointerEnd(Event event) {
-						trainBox.setLevel(level);
-					}
-				});
+				levelButton = createPlayableButton(levelButtonOk, levelButtonActive, i);
 			} else {
-				levelButtonImageLayer.setImage(levelButtonNotOk);
+				levelButton = createUnPlayableButton(levelButtonNotOk);
 			}
-			demoLayerLevels.add(levelButtonImageLayer);
-			levelButtonImageLayer.setTranslation(x, y);
+			demoLayerLevels.add(levelButton);
+			levelButton.setTranslation(x, y);
 			j += 1;
-			x += levelButtonImageLayer.width() + 10;
+			x += levelButtonOk.width() + 10;
 			if (j == 6) {
 				x = 90;
 				y += levelButtonOk.height() + 20;
@@ -140,41 +85,43 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 
 	}
 
+	private Layer createUnPlayableButton(Image levelButtonNotOk) {
+		return graphics().createImageLayer(levelButtonNotOk);
+	}
 
+	private Layer createPlayableButton(Image image,
+			final Image activeImage, final int level) {
+		GroupLayer glayer = graphics().createGroupLayer();
+		final ImageLayer ilayer = graphics().createImageLayer(image);
+		glayer.add(ilayer);
+		
+		CanvasImage textImage = graphics().createImage(image.width(), image.height());
+		Font font = graphics().createFont("Sans", Font.Style.BOLD, 16);
+		TextFormat format = new TextFormat().withFont(font)
+				.withEffect(TextFormat.Effect.outline(0x887f501d))
+				.withTextColor(0xffca7829)
+				.withAlignment(Alignment.RIGHT);
+		TextLayout layout = graphics().layoutText(""+level, format);
+		if (level <= 9)
+			textImage.canvas().drawText(layout, 80, 17);
+		else textImage.canvas().drawText(layout, 75, 17);
+		Layer tlayer = graphics().createImageLayer(textImage);
+		glayer.add(tlayer);
+		
+		tlayer.addListener(new Pointer.Adapter() {
+			@Override
+			public void onPointerStart(Event event) {
+				ilayer.setImage(activeImage);
+			}
+			@Override
+			public void onPointerEnd(Event event) {
+				trainBox.setLevel(level);
+			}
+		});
+		
+		return glayer;
+	}
 	
-	@Override
-	public void onPointerStart(Event event) {
-		/*
-		
-		
-		
-		int numberOfLevels = Level.levels.size();
-		int currentProgress = LevelTracker.getCurrentProgress(); //The level you're currently doing
-		
-		//TODO - if user clicks on button for level i, call trainBox.setLevel(i)
-		//TODO Delete the following code
-		
-		trainBox.setLevel(0);
-		//PlayN.log().debug("Seting level 1 - (choosing other levels not implemented yet)");
-	 */
-	}
-
-	@Override
-	public void onPointerEnd(Event event) {
-	}
-
-	@Override
-	public void onPointerDrag(Event event) {}
-
-	@Override
-	public void onKeyDown(playn.core.Keyboard.Event event) {}
-
-	@Override
-	public void onKeyTyped(TypedEvent event) {}
-
-	@Override
-	public void onKeyUp(playn.core.Keyboard.Event event) {}
-
 	@Override
 	public void update(float delta) {}
 
@@ -183,8 +130,6 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
     	initializeLevelButtons();
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
-	    pointer().setListener(this);
-	    keyboard().setListener(this);
 	}
 
 	@Override
@@ -193,8 +138,6 @@ public class LevelSelectScene implements Scene, Keyboard.Listener, Pointer.Liste
 		demoLayerLevels.destroy();
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
-	    pointer().setListener(null);
-	    keyboard().setListener(null);
 	}
 
 }

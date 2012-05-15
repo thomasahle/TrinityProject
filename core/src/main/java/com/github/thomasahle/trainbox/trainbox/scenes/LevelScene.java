@@ -241,7 +241,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		// We want to hide unused components for the first levels, as it makes the
 		// game easier to play. However it also makes it easier to win, so for the
 		// harder levels we always show everything.
-		if (mLevel.getLevel().levelNumber < 18) {
+		if (mLevel.getLevel().levelNumber < 12) {
 			dupBut.enabled(mLevel.getLevel().dupsBest > 0);
 			boxBut.enabled(mLevel.getLevel().chainsBest > 0);
 			flipBut.enabled(mLevel.getLevel().flipsBest > 0);
