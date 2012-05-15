@@ -239,8 +239,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 	}
 	
 	private void moveAmazingTrains(List<UITrain> trains, float delta, float compLeft, QuadPath uppath, QuadPath downpath, float tBorder, TrainTaker top, TrainTaker bot) {
-		int dir = 0;
-		boolean nomore = false;
 		for (Iterator<UITrain> it = trains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
@@ -277,16 +275,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 				continue;
 			}
 			
-			// Interleave properly
-			if (trains == mOutgoing
-					&& (nomore)) {
-				
-				nomore = true;
-				continue;
-			}
-			nomore = true;
-			dir = 1-dir;
-			
 			//train.vertCenterOn(mTopComp);
 			for (UICarriage car : train.getCarriages()) {
 				float carLeft = car.getPosition().x + trainLeft - compLeft;
@@ -317,7 +305,17 @@ public class UISplitMergeComponent extends AbstractComposite {
 			}
 			
 			if (newRight > compRight) {
+				Point oldPos = train.getPosition();
 				taker.takeTrain(train);
+				// Hack to avoid flicker
+				if (trains == mOutgoing) {
+					float shifty = oldPos.y - train.getPosition().y;
+					for (UICarriage car : train.getCarriages()) {
+						car.setPosition(new Point(
+								car.getPosition().x,
+								car.getPosition().y+shifty));
+					}
+				}
 				updateImages();
 			}
 			
@@ -331,6 +329,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mIngoing.add(train);
 		mNextDirection.add(train);
 		
+		// Hack to avoid flicker
 		Point oldPos = train.getPosition();
 		if (mNextDirection == mUpgoing) {
 			train.vertCenterOn(mTopComp);
@@ -356,6 +355,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	private TrainTaker mTopTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
+			assert mOutgoing.isEmpty();
 			mUpgoing.add(train);
 			mOutgoing.add(train);
 			mNextTaker = mBotTaker;
@@ -367,13 +367,13 @@ public class UISplitMergeComponent extends AbstractComposite {
 			if (mNextTaker == this && mOutgoing.isEmpty())
 				return Math.max(getTrainTaker().leftBlock(), end);
 			return end;
-			//return Float.MAX_VALUE;
 		}
 	};
 	
 	private TrainTaker mBotTaker = new TrainTaker() {
 		@Override
 		public void takeTrain(UITrain train) {
+			assert mOutgoing.isEmpty();
 			mDowngoing.add(train);
 			mOutgoing.add(train);
 			mNextTaker = mTopTaker;
@@ -385,7 +385,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 			if (mNextTaker == this && mOutgoing.isEmpty())
 				return Math.max(getTrainTaker().leftBlock(), end);
 			return end;
-			//return Float.MAX_VALUE;
 		}
 	};
 	private TrainTaker mNextTaker;
