@@ -312,8 +312,9 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		//TODO create an image called retryButton and replace the text below VVVV
 		Image retryButtonImage = assets().getImage("images/pngs/retryButton.png");
 		final Layer retryButtonLeveLStatusImageLayer = graphics().createImageLayer(retryButtonImage);
+		retryButtonLeveLStatusImageLayer.setScale(0.95f,0.95f); // to fix the fact that the retry button is slightly larger than the next one...
 		levelStatusLayer.add(retryButtonLeveLStatusImageLayer);
-		retryButtonLeveLStatusImageLayer.setTranslation(680, 520);
+		retryButtonLeveLStatusImageLayer.setTranslation(550, 520);
 		retryButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				levelFailedBlurbImageLayer.setVisible(false);
@@ -331,7 +332,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(true);
 				nextButtonLeveLStatusImageLayer.setVisible(true);
-				retryButtonLeveLStatusImageLayer.setVisible(false);
+				retryButtonLeveLStatusImageLayer.setVisible(true);
 				levelStatusText.setVisible(true);
 				
 				int used = mLevel.countUserComponents();
