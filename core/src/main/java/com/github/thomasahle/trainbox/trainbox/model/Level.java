@@ -97,7 +97,7 @@ public class Level {
 			1,0,0,0,0
 		));
 		mLevels.add(new Level(
-			2, "Be pre-paired",
+			2, "Be paired",
 			"1 1 1 2", "1-1 1-2",
 			0,1,0,0,0
 		));
