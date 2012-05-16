@@ -129,12 +129,12 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		mLevel.paused(paused);
 		if (!paused) {
 			currPauseGoButtonImageIndex = 1;
-			pauseButtonImageLayer.setVisible(true);
 		}
 		else {
 			currPauseGoButtonImageIndex = 0;
-			pauseButtonImageLayer.setVisible(false);
 		}
+		pauseButtonImageLayer.setVisible(!paused);
+		mResetButton.setVisible(paused);
 	}
 	private boolean isPaused(){
 		return mLevel.paused();
@@ -222,7 +222,6 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		mPlayButton.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				setPaused(!mLevel.paused());
-				mResetButton.setVisible(mLevel.paused());
 			}
 		});
 		
