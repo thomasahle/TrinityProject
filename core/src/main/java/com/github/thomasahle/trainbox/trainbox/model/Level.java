@@ -236,15 +236,16 @@ public class Level {
 			"0 1", "0-0 0-1 1-0 1-1",
 			3,8,1,0,4
 		));
-		// The following might not be solvable
 		mLevels.add(new Level(
+			29, "Single cut", // Yes! Managed to solve this one
+			"1-2-3-4-5-6", "1-2-3 4-5-6",
+			0,4,3,1,3
+		));
+		// The following might not be solvable
+		/*
+		 * mLevels.add(new Level(
 			29, "Autsch! meiner Schwänze!",
 			"1-2-3-4", "1 1-2 1-2-3-4",
-			10,8,10,10,10
-		));
-		/*mLevels.add(new Level(
-			30, "Single cut",
-			"1-2-3-4-5-6", "1-2-3 4-5-6",
 			10,8,10,10,10
 		));
 		mLevels.add(new Level(
