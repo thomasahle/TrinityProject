@@ -133,14 +133,13 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 
 			@Override
 			public void onPointerStart(playn.core.Pointer.Event event) {
-		        demoButtonImageLayer.setImage(demoButtonPressedImage);
-				//trainBox.setScene(trainBox.getDemoScene());
+//		        demoButtonImageLayer.setImage(demoButtonPressedImage);
+				trainBox.setScene(trainBox.getDemoScene());
 			}
 
 			@Override
 			public void onPointerEnd(playn.core.Pointer.Event event) {
-		        demoButtonImageLayer.setImage(demoButtonPressedImage);
-				
+//		        demoButtonImageLayer.setImage(demoButtonImage);
 			}
 
 			@Override
