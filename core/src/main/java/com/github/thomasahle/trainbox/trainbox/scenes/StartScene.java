@@ -17,10 +17,6 @@ import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
 import playn.core.Keyboard.TypedEvent;
-import playn.core.Mouse;
-import playn.core.Mouse.ButtonEvent;
-import playn.core.Mouse.MotionEvent;
-import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
@@ -79,34 +75,25 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final ImageLayer aboutBlurBackButtonImageLayer = graphics().createImageLayer(aboutBlurBackButtonImage);
         aboutLayer.add(aboutBlurBackButtonImageLayer);
         aboutBlurBackButtonImageLayer.setTranslation(680, 520);
-        aboutBlurBackButtonImageLayer.addListener(new Mouse.Listener() {
-
+        aboutBlurBackButtonImageLayer.addListener(new Pointer.Listener() {
 			@Override
-			public void onMouseDown(ButtonEvent event) {
+			public void onPointerStart(playn.core.Pointer.Event event) {
 				aboutLayer.setVisible(false);
-				
 			}
 
 			@Override
-			public void onMouseUp(ButtonEvent event) {
+			public void onPointerEnd(playn.core.Pointer.Event event) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
-			public void onMouseMove(MotionEvent event) {
+			public void onPointerDrag(playn.core.Pointer.Event event) {
 				// TODO Auto-generated method stub
 				
 			}
-
-			@Override
-			public void onMouseWheelScroll(WheelEvent event) {
-				// TODO Auto-generated method stub
-				
-			}});
-        
-        
-        
+		});
+        		
         menuLayer = graphics().createGroupLayer();
         menuLayer.setTranslation(width/5, height/4+40);
         final Image menuBackgoundImage = assets().getImage("images/pngs/menuBackground.png");
@@ -117,103 +104,77 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         final ImageLayer aboutButtonImageLayer = graphics().createImageLayer(aboutButtonImage);
         menuLayer.add(aboutButtonImageLayer);
         aboutButtonImageLayer.setTranslation(205,240);
-        aboutButtonImageLayer.addListener(new Mouse.Listener() {
-
+        aboutButtonImageLayer.addListener(new Pointer.Listener() {
 			@Override
-			public void onMouseDown(ButtonEvent event) {
+			public void onPointerStart(playn.core.Pointer.Event event) {
 		        aboutLayer.setVisible(true);
-				
 			}
 
 			@Override
-			public void onMouseUp(ButtonEvent event) {
+			public void onPointerEnd(playn.core.Pointer.Event event) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
-			public void onMouseMove(MotionEvent event) {
+			public void onPointerDrag(playn.core.Pointer.Event event) {
 				// TODO Auto-generated method stub
 				
 			}
-
-			@Override
-			public void onMouseWheelScroll(WheelEvent event) {
-				// TODO Auto-generated method stub
-				
-			}}
-        );
-        
-        
-
+		});
         		
-       
         final Image demoButtonImage = assets().getImage("images/pngs/demoButton.png");
         final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
         menuLayer.add(demoButtonImageLayer);
         demoButtonImageLayer.setTranslation(110,80);
-        demoButtonImageLayer.addListener(new Mouse.Listener() {
-           Image demoButtonPressedImage = assets().getImage("images/pngs/demoButtonPressed.png");
-            
-			@Override
-			public void onMouseWheelScroll(WheelEvent event) {	
-			}
+        demoButtonImageLayer.addListener(new Pointer.Listener() {
+        	
+          Image demoButtonPressedImage = assets().getImage("images/pngs/demoButtonPressed.png");
 
-			
 			@Override
-			public void onMouseUp(ButtonEvent event) {
-		        demoButtonImageLayer.setImage(demoButtonPressedImage);
-
-				
-			}
-			
-			@Override
-			public void onMouseMove(MotionEvent event) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onMouseDown(ButtonEvent event) {
+			public void onPointerStart(playn.core.Pointer.Event event) {
 		        demoButtonImageLayer.setImage(demoButtonPressedImage);
 				//trainBox.setScene(trainBox.getDemoScene());
 			}
-		});
-        
-        
+
+			@Override
+			public void onPointerEnd(playn.core.Pointer.Event event) {
+		        demoButtonImageLayer.setImage(demoButtonPressedImage);
+				
+			}
+
+			@Override
+			public void onPointerDrag(playn.core.Pointer.Event event) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
+        		        
         final Image playButtonImage = assets().getImage("images/pngs/playButton.png");
         final ImageLayer playButtonImageLayer = graphics().createImageLayer(playButtonImage);
         menuLayer.add(playButtonImageLayer);
         playButtonImageLayer.setTranslation(280,50);
-        playButtonImageLayer.addListener(new Mouse.Listener() {
-            Image playButtonPressedImage = assets().getImage("images/pngs/playButtonPressed.png");
-            
-			@Override
-			public void onMouseWheelScroll(WheelEvent event) {	
-			}
+        playButtonImageLayer.addListener(new Pointer.Listener() {
+        	
+        	Image playButtonPressedImage = assets().getImage("images/pngs/playButtonPressed.png");
 
-			
 			@Override
-			public void onMouseUp(ButtonEvent event) {
-		        playButtonImageLayer.setImage(playButtonPressedImage);
-
-				
-			}
-			
-			@Override
-			public void onMouseMove(MotionEvent event) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onMouseDown(ButtonEvent event) {
+			public void onPointerStart(playn.core.Pointer.Event event) {
 		        playButtonImageLayer.setImage(playButtonPressedImage);
 				trainBox.setScene(trainBox.getLevelSelectScene());
 			}
-		});
-      
-        
+
+			@Override
+			public void onPointerEnd(playn.core.Pointer.Event event) {
+		        playButtonImageLayer.setImage(playButtonPressedImage);
+			}
+
+			@Override
+			public void onPointerDrag(playn.core.Pointer.Event event) {
+			}
+        	
+        });
         
         bgLayer = graphics().createImageLayer(bgImage);
 	    cloudLayer.setTranslation(a, b);

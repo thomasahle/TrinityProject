@@ -1,6 +1,5 @@
 package com.github.thomasahle.trainbox.trainbox.scenes;
 
-import static playn.core.PlayN.mouse;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
@@ -19,10 +18,6 @@ import playn.core.Keyboard;
 import playn.core.TextFormat;
 import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
-import playn.core.Mouse;
-import playn.core.Mouse.ButtonEvent;
-import playn.core.Mouse.MotionEvent;
-import playn.core.Mouse.WheelEvent;
 import playn.core.Pointer;
 import playn.core.Pointer.Event;
 import playn.core.TextFormat.Alignment;
@@ -44,7 +39,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
  *  - Components to add
  *  - The play button
  */
-public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyboard.Listener {
+public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	private static final float SPEED_INCREASE = 0.005f;
 	private static final int MENU_HEIGHT = 200;
 	private final static int HEIGHT = graphics().screenHeight();
@@ -107,7 +102,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		graphics().rootLayer().add(levelStatusLayer);
 		graphics().rootLayer().add(levelPopupLayer);
 		keyboard().setListener(this);
-		mouse().setListener(this);
+		pointer().setListener(this);
 	}
 
 	@Override
@@ -121,7 +116,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 		graphics().rootLayer().remove(levelStatusLayer);
 		graphics().rootLayer().remove(levelPopupLayer);
 		keyboard().setListener(null);
-		mouse().setListener(null);
+		pointer().setListener(null);
 	}
 	
 	private void setPaused(boolean paused) {
@@ -455,15 +450,15 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 	@Override public void onKeyTyped(TypedEvent event) {}
 	@Override public void onKeyUp(playn.core.Keyboard.Event event) {}
 
-	@Override public void onMouseDown(ButtonEvent event) {
-		// Unfortunately this doesn't quite work.
-		// The pointer listener will still register a click. Whatever.
-		if (event.button() != Mouse.BUTTON_LEFT) {
-			toolMan.unselect();
-			event.setPreventDefault(true);
-		}
-	}
-	@Override public void onMouseUp(ButtonEvent event) {}
-	@Override public void onMouseMove(MotionEvent event) {}
-	@Override public void onMouseWheelScroll(WheelEvent event) {}
+//	@Override public void onMouseDown(ButtonEvent event) {
+//		// Unfortunately this doesn't quite work.
+//		// The pointer listener will still register a click. Whatever.
+//		if (event.button() != Mouse.BUTTON_LEFT) {
+//			toolMan.unselect();
+//			event.setPreventDefault(true);
+//		}
+//	}
+//	@Override public void onMouseUp(ButtonEvent event) {}
+//	@Override public void onMouseMove(MotionEvent event) {}
+//	@Override public void onMouseWheelScroll(WheelEvent event) {}
 }
