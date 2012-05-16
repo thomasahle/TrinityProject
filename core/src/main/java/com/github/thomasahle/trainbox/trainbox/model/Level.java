@@ -86,30 +86,29 @@ public class Level {
 	public static final List<Level> levels = Collections.unmodifiableList(mLevels);
 	static {
 		/** Here we code all of the levels */
-		
 		mLevels.add(new Level(
-			0, "Seeing double",
-			"1 2", "1 1 2 2",
+			0, "Let's go!",
+			"1 2 3", "1 2 3",
+			0,0,0,0,0
+		));
+		mLevels.add(new Level(
+			1, "Seeing double",
+			"1 2-3", "1 1 2-3 2-3",
 			1,0,0,0,0
 		));
 		mLevels.add(new Level(
-			1, "Pre-paired",
-			"1 1 1 1", "1-1 1-1",
+			2, "Be pre-paired",
+			"1 1 1 2", "1-1 1-2",
 			0,1,0,0,0
 		));
 		mLevels.add(new Level(
-			2, "Twins", // what do they call it on school trips when everyone partners up, that could be the title here too.
-			"1 1", "1-1 1-1",
+			3, "Twins", // what do they call it on school trips when everyone partners up, that could be the title here too.
+			"1 2", "1-2 1-2",
 			1,1,0,0,0
 		));
 		mLevels.add(new Level(
-			3, "Quads",
-			"1 1", "1-1-1-1 1-1-1-1",
-			2,2,0,0,0
-		));
-		mLevels.add(new Level(
 			4, "Twisted Train Builder",
-			"2 1", "2-1-2-1 2-1-2-1",
+			"1 2", "1-1-1-1 2-2-2-2",
 			2,2,0,0,0
 		));
 		mLevels.add(new Level(
@@ -140,7 +139,7 @@ public class Level {
 		mLevels.add(new Level(
 			10, "Reflection",
 			"2 1", "1 2 2 1",
-			1,1,1,1,1
+			1,0,0,1,1
 		));
 		mLevels.add(new Level(
 			11, "Reverse Express",
@@ -154,7 +153,7 @@ public class Level {
 			0,0,0,1,1
 		));
 		mLevels.add(new Level(
-			13, "Know your matrix",
+			13, "There is no cow matrix",
 			"1-2 3-4", "1-3 2-4",
 			0,2,1,0,1,
 			0,1,2,0,1
@@ -178,27 +177,30 @@ public class Level {
 		mLevels.add(new Level(
 			17, "Overtaking",
 			"2 3 4 1", "1 2 3 4",
+			0,0,0,2,1, // flip (flip||id)
 			0,1,1,3,1
 		));
 		mLevels.add(new Level(
 			18, "Montgomery Reshuffle",
 			"1-2 3-4 5-6 7-8", "1-3-5-7 2-4-6-8",
-			0,1,4,0,3
+			0,4,1,0,1,
+			0,3,2,0,3
 		));
 		mLevels.add(new Level(
 			19, "Bigger and Better Builder",
 			"1", "1 1 1 1 1",
-			3,1,1,0,1,
-			4,0,0,0,2
+			3,0,0,0,2, // dup dup ((dup||id)||id)
+			3,1,1,0,1
 		));
 		mLevels.add(new Level(
 			20, "Mirror Reshuffle",
 			"1-2-3-4", "1-4 2-3 3-2 4-1",
-			1,1,0,1,1
+			1,2,3,2,1 // dup (cat||cat flip box flip cat) box
 		));
 		mLevels.add(new Level(
 			21, "There are seven",
 			"1", "1 1 1 1 1 1 1",
+			4,0,0,0,2, // dup dup (dup||(dup||id))
 			5,0,0,0,2
 		));
 		mLevels.add(new Level(
@@ -219,6 +221,7 @@ public class Level {
 		mLevels.add(new Level(
 			25, "Rotate Mega-Freight",
 			"2 3 4 5 6 7 8 1", "1 2 3 4 5 6 7 8",
+			0,0,0,3,2, // flip (flip (flip||id)||id)
 			0,3,2,6,2
 		));
 		mLevels.add(new Level(
@@ -237,14 +240,14 @@ public class Level {
 			3,8,1,0,4
 		));
 		mLevels.add(new Level(
-			29, "Single cut", // Yes! Managed to solve this one
+			29, "Single cut",
 			"1-2-3-4-5-6", "1-2-3 4-5-6",
 			0,4,3,1,3
 		));
 		// The following might not be solvable
 		/*
 		 * mLevels.add(new Level(
-			29, "Autsch! meiner Schwänze!",
+			29, "Autsch! Meine Schwänze!",
 			"1-2-3-4", "1 1-2 1-2-3-4",
 			10,8,10,10,10
 		));
@@ -253,6 +256,15 @@ public class Level {
 			"1-4-7 2-5-8 3-6-9", "1-2-3 4-5-6 7-8-9",
 			10,8,10,10,10
 		));*/
+		/*
+		 * mLevels.add(new Level(
+			30, "Thomas's testing",
+			"1-2-3-4 1-2-3-4", "1 1 2 2 3 3 4 4",
+			0,4,3,1,3
+		));
+		 */
+		for (int i = 0; i < mLevels.size(); i++)
+			assert i == mLevels.get(i).levelNumber;
 	}
 	
 }

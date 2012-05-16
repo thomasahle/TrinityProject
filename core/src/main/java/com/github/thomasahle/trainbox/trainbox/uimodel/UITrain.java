@@ -1,14 +1,15 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import static playn.core.PlayN.log;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.i.Dimension;
@@ -28,6 +29,9 @@ public class UITrain {
 	private Dimension mSize;
 	private float mRightCrop;
 	private float mLeftCrop;
+	
+	private ImageLayer mDebugLayer;
+	private final static boolean DEBUG = false;
 	
 	public UITrain(Train train) {
 		this(fromTrain(train));
@@ -85,20 +89,47 @@ public class UITrain {
 	
 	private void install(List<UICarriage> carriages) {
 		mCarriages = carriages;
-		int x = 0;
-		int y = 0;
+		int width = 0;
+		int height = 0;
 		for (int i = carriages.size()-1; i >= 0; i--) {
 			UICarriage car = carriages.get(i);
-			car.setPosition(new Point(x, 0));
-			x += car.getSize().width;
-			y = Math.max(y, car.getSize().height);
+			car.setPosition(new Point(width, 0));
+			width += car.getSize().width;
+			height = Math.max(height, car.getSize().height);
 			mLayer.add(car.getLayer());
 		}
-		mSize = new Dimension(x, y);
+		mSize = new Dimension(width, height);
 		
-		/*CanvasImage image = graphics().createImage(mSize.width, mSize.height);
-		image.canvas().setStrokeColor(0xffff0000).strokeRect(0, 0, mSize.width-1, mSize.height-1);
-		mLayer.add(graphics().createImageLayer(image));*/
+		if (DEBUG) {
+			mDebugLayer = graphics().createImageLayer();
+			mLayer.add(mDebugLayer);
+			updateDebugLayer();
+		}
+	}
+	
+	private void updateDebugLayer() {
+		if (DEBUG) {
+			CanvasImage image = graphics().createImage(mSize.width, mSize.height);
+			image.canvas().setStrokeColor(0xffff0000).strokeRect(0, 0, mSize.width-1, mSize.height-1);
+			mDebugLayer.setImage(image);
+		}
+	}
+
+	public UITrain cutOffHead() {
+		UICarriage hcar = mCarriages.remove(0);
+		mLayer.remove(hcar.getLayer());
+		Dimension newSize = new Dimension((int)hcar.getPosition().x, mSize.height);
+		mRightCrop -= mSize.width - newSize.width;
+		mSize = newSize;
+		updateDebugLayer();
+		
+		Point position = new Point(getPosition().x+hcar.getPosition().x,getPosition().y);
+		UITrain head = new UITrain(Arrays.asList(hcar));
+		head.setPosition(position);
+		head.setSpeed(getSpeed());
+		//head.setCropRight(width)
+		//head.setCropLeft(width)
+		return head;
 	}
 	
 	public Point getPosition() {

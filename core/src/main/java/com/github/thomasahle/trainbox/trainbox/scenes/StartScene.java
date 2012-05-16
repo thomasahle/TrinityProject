@@ -176,7 +176,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			@Override
 			public void onMouseDown(ButtonEvent event) {
 		        demoButtonImageLayer.setImage(demoButtonPressedImage);
-				trainBox.setScene(trainBox.getDemoScene());
+				//trainBox.setScene(trainBox.getDemoScene());
 			}
 		});
         

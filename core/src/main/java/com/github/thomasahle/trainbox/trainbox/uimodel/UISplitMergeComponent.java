@@ -267,6 +267,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 						pos[0] += compLeft - trainLeft - car.WIDTH/2.f;
 						pos[1] += getDeepPosition().y - (train.getPosition().y + train.getSize().height/2.f);
 						//car.setRotation(1,0);
+						//pos[0] = Math.max(pos[0], carLeft);
 						car.setPosition(new Point(pos[0], pos[1]));
 						car.setRotation(slope[0], slope[1]);
 					}
