@@ -186,10 +186,9 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		final ImageLayer demoButtonImageLayer = graphics().createImageLayer(demoButtonImage);
 		levelPopupLayer.add(demoButtonImageLayer);
 		demoButtonImageLayer.setTranslation(120, 60);
-		levelPopulHomeButtonImageLayer.addListener(new Pointer.Adapter() {
+		demoButtonImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
-				trainBox.setScene(trainBox.getStartScene());
-
+				trainBox.setScene(trainBox.getDemoScene());
 			}
 		});
 	}
