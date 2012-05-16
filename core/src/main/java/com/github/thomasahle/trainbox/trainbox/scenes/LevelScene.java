@@ -42,8 +42,8 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	private static final float SPEED_INCREASE = 0.005f;
 	private static final int MENU_HEIGHT = 200;
-	private final static int HEIGHT = graphics().screenHeight();
-	private final static int WIDTH = graphics().screenWidth();
+	private final static int HEIGHT = graphics().height();
+	private final static int WIDTH = graphics().width();
 	
 	TrainBox trainBox;
 	
@@ -80,7 +80,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	}
 	
 	private void initLevelText() {
-		CanvasImage textImage = graphics().createImage(graphics().screenWidth(), 400);
+		CanvasImage textImage = graphics().createImage(graphics().width(), 400);
 		Font font = graphics().createFont("Sans", Font.Style.BOLD, 30);
 		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff565248)).withTextColor(0xffffffff);
 		textImage.canvas().drawText(graphics().layoutText(mLevel.getLevel().title, format), 0, 0);

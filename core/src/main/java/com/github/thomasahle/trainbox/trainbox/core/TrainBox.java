@@ -46,7 +46,7 @@ public class TrainBox implements Game{
 		
 		setScene(new LoadingScene(this));
 		if (PlayN.platformType() == PlayN.platformType().ANDROID){
-			graphics().setSize(graphics().screenWidth()-50, graphics().screenHeight()+50);
+			graphics().setSize(graphics().screenWidth(), graphics().screenHeight());
 			// Keep the same aspect ratio.
 			float sx = graphics().screenWidth() / (float) WIDTH;
 			float sy = graphics().screenHeight() / (float) HEIGHT;
