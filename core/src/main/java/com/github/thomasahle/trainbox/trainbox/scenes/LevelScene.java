@@ -103,7 +103,6 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		graphics().rootLayer().add(levelStatusLayer);
 		graphics().rootLayer().add(levelPopupLayer);
 		keyboard().setListener(this);
-		pointer().setListener(this);
 	}
 
 	@Override
@@ -117,7 +116,6 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		graphics().rootLayer().remove(levelStatusLayer);
 		graphics().rootLayer().remove(levelPopupLayer);
 		keyboard().setListener(null);
-		pointer().setListener(null);
 	}
 	
 	private void setPaused(boolean paused) {
@@ -464,16 +462,4 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	}
 	@Override public void onKeyTyped(TypedEvent event) {}
 	@Override public void onKeyUp(playn.core.Keyboard.Event event) {}
-
-//	@Override public void onMouseDown(ButtonEvent event) {
-//		// Unfortunately this doesn't quite work.
-//		// The pointer listener will still register a click. Whatever.
-//		if (event.button() != Mouse.BUTTON_LEFT) {
-//			toolMan.unselect();
-//			event.setPreventDefault(true);
-//		}
-//	}
-//	@Override public void onMouseUp(ButtonEvent event) {}
-//	@Override public void onMouseMove(MotionEvent event) {}
-//	@Override public void onMouseWheelScroll(WheelEvent event) {}
 }
