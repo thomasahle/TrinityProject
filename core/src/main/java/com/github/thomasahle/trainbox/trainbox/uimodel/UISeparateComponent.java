@@ -106,24 +106,31 @@ public class UISeparateComponent extends AbstractComponent {
 				// XXX: This would be nicer if the train remembered what time it
 				// started to wait, so we don't risk livelocks due to evil delta values.
 				if (isUp(UP_LEVEL)) {
-					mLeftSide.poll();
-					train.getLayer().setVisible(false);
-					float oldSpeed = train.getSpeed();
-					fireTrainDestroyed(train);
+					//mLeftSide.poll();
 					
+					UITrain head = train.cutOffHead();
+					fireTrainCreated(head);
+					mLeftSide.addFirst(head);
+					
+					//train.getLayer().setVisible(false);
+					//float oldSpeed = train.getSpeed();
+					//fireTrainDestroyed(train);
+					
+					/*
 					List<UICarriage> tailTrains = new ArrayList<UICarriage>(train.getCarriages());
 					tailTrains.remove(0);
 					UITrain tail = new UITrain(tailTrains);
 					fireTrainCreated(tail);
 					tail.setSpeed(oldSpeed); // set the speed of the remaining tail to the old speed of the total train.
 					tail.setPosition(new Point(trainLeft, train.getPosition().y));
+					// TODO: Set crop
 					mLeftSide.addFirst(tail);
 					
 					UITrain head = new UITrain(Arrays.asList(train.getCarriages().get(0)));
 					fireTrainCreated(head);
 					head.setSpeed(oldSpeed); // set the speed of the head to the old speed of the total train.
 					head.setPosition(new Point(carLeft, train.getPosition().y));
-					mLeftSide.addFirst(head);
+					mLeftSide.addFirst(head);*/
 				}
 			}
 		}
@@ -150,13 +157,20 @@ public class UISeparateComponent extends AbstractComponent {
 		
 		// The right side is easy to move
 		float rightBorder = moveTrains(mRightSide, delta);
-		rightBorder += UITrain.PADDING;
+		int actualLefties = 0;
 		
 		// The left side requires more thought
 		for (UITrain train : mLeftSide) {
 			float trainLeft = train.getPosition().x;
 			float trainRight = trainLeft + train.getSize().width;
 			float carLeft = trainLeft + train.getCarriages().get(0).getPosition().x;
+			
+			// We don't enforce the PADDING between two trains seperated by the knife.
+			// If we did that the left part of a train would jump back, when seperated from its head.
+			if (trainRight <= knifeX + 0.1f)
+				actualLefties += 1;
+			if (actualLefties == 1)
+				rightBorder = Math.max(rightBorder, knifeX);
 			
 			float newRight = Math.min(rightBorder, trainRight + train.speed*delta);
 			
@@ -175,6 +189,8 @@ public class UISeparateComponent extends AbstractComponent {
 			// Note: if the train is small, we may let it go all the way to rightBorder.
 			// The next update should take care of moving it to rightSide and then takeTrain if necessary.
 			float newLeft = newRight - train.getSize().width;
+			//newLeft = Math.max(trainLeft, newLeft);
+			//assert newLeft >= trainLeft;
 			train.setPosition(new Point(newLeft, train.getPosition().y));
 			rightBorder = Math.min(rightBorder, newLeft-UITrain.PADDING);
 		}
