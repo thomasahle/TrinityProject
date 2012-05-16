@@ -187,14 +187,16 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 				trackColor = 0xff00ff33;
 			} else {
 				gameOver = true;
+				gameWon = false;
 				trackColor=0xffff3300;
 				failMsg = "Close... but not quite."; // the last train must be the mismatch.
 			}
 		} else if (deliveredCargoList.size() < cargoGoalList.size()) {
-			log().debug("Goal: " + cargoGoalString);
-			log().debug("Current: " + deliveredCargoString);
+			//log().debug("Goal: " + cargoGoalString);
+			//log().debug("Current: " + deliveredCargoString);
 			if (!checkDelivered()) {
 				gameOver = true;
+				gameWon = false;
 				trackColor = 0xffff3300;
 				failMsg ="Trains don't match! ";
 				//"You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString; This message is too long for the display.
@@ -202,9 +204,10 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		} else { // deliveredCargoList.size() > cargoGoalList.size()
 			log().debug("Too many trains");
 			gameOver = true;
+			gameWon = false;
 			trackColor = 0xffff3300;
 			// LEVEL FAILED
-			failMsg="Too many trains!"; // I actually don't think this code is reachable.
+			failMsg="Too many trains!";
 		}
 		
 		if(gameOver && trainsCompleted()){

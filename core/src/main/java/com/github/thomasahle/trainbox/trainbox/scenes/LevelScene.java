@@ -49,6 +49,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	
 	private Layer mBgLayer;
 	private Layer mPlayButton;
+	private Layer mResetButton;
 	private UILevel mLevel;
 	private UIPallet mPallet;
 	private ToolManager toolMan;
@@ -123,12 +124,12 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		mLevel.paused(paused);
 		if (!paused) {
 			currPauseGoButtonImageIndex = 1;
-			pauseButtonImageLayer.setVisible(true);
 		}
 		else {
 			currPauseGoButtonImageIndex = 0;
-			pauseButtonImageLayer.setVisible(false);
 		}
+		pauseButtonImageLayer.setVisible(!paused);
+		mResetButton.setVisible(paused);
 	}
 	private boolean isPaused(){
 		return mLevel.paused();
@@ -194,6 +195,19 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	}
 
 	private void initLevelController() {
+		// TODO Change the line below to the new reset button image
+		Image resetButtonImage = assets().getImage("images/pngs/resetButton.png");
+		mResetButton = graphics().createImageLayer(resetButtonImage);
+		
+		mResetButton.addListener(new Pointer.Adapter(){
+			@Override public void onPointerStart(Event event) {
+				trainBox.setLevel(mLevel.getLevel().levelNumber);
+			}
+		});
+		
+		mResetButton.setTranslation(graphics().width()-380, graphics().height()-125);
+		
+		
 		Image goButtonImage = assets().getImage("images/pngs/goButton.png");
 		mPlayButton = graphics().createImageLayer(goButtonImage);
 		
@@ -251,6 +265,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		levelControlLayer.add(mPallet.getLayer());
 		levelControlLayer.add(mPlayButton);
 		levelControlLayer.add(menuButtonImageImageLayer);
+		levelControlLayer.add(mResetButton);
 	}
 
 	private void initLevelStatus() {
@@ -291,8 +306,9 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		//TODO create an image called retryButton and replace the text below VVVV
 		Image retryButtonImage = assets().getImage("images/pngs/retryButton.png");
 		final Layer retryButtonLeveLStatusImageLayer = graphics().createImageLayer(retryButtonImage);
+		retryButtonLeveLStatusImageLayer.setScale(0.95f,0.95f); // to fix the fact that the retry button is slightly larger than the next one...
 		levelStatusLayer.add(retryButtonLeveLStatusImageLayer);
-		retryButtonLeveLStatusImageLayer.setTranslation(680, 520);
+		retryButtonLeveLStatusImageLayer.setTranslation(550, 520);
 		retryButtonLeveLStatusImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				levelFailedBlurbImageLayer.setVisible(false);
@@ -310,7 +326,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 				levelFailedBlurbImageLayer.setVisible(false);
 				levelCompletedBlurbImageLayer.setVisible(true);
 				nextButtonLeveLStatusImageLayer.setVisible(true);
-				retryButtonLeveLStatusImageLayer.setVisible(false);
+				retryButtonLeveLStatusImageLayer.setVisible(true);
 				levelStatusText.setVisible(true);
 				
 				int used = mLevel.countUserComponents();

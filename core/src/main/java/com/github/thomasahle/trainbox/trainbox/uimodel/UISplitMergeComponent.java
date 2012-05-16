@@ -96,7 +96,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 	private void updateImages() {
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		if ((!mIngoing.isEmpty() && mUpgoing.contains(mIngoing.get(mIngoing.size()-1))) || (mIngoing.isEmpty() && mNextDirection == mUpgoing)) {
-		//if (mNextDirection == mUpgoing) {
 			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
 			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
 		} else {
@@ -248,6 +247,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			// If the train is now entirely gone from us.
 			if (trainLeft >= compRight) {
 				it.remove();
+				updateImages();
 				continue;
 			}
 			
@@ -317,7 +317,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 								car.getPosition().y+shifty));
 					}
 				}
-				updateImages();
 			}
 			
 			tBorder -= UITrain.PADDING;
@@ -327,6 +326,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 	@Override
 	public void takeTrain(UITrain train) {
 		log().debug("Got train to splitter, sending it "+(mNextDirection==mUpgoing?"up":"down"));
+		assert train.getPosition().x+train.getSize().width <= leftBlock();
+		
 		mIngoing.add(train);
 		mNextDirection.add(train);
 		
@@ -350,7 +351,14 @@ public class UISplitMergeComponent extends AbstractComposite {
 
 	@Override
 	public float leftBlock() {
-		return Float.MAX_VALUE;
+		// Channel leftBlock from next component
+		float res = getTrainTaker().leftBlock();
+		// Don't allow trains to jump over us
+		res = Math.min(res, getDeepPosition().x+SIDES_WIDTH-0.1f);
+		// Don't overlap trains we currently manage
+		if (!mIngoing.isEmpty())
+			res = Math.min(res, mIngoing.getLast().getPosition().x - UITrain.PADDING);
+		return res;
 	}
 	
 	private TrainTaker mTopTaker = new TrainTaker() {

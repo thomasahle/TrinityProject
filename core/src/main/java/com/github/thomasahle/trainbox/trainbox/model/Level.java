@@ -97,7 +97,7 @@ public class Level {
 			1,0,0,0,0
 		));
 		mLevels.add(new Level(
-			2, "Be pre-paired",
+			2, "Be paired",
 			"1 1 1 2", "1-1 1-2",
 			0,1,0,0,0
 		));
@@ -137,7 +137,7 @@ public class Level {
 			2,0,0,0,1
 		));
 		mLevels.add(new Level(
-			10, "Flip or mirror",
+			10, "Reflection",
 			"2 1", "1 2 2 1",
 			1,0,0,1,1
 		));
@@ -153,7 +153,7 @@ public class Level {
 			0,0,0,1,1
 		));
 		mLevels.add(new Level(
-			13, "Know your matrix",
+			13, "There is no cow matrix",
 			"1-2 3-4", "1-3 2-4",
 			0,2,1,0,1,
 			0,1,2,0,1
