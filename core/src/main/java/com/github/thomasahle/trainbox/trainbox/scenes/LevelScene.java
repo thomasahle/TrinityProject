@@ -201,7 +201,7 @@ public class LevelScene implements Scene, Mouse.Listener, Pointer.Listener, Keyb
 
 	private void initLevelController() {
 		// TODO Change the line below to the new reset button image
-		Image resetButtonImage = assets().getImage("images/pngs/goButton.png");
+		Image resetButtonImage = assets().getImage("images/pngs/resetButton.png");
 		mResetButton = graphics().createImageLayer(resetButtonImage);
 		
 		mResetButton.addListener(new Pointer.Adapter(){
