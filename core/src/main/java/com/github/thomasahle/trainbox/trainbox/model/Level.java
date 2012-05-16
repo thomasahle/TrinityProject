@@ -153,7 +153,7 @@ public class Level {
 			0,0,0,1,1
 		));
 		mLevels.add(new Level(
-			13, "Know your matrix",
+			13, "There is no cow matrix",
 			"1-2 3-4", "1-3 2-4",
 			0,2,1,0,1,
 			0,1,2,0,1
