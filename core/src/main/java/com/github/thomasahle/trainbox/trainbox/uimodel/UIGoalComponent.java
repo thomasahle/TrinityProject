@@ -30,7 +30,12 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 
 	private final static int HEIGHT = 100;
 	private int mWidth;
+	
 
+	private boolean gameOver = false;
+	private boolean gameWon = false;
+	private String failMsg = "";
+	private UITrain mostRecentTrain;
 	private Image finishChecker = assets().getImage("images/pngs/finishChecker.png");
 	private ImageLayer mCheckerLayer, mTrackLayer;
 	private GroupLayer mBackLayer;
@@ -40,6 +45,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	private int deliveredCount = 0;
 	List<Train> deliveredCargoList = new ArrayList<Train>();
 	List<Train> cargoGoalList = new ArrayList<Train>();
+	public int trackColor = 0xffffdd00;
 
 	private LinkedList<UITrain> currentTrains = new LinkedList<UITrain>();
 	private LevelFinishedListener mListener;
@@ -90,8 +96,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		int imageWidth = mWidth
 				+ (int) Math.ceil(2 * ComponentHelper.RAIL_EXTRA);
 		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
-		int c = 0xffffdd00;
-		ComponentHelper.drawTracks(image.canvas(), mWidth, c, c);
+		ComponentHelper.drawTracks(image.canvas(), mWidth, trackColor, trackColor);
 		mTrackLayer.setImage(image);
 	}
 
@@ -134,44 +139,15 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 
 	@Override
 	public void takeTrain(UITrain uitrain) {
+		mostRecentTrain = uitrain;
 		currentTrains.add(uitrain);
-		
 		Train train = uitrain.train();
 		deliveredCargoList.add(train);
 		deliveredCount++;
 		deliveredCargoString = train + " " + deliveredCargoString;
 		// log().debug("Cargo: "+cargo+" delivered sucessfully!");
 
-		// TODO Tidy up this code.
-		if (deliveredCargoList.size() == cargoGoalList.size()) {
-			if (checkDelivered()) {
-				if (mListener != null) {
-					mListener.levelCleared();
-				}
-			} else {
-				if (mListener != null) {
-					mListener.levelFailed("Bad prefix");
-				}
-			}
-		} else if (deliveredCargoList.size() < cargoGoalList.size()) {
-			log().debug("Goal: " + cargoGoalString);
-			log().debug("Current: " + deliveredCargoString);
-			if (!checkDelivered()) {
-				if (mListener != null) {
-					mListener.levelFailed("You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString);
-				}
-			}
-		} else {
-			log().debug("Too many trains");
-			// LEVEL FAILED
-			if (mListener != null) {
-				mListener.levelFailed("You sent in "+deliveredCargoList.size()+" trains but we wanted "+cargoGoalList.size());
-			}
-		}
-
-		
-		// Display the cargos delivered
-		// Destroy the train.
+	
 	}
 
 	@Override
@@ -179,13 +155,70 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		return currentTrains;
 	}
 
+	/*
+	 * This isn't an exact science but it works for all levels so far,
+	 * if you find a bug let me know,
+	 * Matt
+	 */
+	public boolean trainsCompleted(){
+		int widthFull =0;
+		for(UITrain t:currentTrains){
+			widthFull += t.getSize().width + UITrain.PADDING;
+		}
+		widthFull -= UITrain.PADDING;
+		float block = this.getPosition().x+mWidth-widthFull;
+		//log().debug("MRT : " +mostRecentTrain.getPosition().x);
+		//log().debug("block: "+block);
+		return mostRecentTrain!= null && 
+				(mostRecentTrain.getPosition().x > block); 
+	}
 	@Override
 	public void update(float delta) {
-
 		if (paused())
 			return;
 
 		moveTrains(currentTrains, delta);
+		
+		// TODO Tidy up this code.
+		if (deliveredCargoList.size() == cargoGoalList.size()) {
+			if (checkDelivered()){
+				gameOver = true;
+				gameWon = true;
+				trackColor = 0xff00ff33;
+			} else {
+				gameOver = true;
+				trackColor=0xffff3300;
+				failMsg = "Close... but not quite."; // the last train must be the mismatch.
+			}
+		} else if (deliveredCargoList.size() < cargoGoalList.size()) {
+			log().debug("Goal: " + cargoGoalString);
+			log().debug("Current: " + deliveredCargoString);
+			if (!checkDelivered()) {
+				gameOver = true;
+				trackColor = 0xffff3300;
+				failMsg ="Trains don't match! ";
+				//"You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString; This message is too long for the display.
+			}
+		} else { // deliveredCargoList.size() > cargoGoalList.size()
+			log().debug("Too many trains");
+			gameOver = true;
+			trackColor = 0xffff3300;
+			// LEVEL FAILED
+			failMsg="Too many trains!"; // I actually don't think this code is reachable.
+		}
+		
+		if(gameOver && trainsCompleted()){
+			if(gameWon){
+				if (mListener != null ) {
+					mListener.levelCleared();
+				}
+			}else{
+				if (mListener != null ) {
+					mListener.levelFailed(failMsg);
+				}
+			}
+		}
+		updateTracks();
 	}
 
 	@Override
