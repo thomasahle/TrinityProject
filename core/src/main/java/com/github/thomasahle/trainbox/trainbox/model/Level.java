@@ -137,7 +137,7 @@ public class Level {
 			2,0,0,0,1
 		));
 		mLevels.add(new Level(
-			10, "Flip or mirror",
+			10, "Reflection",
 			"2 1", "1 2 2 1",
 			1,0,0,1,1
 		));

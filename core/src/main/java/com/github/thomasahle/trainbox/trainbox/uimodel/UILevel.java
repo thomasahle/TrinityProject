@@ -100,9 +100,9 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 
 		allTrains.removeAll(trainsInGoalComp);
 
-		if (!allTrains.isEmpty()) { // all the trains are in the goalComp
+		if (!allTrains.isEmpty()) { //  not all the trains are in the goalComp
 			log().debug("EXTRA TRAINS");
-			this.levelFailed("Too many trains");
+			this.levelFailed("UILEVEL: Too many trains");
 		} else {
 			log().debug("LEVEL CLEARED !!!");
 			mListener.levelCleared();
