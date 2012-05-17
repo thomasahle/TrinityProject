@@ -4,7 +4,6 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.List;
 import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.Layer;
+import playn.core.PlayN;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
@@ -106,31 +106,9 @@ public class UISeparateComponent extends AbstractComponent {
 				// XXX: This would be nicer if the train remembered what time it
 				// started to wait, so we don't risk livelocks due to evil delta values.
 				if (isUp(UP_LEVEL)) {
-					//mLeftSide.poll();
-					
 					UITrain head = train.cutOffHead();
 					fireTrainCreated(head);
 					mLeftSide.addFirst(head);
-					
-					//train.getLayer().setVisible(false);
-					//float oldSpeed = train.getSpeed();
-					//fireTrainDestroyed(train);
-					
-					/*
-					List<UICarriage> tailTrains = new ArrayList<UICarriage>(train.getCarriages());
-					tailTrains.remove(0);
-					UITrain tail = new UITrain(tailTrains);
-					fireTrainCreated(tail);
-					tail.setSpeed(oldSpeed); // set the speed of the remaining tail to the old speed of the total train.
-					tail.setPosition(new Point(trainLeft, train.getPosition().y));
-					// TODO: Set crop
-					mLeftSide.addFirst(tail);
-					
-					UITrain head = new UITrain(Arrays.asList(train.getCarriages().get(0)));
-					fireTrainCreated(head);
-					head.setSpeed(oldSpeed); // set the speed of the head to the old speed of the total train.
-					head.setPosition(new Point(carLeft, train.getPosition().y));
-					mLeftSide.addFirst(head);*/
 				}
 			}
 		}
@@ -175,7 +153,7 @@ public class UISeparateComponent extends AbstractComponent {
 			float newRight = Math.min(rightBorder, trainRight + train.speed*delta);
 			
 			// If we are already on the knife, hold it down
-			if (carLeft < knifeX && knifeX <= trainRight - 0.1f) {
+			if (carLeft + 1f < knifeX && knifeX <= trainRight - 1f) {
 				mKnifeT = 0;
 			}
 			// If we are on the left side of the knife, and its up, we have to wait
