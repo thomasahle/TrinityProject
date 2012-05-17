@@ -6,7 +6,6 @@ import static playn.core.PlayN.pointer;
 
 import java.util.ArrayList;
 
-
 import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
@@ -19,7 +18,7 @@ import pythagoras.f.Point;
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIFlipComponent;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIIdentityComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIHorizontalComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIJoinComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UISeparateComponent;
@@ -272,7 +271,7 @@ public class DemoScene implements Scene, Pointer.Listener {
 				"2 1", "2-1",
 				0,0,0,0,0
 			));
-		mLevelPage9.insertChildAt(new UISplitMergeComponent(new UIIdentityComponent(2), new UIIdentityComponent(2)), new Point(210,50));
+		mLevelPage9.insertChildAt(new UISplitMergeComponent(new UIHorizontalComponent(100), new UIHorizontalComponent(100)), new Point(210,50));
 		mLevelPage9.layer().setTranslation(10, 350);
 		demoPages.get(8).add(mLevelPage9.layer());
 		
