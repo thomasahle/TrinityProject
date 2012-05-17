@@ -212,7 +212,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			}
 		});
 		
-		mResetButton.setTranslation(graphics().width()-380, graphics().height()-125);
+		mResetButton.setTranslation(graphics().width()-390, graphics().height()-125);
 		
 		
 		Image goButtonImage = assets().getImage("images/pngs/goButton.png");
@@ -236,7 +236,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		
 		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");
 		ImageLayer menuButtonImageImageLayer = graphics().createImageLayer(menuButtonImage);
-		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-125);
+		menuButtonImageImageLayer.setTranslation(graphics().width()-260, graphics().height()-125);
 		menuButtonImageImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				setPaused(true);
