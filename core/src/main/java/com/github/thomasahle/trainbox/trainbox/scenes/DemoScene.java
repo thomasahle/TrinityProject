@@ -28,7 +28,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UISplitMergeComponent;
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
-public class DemoScene implements Scene, Pointer.Listener {
+public class DemoScene implements Scene {
     int width = graphics().width();
 	int height = graphics().height();
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
@@ -164,12 +164,11 @@ public class DemoScene implements Scene, Pointer.Listener {
 
 		});
         
-        
         final Image nextButtonImage = assets().getImage("images/pngs/nextButton.png");
         nextButtonImageLayer = graphics().createImageLayer(nextButtonImage);
         demoLayer.add(nextButtonImageLayer);
 		nextButtonImageLayer.setTranslation(680, 520);
-		nextButtonImageLayer.addListener(new Pointer.Listener() {
+		nextButtonImageLayer.addListener(new Pointer.Adapter() {
 
 			@Override
 			public void onPointerStart(Pointer.Event event) {

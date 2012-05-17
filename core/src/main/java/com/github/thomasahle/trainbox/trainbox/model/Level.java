@@ -187,7 +187,7 @@ public class Level {
 			0,3,2,0,3
 		));
 		mLevels.add(new Level(
-			19, "Bigger and Better Builder",
+			19, "Bigger, Better",
 			"1", "1 1 1 1 1",
 			3,0,0,0,2, // dup dup ((dup||id)||id)
 			3,1,1,0,1
