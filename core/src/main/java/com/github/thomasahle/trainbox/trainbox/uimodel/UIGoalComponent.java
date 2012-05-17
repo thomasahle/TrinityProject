@@ -23,6 +23,8 @@ import com.github.thomasahle.trainbox.trainbox.model.Train;
 public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		UIComponent {
 
+	private static final int RED = 0xffff3300;
+	private static final int GREEN = 0xff00ff33;
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
@@ -40,7 +42,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	private int deliveredCount = 0;
 	List<Train> deliveredCargoList = new ArrayList<Train>();
 	List<Train> cargoGoalList = new ArrayList<Train>();
-	public int trackColor = 0xffffdd00;
+	public int trackColor = 0xff816647;
 
 	private LinkedList<UITrain> currentTrains = new LinkedList<UITrain>();
 	private LevelFinishedListener mListener;
@@ -91,7 +93,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		int imageWidth = mWidth
 				+ (int) Math.ceil(2 * ComponentHelper.RAIL_EXTRA);
 		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
-		ComponentHelper.drawTracks(image.canvas(), mWidth, trackColor, trackColor);
+		ComponentHelper.drawTracks(image.canvas(), mWidth, 0xff565248, trackColor);
 		mTrackLayer.setImage(image);
 	}
 
@@ -179,11 +181,11 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 			if (checkDelivered()){
 				gameOver = true;
 				gameWon = true;
-				trackColor = 0xff00ff33;
+				trackColor = GREEN;
 			} else {
 				gameOver = true;
 				gameWon = false;
-				trackColor=0xffff3300;
+				trackColor=RED;
 				failMsg = "Close... but not quite."; // the last train must be the mismatch.
 			}
 		} else if (deliveredCargoList.size() < cargoGoalList.size()) {
@@ -192,7 +194,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 			if (!checkDelivered()) {
 				gameOver = true;
 				gameWon = false;
-				trackColor = 0xffff3300;
+				trackColor = RED;
 				failMsg ="Trains don't match! ";
 				//"You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString; This message is too long for the display.
 			}
@@ -200,7 +202,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 			log().debug("Too many trains");
 			gameOver = true;
 			gameWon = false;
-			trackColor = 0xffff3300;
+			trackColor = RED;
 			// LEVEL FAILED
 			failMsg="Too many trains!";
 		}
