@@ -17,6 +17,7 @@ import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
+import com.sun.tools.javac.util.Position;
 
 public class UILevel implements TrainsChangedListener, LevelFinishedListener, HitTester {
 	
@@ -27,6 +28,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
+	private UITrain frontTrain;
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -61,6 +63,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 		mLayer.setHitTester(this);
 		
 		mTrack.setTrainsChangedListener(this);
+		frontTrain = mTrack.getTrains().get(0);
 	}
 	
 	public void update(float delta) {
@@ -84,6 +87,11 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	public boolean paused() {
 		return mTrack.paused();
 	}
+	
+	public Point getFrontTrainPosition(){
+		return frontTrain.getPosition();
+	}
+	
 	public void paused(boolean paused) {
 		mTrack.paused(paused);
 	}
