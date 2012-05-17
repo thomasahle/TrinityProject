@@ -3,7 +3,10 @@ package com.github.thomasahle.trainbox.trainbox.core;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
+import playn.core.CanvasImage;
+import playn.core.CanvasLayer;
 import playn.core.Game;
+import playn.core.ImageLayer;
 import playn.core.PlayN;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
@@ -44,7 +47,12 @@ public class TrainBox implements Game{
 		} else {
 			graphics().setSize(1024, 640); // this changes the size of the main window
 		}
-
+		
+		CanvasImage bgimage = graphics().createImage(graphics().width(), graphics().height());
+		bgimage.canvas().fillRect(0, 0, graphics().width(), graphics().height());
+		ImageLayer bglayer = graphics().createImageLayer(bgimage);
+		
+		graphics().rootLayer().add(bglayer);
 		
 		addResources();
 
