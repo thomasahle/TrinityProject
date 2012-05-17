@@ -10,6 +10,7 @@ import java.util.List;
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
+import playn.core.PlayN;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
@@ -41,6 +42,8 @@ public class UIHorizontalComponent extends AbstractComposite implements HitTeste
 	public boolean insertChildAt(UIComponent child, Point position) {
 		// We accept positions that are on top of an identity component.
 		// For the user that corresponds to the spaces between 'real' components.
+		
+		PlayN.log().debug("At: " + position);
 		
 		for (int p = 0; p < mComponents.size(); p++) {
 			UIComponent c = mComponents.get(p);

@@ -6,12 +6,9 @@ import static playn.core.PlayN.log;
 import java.util.ArrayList;
 import java.util.List;
 
-import playn.core.CanvasImage;
-import playn.core.Font;
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
-import playn.core.TextFormat;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
@@ -27,6 +24,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
+	private UITrain frontTrain;
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -61,6 +59,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 		mLayer.setHitTester(this);
 		
 		mTrack.setTrainsChangedListener(this);
+		frontTrain = mTrack.getTrains().get(0);
 	}
 	
 	public void update(float delta) {
@@ -84,6 +83,11 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	public boolean paused() {
 		return mTrack.paused();
 	}
+	
+	public Point getFrontTrainPosition(){
+		return frontTrain.getPosition();
+	}
+	
 	public void paused(boolean paused) {
 		mTrack.paused(paused);
 	}
@@ -105,14 +109,16 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 			this.levelFailed("You have hidden trains in your track!");
 		} else {
 			log().debug("LEVEL CLEARED !!!");
-			mListener.levelCleared();
+			if (mListener != null)
+				mListener.levelCleared();
 		}
 	}
 	@Override
 	public void levelFailed(String message) {
 		mTrack.paused(true);
 		log().debug("LEVEL FAILED !!!");
-		mListener.levelFailed(message);
+		if (mListener != null)	
+			mListener.levelFailed(message);
 	}
 
 	@Override

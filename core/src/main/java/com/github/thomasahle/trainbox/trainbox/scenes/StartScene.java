@@ -195,6 +195,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 	
 	@Override
 	public void onAttach() {
+		graphics().rootLayer().setScale(1, 1);
 		graphics().rootLayer().add(bgLayer);
 		graphics().rootLayer().add(cloudLayer);
         graphics().rootLayer().add(menuLayer);

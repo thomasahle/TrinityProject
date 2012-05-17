@@ -32,7 +32,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 
-
+	
 /**
  * This should contain everything we need for a level:
  *  - The track
@@ -60,6 +60,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	ImageLayer pauseButtonImageLayer;
 	GroupLayer levelPopupLayer;
 	ImageLayer titleLayer;
+	private boolean autoScroll = true;
 	
 	public LevelScene(TrainBox trainBox, Level level) {
 		this.trainBox = trainBox;
@@ -81,8 +82,8 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	
 	private void initLevelText() {
 		CanvasImage textImage = graphics().createImage(graphics().width(), 400);
-		Font font = graphics().createFont("Sans", Font.Style.BOLD, 30);
-		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff565248)).withTextColor(0xffffffff);
+		Font font = graphics().createFont("Tahoma", Font.Style.BOLD, 35);
+		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff000000)).withTextColor(0xffca7829);
 		textImage.canvas().drawText(graphics().layoutText(mLevel.getLevel().title, format), 0, 0);
 		titleLayer = graphics().createImageLayer(textImage);
 		titleLayer.setTranslation(50, 35);
@@ -91,6 +92,14 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	@Override
 	public void update(float delta) {
 		mLevel.update(delta);
+		
+		if (!isPaused() && autoScroll ){
+			Point p = mLevel.getFrontTrainPosition();
+						
+			float x = (float) (graphics().width()*0.68-p.x);
+			
+			setLevelTranslation(x, p.y);
+		}
 	}
 	
 	@Override
@@ -121,6 +130,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	private void setPaused(boolean paused) {
 		mLevel.paused(paused);
 		if (!paused) {
+			autoScroll = true;
 			currPauseGoButtonImageIndex = 1;
 		}
 		else {
@@ -202,7 +212,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			}
 		});
 		
-		mResetButton.setTranslation(graphics().width()-380, graphics().height()-125);
+		mResetButton.setTranslation(graphics().width()-390, graphics().height()-125);
 		
 		
 		Image goButtonImage = assets().getImage("images/pngs/goButton.png");
@@ -226,7 +236,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		
 		Image menuButtonImage = assets().getImage("images/pngs/menuButton.png");
 		ImageLayer menuButtonImageImageLayer = graphics().createImageLayer(menuButtonImage);
-		menuButtonImageImageLayer.setTranslation(graphics().width()*3/4, graphics().height()-125);
+		menuButtonImageImageLayer.setTranslation(graphics().width()-260, graphics().height()-125);
 		menuButtonImageImageLayer.addListener(new Pointer.Adapter() {
 			@Override public void onPointerStart(Event event) {
 				setPaused(true);
@@ -405,6 +415,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	@Override
 	public void onPointerDrag(Event event) {
 		if (mIsDragging) {
+			autoScroll = false;
 			float x = event.x()-mDragStartXPos;
 			float y = event.y()-mDragStartYPos;
 			setLevelTranslation(x, y);

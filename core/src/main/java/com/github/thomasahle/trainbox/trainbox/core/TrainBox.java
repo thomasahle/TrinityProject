@@ -3,7 +3,10 @@ package com.github.thomasahle.trainbox.trainbox.core;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
+import playn.core.CanvasImage;
+import playn.core.CanvasLayer;
 import playn.core.Game;
+import playn.core.ImageLayer;
 import playn.core.PlayN;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
@@ -23,30 +26,18 @@ public class TrainBox implements Game{
 	Scene startScene;
 	Scene levelSelectScene;
 	
+	AssetWatcher watcher;
+	
 	public final static int WIDTH = 1024;
 	public final static int HEIGHT = 640;
 	Scene mScene = new NullScene();
-	
-	AssetWatcher watcher = new AssetWatcher(new AssetWatcher.Listener() {
-		public void done() {
-			startScene = new StartScene(TrainBox.this);
-			demoScene = new DemoScene(TrainBox.this);
-			moveScene = new MoveScene(TrainBox.this);
-			levelSelectScene = new LevelSelectScene(TrainBox.this);
-			
-			setScene(startScene);
-		}
-
-		public void error(Throwable e) {
-		}
-	});
 	
 	@Override
 	public void init() {
 		
 		setScene(new LoadingScene(this));
 		if (PlayN.platformType() == PlayN.platformType().ANDROID){
-			graphics().setSize(graphics().screenWidth(), graphics().screenHeight()-50);
+			graphics().setSize(graphics().screenWidth(), graphics().screenHeight());
 			// Keep the same aspect ratio.
 			float sx = graphics().screenWidth() / (float) WIDTH;
 			float sy = graphics().screenHeight() / (float) HEIGHT;
@@ -56,7 +47,13 @@ public class TrainBox implements Game{
 		} else {
 			graphics().setSize(1024, 640); // this changes the size of the main window
 		}
-
+		
+		CanvasImage bgimage = graphics().createImage(graphics().width(), graphics().height());
+		bgimage.canvas().fillRect(0, 0, graphics().width(), graphics().height());
+		ImageLayer bglayer = graphics().createImageLayer(bgimage);
+		
+		graphics().rootLayer().add(bglayer);
+		
 		addResources();
 
 		watcher.start();
@@ -64,6 +61,16 @@ public class TrainBox implements Game{
 
 	private void addResources(){
 		//Insert resources here.
+		
+		watcher = new AssetWatcher(new AssetWatcher.Listener() {
+			public void done() {
+				setScene(getStartScene());
+			}
+
+			public void error(Throwable e) {
+			}
+		});
+		
 		watcher.add(assets().getImage("images/pngs/aboutButton.png"));
 		watcher.add(assets().getImage("images/pngs/aboutButtonPressed.png"));
 		watcher.add(assets().getImage("images/pngs/aboutPage.png"));
@@ -142,18 +149,22 @@ public class TrainBox implements Game{
 	}
 	
 	public Scene getDemoScene() {
+		demoScene = new DemoScene(this);
 		return demoScene;
 	}
 	
 	public Scene getStartScene() {
+		startScene = new StartScene(this);
 		return startScene;
 	}
 
 	public Scene getMoveScene() {
+		moveScene = new MoveScene(this);
 		return moveScene;
 	}
 	
 	public Scene getLevelSelectScene() {
+		levelSelectScene = new LevelSelectScene(this);
 		return levelSelectScene;
 	}
 	
