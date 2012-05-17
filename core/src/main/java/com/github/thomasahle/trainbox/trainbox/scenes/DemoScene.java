@@ -14,8 +14,16 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Pointer;
 import playn.core.Pointer.Event;
+import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
+import com.github.thomasahle.trainbox.trainbox.model.Level;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIFlipComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIIdentityComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UIJoinComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UISeparateComponent;
+import com.github.thomasahle.trainbox.trainbox.uimodel.UISplitMergeComponent;
 
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
@@ -27,8 +35,15 @@ public class DemoScene implements Scene, Pointer.Listener {
     ImageLayer bgLayer;
     GroupLayer demoLayer;
     TrainBox trainBox;
-    ArrayList<ImageLayer> demoPages;  // this array contains the pages that the demo contains, allows easy iteration
+    ArrayList<GroupLayer> demoPages;  // this array contains the pages that the demo contains, allows easy iteration
     int currentDemoIndex;
+    private UILevel mLevelPage6;
+    private UILevel mLevelPage7;
+    private UILevel mLevelPage8;
+    private UILevel mLevelPage9;
+
+
+
     
     ImageLayer nextButtonImageLayer;
     ImageLayer backButtonImageLayer;
@@ -70,21 +85,36 @@ public class DemoScene implements Scene, Pointer.Listener {
         final ImageLayer demoPage8ImageLayer = graphics().createImageLayer(demoPage8Image);
         final ImageLayer demoPage9ImageLayer = graphics().createImageLayer(demoPage9Image);
 
+        GroupLayer demoPage1Layer = graphics().createGroupLayer();
+        GroupLayer demoPage2Layer = graphics().createGroupLayer();
+        GroupLayer demoPage3Layer = graphics().createGroupLayer();
+        GroupLayer demoPage4Layer = graphics().createGroupLayer();
+        GroupLayer demoPage5Layer = graphics().createGroupLayer();
+        GroupLayer demoPage6Layer = graphics().createGroupLayer();
+        GroupLayer demoPage7Layer = graphics().createGroupLayer();
+        GroupLayer demoPage8Layer = graphics().createGroupLayer();
+        GroupLayer demoPage9Layer = graphics().createGroupLayer();
         
-        
-        
+        demoPage1Layer.add(demoPage1ImageLayer);
+        demoPage2Layer.add(demoPage2ImageLayer);
+        demoPage3Layer.add(demoPage3ImageLayer);
+        demoPage4Layer.add(demoPage4ImageLayer);
+        demoPage5Layer.add(demoPage5ImageLayer);
+        demoPage6Layer.add(demoPage6ImageLayer);
+        demoPage7Layer.add(demoPage7ImageLayer);
+        demoPage8Layer.add(demoPage8ImageLayer);
+        demoPage9Layer.add(demoPage9ImageLayer);
 
-        
         demoPages = new ArrayList();
-        demoPages.add(demoPage1ImageLayer);
-        demoPages.add(demoPage2ImageLayer);
-        demoPages.add(demoPage3ImageLayer);
-        demoPages.add(demoPage4ImageLayer);
-        demoPages.add(demoPage5ImageLayer);
-        demoPages.add(demoPage6ImageLayer);
-        demoPages.add(demoPage7ImageLayer);
-        demoPages.add(demoPage8ImageLayer);
-        demoPages.add(demoPage9ImageLayer);
+        demoPages.add(demoPage1Layer);
+        demoPages.add(demoPage2Layer);
+        demoPages.add(demoPage3Layer);
+        demoPages.add(demoPage4Layer);
+        demoPages.add(demoPage5Layer);
+        demoPages.add(demoPage6Layer);
+        demoPages.add(demoPage7Layer);
+        demoPages.add(demoPage8Layer);
+        demoPages.add(demoPage9Layer);
 
 
 
@@ -92,6 +122,8 @@ public class DemoScene implements Scene, Pointer.Listener {
         	demoLayer.add(demoPages.get(i));
         }
     
+		initDemoLevels();
+
         
         demoLayer.setVisible(true);
         currentDemoIndex = 0;
@@ -204,10 +236,53 @@ public class DemoScene implements Scene, Pointer.Listener {
 
 	}
 
+	private void initDemoLevels() {
+		mLevelPage6 = new UILevel(new Level(
+				0, "",
+				"2 1", "2-1",
+				0,0,0,0,0
+			));
+		mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(1,0));
+		mLevelPage6.layer().setTranslation(80, 420);
+		demoPages.get(5).add(mLevelPage6.layer());
+		
+		
+		mLevelPage7 = new UILevel(new Level(
+				0, "",
+				"2 1", "2-1",
+				0,0,0,0,0
+			));
+		mLevelPage7.insertChildAt(new UISeparateComponent(), new Point(0,0));
+		mLevelPage7.layer().setTranslation(80, 420);
+		demoPages.get(6).add(mLevelPage7.layer());
+		
+		
+		mLevelPage8 = new UILevel(new Level(
+				0, "",
+				"2 1", "2-1",
+				0,0,0,0,0
+			));
+		mLevelPage8.insertChildAt(new UIFlipComponent(), new Point(0,0));
+		mLevelPage8.layer().setTranslation(80, 420);
+		demoPages.get(7).add(mLevelPage8.layer());
+		
+		
+		mLevelPage9 = new UILevel(new Level(
+				0, "",
+				"2 1", "2-1",
+				0,0,0,0,0
+			));
+		mLevelPage9.insertChildAt(new UISplitMergeComponent(new UIIdentityComponent(2), new UIIdentityComponent(2)), new Point(0,0));
+		mLevelPage9.layer().setTranslation(10, 350);
+		demoPages.get(8).add(mLevelPage9.layer());
+		
+	}
+
 	@Override
 	public void onAttach() {
 		graphics().rootLayer().add(bgLayer);
 	    graphics().rootLayer().add(demoLayer);
+		//graphics().rootLayer().add();
 	    pointer().setListener(this);
 	}
 
@@ -215,6 +290,7 @@ public class DemoScene implements Scene, Pointer.Listener {
 	public void onDetach() {
 		graphics().rootLayer().remove(bgLayer);
 	    graphics().rootLayer().remove(demoLayer);
+		//graphics().rootLayer().remove(mLevel.layer());
 	    pointer().setListener(null);
 
 
@@ -223,8 +299,12 @@ public class DemoScene implements Scene, Pointer.Listener {
 	
 	@Override
 	public void update(float delta) {
-
+		mLevelPage6.update(delta);
+		mLevelPage7.update(delta);
+		mLevelPage8.update(delta);
+		mLevelPage9.update(delta);
 	}
+	
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
