@@ -10,6 +10,7 @@
         <activity android:name="TrainBoxActivity"
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+                  android:background="#ffe9b96e"
                   android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
