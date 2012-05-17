@@ -60,6 +60,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	ImageLayer pauseButtonImageLayer;
 	GroupLayer levelPopupLayer;
 	ImageLayer titleLayer;
+	private boolean autoScroll = true;
 	
 	public LevelScene(TrainBox trainBox, Level level) {
 		this.trainBox = trainBox;
@@ -91,6 +92,14 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	@Override
 	public void update(float delta) {
 		mLevel.update(delta);
+		
+		if (!isPaused() && autoScroll ){
+			Point p = mLevel.getFrontTrainPosition();
+						
+			float x = (float) (graphics().width()*0.68-p.x);
+			
+			setLevelTranslation(x, p.y);
+		}
 	}
 	
 	@Override
@@ -121,6 +130,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	private void setPaused(boolean paused) {
 		mLevel.paused(paused);
 		if (!paused) {
+			autoScroll = true;
 			currPauseGoButtonImageIndex = 1;
 		}
 		else {
@@ -405,6 +415,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	@Override
 	public void onPointerDrag(Event event) {
 		if (mIsDragging) {
+			autoScroll = false;
 			float x = event.x()-mDragStartXPos;
 			float y = event.y()-mDragStartYPos;
 			setLevelTranslation(x, y);
