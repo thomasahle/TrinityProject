@@ -64,7 +64,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 		this.trainBox = trainBox;
 		menuVisible = true;
 		Canvas canvas = bgImage.canvas();
-		canvas.setFillColor(0xff87ceeb);
+		canvas.setFillColor(0xffe9b96e);
 		canvas.fillRect(0, 0, width, height);
         final Image backgroundImage = assets().getImage("images/pngs/startPage.png");
 		canvas.drawImage(backgroundImage, 0, 0);

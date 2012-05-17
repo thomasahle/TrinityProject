@@ -8,6 +8,7 @@ import static playn.core.PlayN.pointer;
 
 import java.util.Arrays;
 
+import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Font;
 import playn.core.GroupLayer;
@@ -69,6 +70,8 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		// A background image. This should be really nice.
 		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
 		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
+		bgImage.canvas().setFillColor(0xffe9b96e);
+		bgImage.canvas().fillRect(0, 0, WIDTH, HEIGHT);
 		bgImage.canvas().drawImage(backgroundImage, 0, 0);
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
