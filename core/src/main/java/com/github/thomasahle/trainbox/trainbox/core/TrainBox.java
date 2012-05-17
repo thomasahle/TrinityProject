@@ -23,30 +23,18 @@ public class TrainBox implements Game{
 	Scene startScene;
 	Scene levelSelectScene;
 	
+	AssetWatcher watcher;
+	
 	public final static int WIDTH = 1024;
 	public final static int HEIGHT = 640;
 	Scene mScene = new NullScene();
-	
-	AssetWatcher watcher = new AssetWatcher(new AssetWatcher.Listener() {
-		public void done() {
-			startScene = new StartScene(TrainBox.this);
-			demoScene = new DemoScene(TrainBox.this);
-			moveScene = new MoveScene(TrainBox.this);
-			levelSelectScene = new LevelSelectScene(TrainBox.this);
-			
-			setScene(startScene);
-		}
-
-		public void error(Throwable e) {
-		}
-	});
 	
 	@Override
 	public void init() {
 		
 		setScene(new LoadingScene(this));
 		if (PlayN.platformType() == PlayN.platformType().ANDROID){
-			graphics().setSize(graphics().screenWidth(), graphics().screenHeight()-50);
+			graphics().setSize(graphics().screenWidth(), graphics().screenHeight());
 			// Keep the same aspect ratio.
 			float sx = graphics().screenWidth() / (float) WIDTH;
 			float sy = graphics().screenHeight() / (float) HEIGHT;
@@ -57,6 +45,7 @@ public class TrainBox implements Game{
 			graphics().setSize(1024, 640); // this changes the size of the main window
 		}
 
+		
 		addResources();
 
 		watcher.start();
@@ -64,6 +53,16 @@ public class TrainBox implements Game{
 
 	private void addResources(){
 		//Insert resources here.
+		
+		watcher = new AssetWatcher(new AssetWatcher.Listener() {
+			public void done() {
+				setScene(getStartScene());
+			}
+
+			public void error(Throwable e) {
+			}
+		});
+		
 		watcher.add(assets().getImage("images/pngs/aboutButton.png"));
 		watcher.add(assets().getImage("images/pngs/aboutButtonPressed.png"));
 		watcher.add(assets().getImage("images/pngs/aboutPage.png"));
@@ -142,18 +141,22 @@ public class TrainBox implements Game{
 	}
 	
 	public Scene getDemoScene() {
+		demoScene = new DemoScene(this);
 		return demoScene;
 	}
 	
 	public Scene getStartScene() {
+		startScene = new StartScene(this);
 		return startScene;
 	}
 
 	public Scene getMoveScene() {
+		moveScene = new MoveScene(this);
 		return moveScene;
 	}
 	
 	public Scene getLevelSelectScene() {
+		levelSelectScene = new LevelSelectScene(this);
 		return levelSelectScene;
 	}
 	
