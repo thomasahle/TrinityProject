@@ -12,7 +12,7 @@ import pythagoras.f.Rectangle;
 
 public class QuadPath {
 	
-	private static final float SMOOTHNES = 0.2f;
+	private static final float SMOOTHNES = 0.5f;
 	
 	public final pythagoras.f.Path pytagPath;
 	
