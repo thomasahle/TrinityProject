@@ -6,18 +6,14 @@ import static playn.core.PlayN.log;
 import java.util.ArrayList;
 import java.util.List;
 
-import playn.core.CanvasImage;
-import playn.core.Font;
 import playn.core.GroupLayer;
 import playn.core.Layer;
 import playn.core.Layer.HitTester;
-import playn.core.TextFormat;
 import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.model.Train;
-import com.sun.tools.javac.util.Position;
 
 public class UILevel implements TrainsChangedListener, LevelFinishedListener, HitTester {
 	
