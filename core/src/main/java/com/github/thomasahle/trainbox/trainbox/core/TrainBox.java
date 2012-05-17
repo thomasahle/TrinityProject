@@ -35,6 +35,12 @@ public class TrainBox implements Game{
 	@Override
 	public void init() {
 		
+		CanvasImage bgimage = graphics().createImage(graphics().width(), graphics().height());
+		bgimage.canvas().setFillColor(0xe9b96e);
+		bgimage.canvas().fillRect(0, 0, graphics().width(), graphics().height());
+		ImageLayer bglayer = graphics().createImageLayer(bgimage);
+		graphics().rootLayer().add(bglayer);
+		
 		setScene(new LoadingScene(this));
 		if (PlayN.platformType() == PlayN.platformType().ANDROID){
 			graphics().setSize(graphics().screenWidth(), graphics().screenHeight());
@@ -48,11 +54,7 @@ public class TrainBox implements Game{
 			graphics().setSize(1024, 640); // this changes the size of the main window
 		}
 		
-		CanvasImage bgimage = graphics().createImage(graphics().width(), graphics().height());
-		bgimage.canvas().fillRect(0, 0, graphics().width(), graphics().height());
-		ImageLayer bglayer = graphics().createImageLayer(bgimage);
 		
-		graphics().rootLayer().add(bglayer);
 		
 		addResources();
 
