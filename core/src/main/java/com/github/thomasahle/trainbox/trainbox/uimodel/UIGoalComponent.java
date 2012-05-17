@@ -20,11 +20,6 @@ import pythagoras.f.Dimension;
 
 import com.github.thomasahle.trainbox.trainbox.model.Train;
 
-/* Once we have Images for the cargo, maybe have this component 'drop' the
- * ground where the alien avatar for the level (planet) can be waiting, and
- * react as each piece of cargo hits the ground?
- */
-
 public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		UIComponent {
 
