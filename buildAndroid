@@ -1,0 +1,2 @@
+mvn clean install -pl core,android -Dandroid.sdk.path=/opt/android-sdk
+

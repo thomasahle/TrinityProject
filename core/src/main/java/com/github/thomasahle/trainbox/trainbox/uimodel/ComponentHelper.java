@@ -1,8 +1,8 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
-import java.util.Arrays;
-
 import playn.core.Canvas;
+import playn.core.Canvas.Composite;
+import playn.core.CanvasImage;
 import playn.core.Path;
 import playn.core.PlayN;
 import pythagoras.f.FloatMath;
@@ -64,22 +64,16 @@ public class ComponentHelper {
 	}
 	
 	public static void drawBendTrack(Canvas ctx, QuadPath path) {
-		// FIXME: OK we put these the wrong way around, but until we
-		//		  can properly intersect the path stroking, there is no way around it
-		Path playnPath = path.paintPath(ctx.createPath());
-		ctx.setStrokeColor(0xff666666);
-		ctx.setStrokeWidth(RAIL_SPACE+2*RAIL_HEIGHT);
-		ctx.strokePath(playnPath);
-		ctx.setStrokeColor(0xffe9b96e);
-		ctx.setStrokeWidth(RAIL_SPACE);
-		ctx.strokePath(playnPath);
+		drawBendTrack(ctx, path, 0xff000000, 0xff666666);
+	}
+	
+	public static void drawBendTrack(Canvas ctx, QuadPath path, int sleeper_color, int rail_color) {
 		
-		
+		// The sleepers
 		float width = path.length();
 		int nSleepers = (int)(width/(SLEEPER_WIDTH + SLEEPER_SPACE));
 		nSleepers = Math.max(nSleepers, 1);
 		float actualSpace = width/(float)nSleepers - SLEEPER_WIDTH;
-		
 		for (int i = 0; i < nSleepers; i++) {
 			float t = (i+0.5f) * (SLEEPER_WIDTH + actualSpace);
 			float[] pos = path.evaluate(t);
@@ -93,9 +87,24 @@ public class ComponentHelper {
 			ctx.save();
 			ctx.translate(pos[0], pos[1]);
 			ctx.rotate(FloatMath.atan2(slope[1], slope[0]));
-			ctx.setFillColor(0xff000000);
+			ctx.setFillColor(sleeper_color);
 			ctx.fillPath(rect);
 			ctx.restore();
 		}
+		
+		// The rails
+		float outerRailSize = RAIL_SPACE+2*RAIL_HEIGHT;
+		CanvasImage offScreen = PlayN.graphics().createImage(
+				(int)(path.bounds().width+path.bounds().x+outerRailSize+2),
+				(int)(path.bounds().height+path.bounds().y+outerRailSize+2));
+		Canvas ctx2 = offScreen.canvas();
+		Path playnPath = path.paintPath(ctx2.createPath());
+		ctx2.setStrokeColor(rail_color);
+		ctx2.setStrokeWidth(outerRailSize);
+		ctx2.strokePath(playnPath);
+		ctx2.setCompositeOperation(Composite.DST_OUT); // F*cking awesome feature!
+		ctx2.setStrokeWidth(RAIL_SPACE);
+		ctx2.strokePath(playnPath);
+		ctx.drawImage(offScreen, 0, 0);
 	}
 }

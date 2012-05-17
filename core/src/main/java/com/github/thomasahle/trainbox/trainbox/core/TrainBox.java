@@ -23,6 +23,8 @@ public class TrainBox implements Game{
 	Scene startScene;
 	Scene levelSelectScene;
 	
+	public final static int WIDTH = 1024;
+	public final static int HEIGHT = 640;
 	Scene mScene = new NullScene();
 	
 	AssetWatcher watcher = new AssetWatcher(new AssetWatcher.Listener() {
@@ -43,10 +45,20 @@ public class TrainBox implements Game{
 	public void init() {
 		
 		setScene(new LoadingScene(this));
-		graphics().setSize(1024, 640);  // this changes the size of the main window
-		
+		if (PlayN.platformType() == PlayN.platformType().ANDROID){
+			graphics().setSize(graphics().screenWidth(), graphics().screenHeight()-50);
+			// Keep the same aspect ratio.
+			float sx = graphics().screenWidth() / (float) WIDTH;
+			float sy = graphics().screenHeight() / (float) HEIGHT;
+
+			// Fit to the available screen without stretching.
+			graphics().rootLayer().setScale(Math.min(sx, sy));
+		} else {
+			graphics().setSize(1024, 640); // this changes the size of the main window
+		}
+
 		addResources();
-		
+
 		watcher.start();
 	}
 

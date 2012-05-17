@@ -4,22 +4,22 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.Layer;
-import playn.core.Path;
 import pythagoras.f.Dimension;
-import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
 
+import com.github.thomasahle.trainbox.trainbox.model.Train;
 import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
 
 // It's expected that this deadlocks when the output is waiting for the input.
@@ -27,6 +27,8 @@ import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
 
 public class UISplitMergeComponent extends AbstractComposite {
 	
+	private static final float BOTTOM_ALPHA = 0.5f;
+
 	private final static float SIDES_WIDTH = 150;
 	
 	private LinkedList<UITrain> mIngoing = new LinkedList<UITrain>();
@@ -93,27 +95,38 @@ public class UISplitMergeComponent extends AbstractComposite {
 				0, mBotComp.getPosition().y + mBotComp.getSize().height/2,
 				SIDES_WIDTH, mSize.height/2);
 	}
+	
 	private void updateImages() {
+		QuadPath first, second;
+		
 		CanvasImage imageLeft = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		if ((!mIngoing.isEmpty() && mUpgoing.contains(mIngoing.get(mIngoing.size()-1))) || (mIngoing.isEmpty() && mNextDirection == mUpgoing)) {
-		//if (mNextDirection == mUpgoing) {
-			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
-			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
+			first = mDownPathIn;
+			second = mUpPathIn;
 		} else {
-			ComponentHelper.drawBendTrack(imageLeft.canvas(), mUpPathIn);
-			ComponentHelper.drawBendTrack(imageLeft.canvas(), mDownPathIn);
+			first = mUpPathIn;
+			second = mDownPathIn;
 		}
+		drawTwoTracks(imageLeft, first, second);
 		mLeftLayer.setImage(imageLeft);
 		
 		CanvasImage imageRight = graphics().createImage((int)SIDES_WIDTH, (int)mSize.height);
 		if ((!mOutgoing.isEmpty() && mUpgoing.contains(mOutgoing.peek())) || (mOutgoing.isEmpty() && mNextTaker == mTopTaker)) {
-			ComponentHelper.drawBendTrack(imageRight.canvas(), mDownPathOut);
-			ComponentHelper.drawBendTrack(imageRight.canvas(), mUpPathOut);
+			first = mDownPathOut;
+			second = mUpPathOut;
 		} else {
-			ComponentHelper.drawBendTrack(imageRight.canvas(), mUpPathOut);
-			ComponentHelper.drawBendTrack(imageRight.canvas(), mDownPathOut);
+			first = mUpPathOut;
+			second = mDownPathOut;
 		}
+		drawTwoTracks(imageRight, first, second);
 		mRightLayer.setImage(imageRight);
+	}
+
+	private void drawTwoTracks(CanvasImage image, QuadPath bottom, QuadPath top) {
+		image.canvas().setAlpha(BOTTOM_ALPHA);
+		ComponentHelper.drawBendTrack(image.canvas(), bottom);
+		image.canvas().setAlpha(1f);
+		ComponentHelper.drawBendTrack(image.canvas(), top);
 	}
 	
 	private void add(UIComponent comp) {
@@ -248,6 +261,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			// If the train is now entirely gone from us.
 			if (trainLeft >= compRight) {
 				it.remove();
+				updateImages();
 				continue;
 			}
 			
@@ -276,12 +290,13 @@ public class UISplitMergeComponent extends AbstractComposite {
 				continue;
 			}
 			
-			//train.vertCenterOn(mTopComp);
+			// Main move carriages part
 			for (UICarriage car : train.getCarriages()) {
 				float carLeft = car.getPosition().x + trainLeft - compLeft;
 				float carRight = carLeft + car.WIDTH;
 				float tCenter = path.calculateT((carRight+carLeft)/2.f);
 				tCenter = Math.min(tBorder - car.WIDTH/2.f, tCenter + train.getSpeed()*delta);
+				
 				if (carRight >= 0 || !car.touched()) {
 					float[] slope = path.evaluateSlope(tCenter);
 					float[] pos = path.evaluate(tCenter);
@@ -293,6 +308,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 				tBorder = tCenter - car.WIDTH/2.f;
 			}
 			
+			// Updating the position of the train
 			UICarriage first = train.getCarriages().get(0);
 			float newRight = trainLeft + first.getPosition().x + first.WIDTH;
 			float newLeft = newRight - train.getSize().width;
@@ -317,7 +333,6 @@ public class UISplitMergeComponent extends AbstractComposite {
 								car.getPosition().y+shifty));
 					}
 				}
-				updateImages();
 			}
 			
 			tBorder -= UITrain.PADDING;
@@ -327,8 +342,13 @@ public class UISplitMergeComponent extends AbstractComposite {
 	@Override
 	public void takeTrain(UITrain train) {
 		log().debug("Got train to splitter, sending it "+(mNextDirection==mUpgoing?"up":"down"));
+		log().debug("tblock was reported: "+mUpPathIn.calculateT(leftBlock()-getDeepPosition().x));
+		assert train.getPosition().x+train.getSize().width <= leftBlock();
+		
 		mIngoing.add(train);
 		mNextDirection.add(train);
+		//for (UICarriage car : train.getCarriages())
+		//	mTrainT.put(car, train.getPosition().x + car.getPosition().x - getDeepPosition().x + car.getSize().width);
 		
 		// Hack to avoid flicker
 		Point oldPos = train.getPosition();
@@ -350,7 +370,16 @@ public class UISplitMergeComponent extends AbstractComposite {
 
 	@Override
 	public float leftBlock() {
-		return Float.MAX_VALUE;
+		// Channel leftBlock from next component
+		float res = getTrainTaker().leftBlock();
+		// Don't allow trains to jump over us
+		res = Math.min(res, getDeepPosition().x+SIDES_WIDTH-0.1f);
+		// Don't overlap trains we currently manage
+		if (!mIngoing.isEmpty())
+			// FIXME: This is a necessary evil because the real, nice interleaving isn't working.
+			res = Math.min(res, getDeepPosition().x);
+			//res = Math.min(res, mIngoing.getLast().getPosition().x - UITrain.PADDING);
+		return res;
 	}
 	
 	private TrainTaker mTopTaker = new TrainTaker() {
