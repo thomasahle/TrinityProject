@@ -105,14 +105,16 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 			this.levelFailed("You have hidden trains in your track!");
 		} else {
 			log().debug("LEVEL CLEARED !!!");
-			mListener.levelCleared();
+			if (mListener != null)
+				mListener.levelCleared();
 		}
 	}
 	@Override
 	public void levelFailed(String message) {
 		mTrack.paused(true);
 		log().debug("LEVEL FAILED !!!");
-		mListener.levelFailed(message);
+		if (mListener != null)	
+			mListener.levelFailed(message);
 	}
 
 	@Override

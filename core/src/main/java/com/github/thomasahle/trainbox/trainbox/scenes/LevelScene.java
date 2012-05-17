@@ -32,7 +32,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
 
-
+	
 /**
  * This should contain everything we need for a level:
  *  - The track

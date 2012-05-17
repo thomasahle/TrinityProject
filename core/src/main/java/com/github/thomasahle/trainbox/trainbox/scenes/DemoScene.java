@@ -242,7 +242,7 @@ public class DemoScene implements Scene, Pointer.Listener {
 				0,0,0,0,0
 			));
 		//mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(0,0));
-		mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(500,500));
+		mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(210,50));
 		mLevelPage6.layer().setTranslation(80, 420);
 		demoPages.get(5).add(mLevelPage6.layer());
 		
@@ -252,7 +252,7 @@ public class DemoScene implements Scene, Pointer.Listener {
 				"2 1", "2-1",
 				0,0,0,0,0
 			));
-		mLevelPage7.insertChildAt(new UISeparateComponent(), new Point(0,0));
+		mLevelPage7.insertChildAt(new UISeparateComponent(), new Point(210,50));
 		mLevelPage7.layer().setTranslation(80, 420);
 		demoPages.get(6).add(mLevelPage7.layer());
 		
@@ -262,7 +262,7 @@ public class DemoScene implements Scene, Pointer.Listener {
 				"2 1", "2-1",
 				0,0,0,0,0
 			));
-		mLevelPage8.insertChildAt(new UIFlipComponent(), new Point(0,0));
+		mLevelPage8.insertChildAt(new UIFlipComponent(), new Point(210,50));
 		mLevelPage8.layer().setTranslation(80, 420);
 		demoPages.get(7).add(mLevelPage8.layer());
 		
@@ -272,9 +272,11 @@ public class DemoScene implements Scene, Pointer.Listener {
 				"2 1", "2-1",
 				0,0,0,0,0
 			));
-		mLevelPage9.insertChildAt(new UISplitMergeComponent(new UIIdentityComponent(2), new UIIdentityComponent(2)), new Point(0,0));
+		mLevelPage9.insertChildAt(new UISplitMergeComponent(new UIIdentityComponent(2), new UIIdentityComponent(2)), new Point(210,50));
 		mLevelPage9.layer().setTranslation(10, 350);
 		demoPages.get(8).add(mLevelPage9.layer());
+		
+		mLevelPage6.paused(false);
 		
 	}
 
