@@ -82,8 +82,8 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	
 	private void initLevelText() {
 		CanvasImage textImage = graphics().createImage(graphics().width(), 400);
-		Font font = graphics().createFont("Sans", Font.Style.BOLD, 30);
-		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff565248)).withTextColor(0xffffffff);
+		Font font = graphics().createFont("Tahoma", Font.Style.BOLD, 35);
+		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff000000)).withTextColor(0xffca7829);
 		textImage.canvas().drawText(graphics().layoutText(mLevel.getLevel().title, format), 0, 0);
 		titleLayer = graphics().createImageLayer(textImage);
 		titleLayer.setTranslation(50, 35);
