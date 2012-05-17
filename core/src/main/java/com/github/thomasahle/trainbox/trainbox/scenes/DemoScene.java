@@ -28,7 +28,7 @@ import com.github.thomasahle.trainbox.trainbox.uimodel.UISplitMergeComponent;
 /**
  * It might be cleaner to keep the demo showing off new components and stuff in a seperate scene. 
  */
-public class DemoScene implements Scene {
+public class DemoScene implements Scene, Pointer.Listener {
     int width = graphics().width();
 	int height = graphics().height();
 	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
@@ -241,7 +241,8 @@ public class DemoScene implements Scene {
 				"2 1", "2-1",
 				0,0,0,0,0
 			));
-		mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(1,0));
+		//mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(0,0));
+		mLevelPage6.insertChildAt(new UIJoinComponent(), new Point(500,500));
 		mLevelPage6.layer().setTranslation(80, 420);
 		demoPages.get(5).add(mLevelPage6.layer());
 		

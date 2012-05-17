@@ -34,8 +34,11 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     float vxx = 80.0f;
     float axx = 0.00f;
 
-	
-	Image cloudImage = assets().getImage("images/pngs/trains.png");
+    
+    Image oxfordLogoImage = assets().getImage("images/CompSci_logo_portraitR_RGB.jpg");
+    ImageLayer oxfordLogoImageLayer = graphics().createImageLayer(oxfordLogoImage);    
+    
+    Image cloudImage = assets().getImage("images/pngs/trains.png");
     ImageLayer cloudLayer = graphics().createImageLayer(cloudImage);
     int width = graphics().width();
 	int height = graphics().height();
@@ -55,7 +58,9 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     TrainBox trainBox;
     
     
-	public StartScene(final TrainBox trainBox) {
+	public StartScene(final TrainBox trainBox) {		
+	    oxfordLogoImageLayer.setTranslation(width-oxfordLogoImageLayer.width()-10,height-oxfordLogoImageLayer.height()-38);
+
 		this.trainBox = trainBox;
 		menuVisible = true;
 		Canvas canvas = bgImage.canvas();
@@ -174,6 +179,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
 			}
         	
         });
+
         
         bgLayer = graphics().createImageLayer(bgImage);
 	    cloudLayer.setTranslation(a, b);
@@ -184,6 +190,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
     	x = a+3*cloudLayer.width()/4;
     	y = b+1*cloudLayer.height()/6;
 	    ayy = GRAVITY;
+	 
 	}
 	
 	@Override
@@ -193,6 +200,7 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         graphics().rootLayer().add(menuLayer);
 	    graphics().rootLayer().add(watermelon);
 	    graphics().rootLayer().add(aboutLayer);
+	    graphics().rootLayer().add(oxfordLogoImageLayer);
 	    pointer().setListener(this);
 	    keyboard().setListener(this);	
 	}
@@ -204,6 +212,8 @@ public class StartScene implements Scene, Keyboard.Listener, Pointer.Listener {
         graphics().rootLayer().remove(menuLayer);
 	    graphics().rootLayer().remove(watermelon);
 	    graphics().rootLayer().remove(aboutLayer);
+	    graphics().rootLayer().remove(oxfordLogoImageLayer);
+
 	    pointer().setListener(null);
 	    keyboard().setListener(null);	
 	}
