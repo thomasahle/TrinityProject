@@ -142,32 +142,32 @@ public class Level {
 			1,0,0,1,1
 		));
 		mLevels.add(new Level(
-			11, "Reverse Express",
-			"4 3 2 1", "1 2 3 4",
-			0,0,0,3,1,
-			0,1,1,2,0
-		));
-		mLevels.add(new Level(
-			12, "Same same, but smaller?",
+			11, "A new train order",
 			"3 2 1", "1 2 3",
 			0,0,0,1,1
 		));
 		mLevels.add(new Level(
-			13, "There is no cow matrix",
+			12, "There is no cow matrix",
 			"1-2 3-4", "1-3 2-4",
 			0,2,1,0,1,
 			0,1,2,0,1
 		));
 		mLevels.add(new Level(
-			14, "Reverse Mega-Freight",
+			13, "Reverse Express",
+			"4 3 2 1", "1 2 3 4",
+			0,0,0,3,1,
+			0,1,1,2,0
+		));
+		mLevels.add(new Level(
+			14, "The small difference",
+			"0 1", "0-0-1-1 0-1-0-1",
+			3,4,0,0,1
+		));
+		mLevels.add(new Level(
+			15, "Reverse Mega-Freight",
 			"8 7 6 5 4 3 2 1", "1 2 3 4 5 6 7 8",
 			0,2,1,3,0,
 			0,0,0,7,3
-		));
-		mLevels.add(new Level(
-			15, "The small difference",
-			"0 1", "0-0-1-1 0-1-0-1",
-			3,4,0,0,1
 		));
 		mLevels.add(new Level(
 			16, "Not just random",

@@ -22,7 +22,7 @@ public class UITrain {
 	
 	public final static float PADDING = 20.f;
 	
-	public float speed = 0.064f; // pixels/s
+	public float speed = 0.1f; // pixels/s
 	private List<UICarriage> mCarriages;
 	private GroupLayer mLayer;
 	private Point mPosition;
