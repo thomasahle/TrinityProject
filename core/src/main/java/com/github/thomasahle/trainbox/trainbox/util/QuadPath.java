@@ -8,6 +8,7 @@ import pythagoras.f.FloatMath;
 import pythagoras.f.IdentityTransform;
 import pythagoras.f.Path;
 import pythagoras.f.PathIterator;
+import pythagoras.f.Rectangle;
 
 public class QuadPath {
 	
@@ -17,7 +18,8 @@ public class QuadPath {
 	
 	private float minx = Float.MAX_VALUE;
 	private float maxx = Float.MIN_VALUE;
-	
+	private float miny = Float.MAX_VALUE;
+	private float maxy = Float.MIN_VALUE;
 	
 	
 	public QuadPath() {
@@ -28,16 +30,24 @@ public class QuadPath {
 		pytagPath.moveTo(x, y);
 		minx = Math.min(minx, x);
 		maxx = Math.max(maxx, x);
+		miny = Math.min(miny, y);
+		maxy = Math.max(maxy, y);
 	}
 
 	public void quadraticCurveTo(float cpx, float cpy, float x, float y) {
 		pytagPath.quadTo(cpx, cpy, x, y);
 		minx = Math.min(minx, x);
 		maxx = Math.max(maxx, x);
+		miny = Math.min(miny, y);
+		maxy = Math.max(maxy, y);
 	}
 	
 	public float length() {
 		return calculateT(maxx);
+	}
+	
+	public Rectangle bounds() {
+		return new Rectangle(minx, miny, maxx-minx, maxy-miny);
 	}
 	
 	public playn.core.Path paintPath(playn.core.Path path) {

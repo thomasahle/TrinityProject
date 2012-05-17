@@ -76,9 +76,4 @@ public class UIJoinComponent extends BlackBoxComponent{
 			frontTrain = train;
 		}
 	}
-	
-	/*@Override
-	public float leftBlock() {
-		return getDeepPosition().x;
-	}*/
 }
