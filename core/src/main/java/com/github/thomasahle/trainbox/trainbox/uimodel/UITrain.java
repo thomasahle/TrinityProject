@@ -135,7 +135,14 @@ public class UITrain {
 	public Point getPosition() {
 		return mPosition;
 	}
+	int times = 0;
 	public UITrain setPosition(Point position) {
+		if (position.x < getPosition().x)
+			times += 1;
+		else times = 0;
+		assert times < 5;
+		assert position.x > 0 || position.x >= getPosition().x;
+			
 		getLayer().setTranslation(position.x, position.y);
 		mPosition = position;
 		return this;

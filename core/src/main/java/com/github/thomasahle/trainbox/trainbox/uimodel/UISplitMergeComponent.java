@@ -50,6 +50,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	private QuadPath mUpPathIn, mDownPathIn;
 	private QuadPath mUpPathOut, mDownPathOut;
+
+	private Set<UITrain> served = new HashSet<UITrain>();
 	
 	public UISplitMergeComponent(UIComponent top, UIComponent bot) {
 		mNextDirection = mUpgoing;
@@ -264,12 +266,12 @@ public class UISplitMergeComponent extends AbstractComposite {
 		for (Iterator<UITrain> it = trains.iterator(); it.hasNext(); ) {
 			UITrain train = it.next();
 			float trainLeft = train.getPosition().x;
-			float trainRight = trainLeft + train.getSize().width;
 			float compRight = compLeft + SIDES_WIDTH;
 			
 			// If the train is now entirely gone from us.
 			if (trainLeft >= compRight) {
 				it.remove();
+				served.remove(train);
 				updateImages();
 				continue;
 			}
@@ -278,7 +280,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			UIComponent taker = (UIComponent)(mUpgoing.contains(train) ? top : bot);
 			
 			// If the train is no longer controlled by us, but still 'on us'.
-			if (trainRight > compRight) {
+			if (served.contains(train)) {
 				for (UICarriage car : train.getCarriages()) {
 					float carLeft = car.getPosition().x + trainLeft - compLeft;
 					float carRight = carLeft + car.WIDTH;
@@ -290,7 +292,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 						pos[0] += compLeft - trainLeft - car.WIDTH/2.f;
 						pos[1] += getDeepPosition().y - (train.getPosition().y + train.getSize().height/2.f);
 						//car.setRotation(1,0);
-						//pos[0] = Math.max(pos[0], carLeft);
+						//pos[0] = Math.max(pos[0], carLeft - trainLeft);
 						car.setPosition(new Point(pos[0], pos[1]));
 						car.setRotation(slope[0], slope[1]);
 					}
@@ -333,6 +335,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 			if (newRight > compRight) {
 				Point oldPos = train.getPosition();
 				taker.takeTrain(train);
+				served.add(train);
 				// Hack to avoid flicker
 				if (trains == mOutgoing) {
 					float shifty = oldPos.y - train.getPosition().y;

@@ -80,6 +80,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	public void takeTrain(UITrain train) {
 		// The train can't have passed us already. This makes things a lot simpler. 
 		assert train.getPosition().x < getDeepPosition().x+getSize().width;
+		assert !mTrains.contains(train);
 		mTrains.add(train);
 		train.vertCenterOn(this);
 	}
