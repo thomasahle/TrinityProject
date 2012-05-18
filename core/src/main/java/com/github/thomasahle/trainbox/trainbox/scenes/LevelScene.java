@@ -4,7 +4,6 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.log;
-import static playn.core.PlayN.pointer;
 
 import java.util.Arrays;
 
@@ -15,19 +14,19 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Key;
 import playn.core.Keyboard;
-import playn.core.TextFormat;
 import playn.core.Keyboard.TypedEvent;
 import playn.core.Layer;
 import playn.core.Pointer;
 import playn.core.Pointer.Event;
+import playn.core.TextFormat;
 import playn.core.TextFormat.Alignment;
+import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
-import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponent;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory.UIToken;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UILevel;
@@ -60,6 +59,10 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	ImageLayer pauseButtonImageLayer;
 	GroupLayer levelPopupLayer;
 	ImageLayer titleLayer;
+	
+	private float autoScrollSpeed = 0.01f;
+	private float scrollTargetX = 0;
+	private float scrollTargetY = 0;
 	private boolean autoScroll = true;
 	
 	public LevelScene(TrainBox trainBox, Level level) {
@@ -92,14 +95,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	@Override
 	public void update(float delta) {
 		mLevel.update(delta);
-		
-		if (!isPaused() && autoScroll ){
-			Point p = mLevel.getFrontTrainPosition();
-						
-			float x = (float) (graphics().width()*0.68-p.x);
-			
-			setLevelTranslation(x, p.y);
-		}
+		updateScroll(delta);
 	}
 	
 	@Override
@@ -381,7 +377,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		mLevel.layer().addListener((Pointer.Listener)this);
 		setLevelTranslation(
 				graphics().width()/2.f - mLevel.getSize().width/2.f,
-				(graphics().height()-MENU_HEIGHT)/2.f - mLevel.getSize().height/2.f);
+				(graphics().height()-MENU_HEIGHT)/2.f - mLevel.getSize().height/2.f, true);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -401,9 +397,13 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		if (didInsertSomething) {
 			mIsDragging = false;
 			toolMan.unselect();
-			setLevelTranslation(
-					mLevel.layer().transform().tx(),
-					mLevel.layer().transform().ty());
+			float oldx = event.x() - event.localX();
+			float oldy = event.y() - event.localY();
+			float newx = graphics().width()/2 - event.localX();
+			float newy = graphics().height()/2 - event.localY();
+			if (Math.abs(newx-oldx) > graphics().width()*0.382f || Math.abs(newy-oldy) > graphics().height()*0.382f)
+				setLevelTranslation(newx, newy, false);
+			else setLevelTranslation(oldx, oldy, false);
 		}
 		else {
 			toolMan.unselect();
@@ -418,7 +418,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			autoScroll = false;
 			float x = event.x()-mDragStartXPos;
 			float y = event.y()-mDragStartYPos;
-			setLevelTranslation(x, y);
+			setLevelTranslation(x, y, true);
 		}
 	}
 	@Override
@@ -426,9 +426,12 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		mIsDragging = false;
 	}
 
-	private void setLevelTranslation(float x, float y) {
+	private void setLevelTranslation(float x, float y, boolean force) {
 		
-		float y0 = 0;
+		if (force)
+			mLevel.layer().setTranslation(x, y);
+		
+		float y0 = MENU_HEIGHT*0.618f;
 		float y1 = graphics().height() - MENU_HEIGHT;
 		float x0 = 0;
 		float x1 = graphics().width();
@@ -449,9 +452,33 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			y = Math.min(y, y0);
 		}
 		
-		mLevel.layer().setTranslation(x,y);
+		scrollTargetX = x;
+		scrollTargetY = y;
 	}
-
+	
+	private void updateScroll(float delta) {
+		if (mIsDragging)
+			return;
+		
+		if (!isPaused() && autoScroll) {
+			Point p = mLevel.getFrontTrainPosition();
+			float x = graphics().width()*0.618f-p.x;
+			setLevelTranslation(x, p.y, false);
+		}
+		
+		float tx = mLevel.layer().transform().tx();
+		float ty = mLevel.layer().transform().ty();
+		float distx = scrollTargetX - tx;
+		float disty = scrollTargetY - ty;
+		
+		float x = tx + autoScrollSpeed*delta*distx;
+		float y = ty + autoScrollSpeed*delta*disty;
+		if (Math.abs(x-tx)+1 >= Math.abs(distx)) x = scrollTargetX;
+		if (Math.abs(y-ty)+1 >= Math.abs(disty)) y = scrollTargetY;
+		
+		mLevel.layer().setTranslation(x, y);
+	}
+	
 	@Override
 	public void onKeyDown(playn.core.Keyboard.Event event) {
 		if(event.key() == Key.UP){

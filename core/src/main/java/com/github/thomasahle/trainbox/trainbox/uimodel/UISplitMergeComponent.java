@@ -3,6 +3,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -249,6 +250,14 @@ public class UISplitMergeComponent extends AbstractComposite {
 		tBorder = Float.MAX_VALUE;
 		moveAmazingTrains(mOutgoing, delta, getDeepPosition().x + getSize().width - SIDES_WIDTH, mUpPathOut, mDownPathOut, tBorder, getTrainTaker(), getTrainTaker());
 		
+	}
+	
+	@Override
+	public List<UITrain> getTrains() {
+		List<UITrain> trains = new ArrayList<UITrain>(super.getTrains());
+		trains.addAll(mIngoing);
+		trains.addAll(mOutgoing);
+		return trains;
 	}
 	
 	private void moveAmazingTrains(List<UITrain> trains, float delta, float compLeft, QuadPath uppath, QuadPath downpath, float tBorder, TrainTaker top, TrainTaker bot) {

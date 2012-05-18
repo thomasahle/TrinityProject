@@ -237,7 +237,8 @@ public class Level {
 		mLevels.add(new Level(
 			28, "Zero to Three",
 			"0 1", "0-0 0-1 1-0 1-1",
-			3,8,1,0,4
+			3,2,1,0,1, // dup (dup || box dup cat) box
+			3,8,1,0,4 // "The small difference" then transpose
 		));
 		mLevels.add(new Level(
 			29, "Single cut",

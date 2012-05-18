@@ -24,7 +24,6 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
-	private UITrain frontTrain;
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -59,7 +58,6 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 		mLayer.setHitTester(this);
 		
 		mTrack.setTrainsChangedListener(this);
-		frontTrain = mTrack.getTrains().get(0);
 	}
 	
 	public void update(float delta) {
@@ -85,7 +83,12 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	}
 	
 	public Point getFrontTrainPosition(){
-		return frontTrain.getPosition();
+		Point res = new Point(Float.MIN_VALUE,0);
+		for (UITrain train : mTrack.getTrains())
+			for (UICarriage car : train.getCarriages())
+				if (car.getPosition().x+train.getPosition().x > res.x)
+					res = car.getPosition().add(train.getPosition().x, train.getPosition().y);
+		return res;
 	}
 	
 	public void paused(boolean paused) {

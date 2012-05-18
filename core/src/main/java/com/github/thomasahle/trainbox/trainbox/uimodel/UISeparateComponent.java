@@ -101,7 +101,7 @@ public class UISeparateComponent extends AbstractComponent {
 			float trainLeft = train.getPosition().x;
 			float carLeft = trainLeft + train.getCarriages().get(0).getPosition().x;
 			
-			if (train.getCarriages().size() > 1 && Math.abs(carLeft-knifeX) < 1) {
+			if (train.getCarriages().size() > 1 && carLeft-knifeX > -1) {
 				// Wait for the knife to go up.
 				// XXX: This would be nicer if the train remembered what time it
 				// started to wait, so we don't risk livelocks due to evil delta values.
