@@ -25,13 +25,11 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 
 	private static final int RED = 0xffff3300;
 	private static final int GREEN = 0xff00ff33;
+	private static final int DEFCOLOR = 0xff816647;
+	private static final int LIGHT_GREEN = 0xff40B23d;
 	private final static int HEIGHT = 100;
 	private int mWidth;
 	
-
-	private boolean gameOver = false;
-	private boolean gameWon = false;
-	private String failMsg = "";
 	private UITrain mostRecentTrain;
 	private Image finishChecker = assets().getImage("images/pngs/finishChecker.png");
 	private ImageLayer mCheckerLayer, mTrackLayer;
@@ -42,10 +40,9 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	private int deliveredCount = 0;
 	List<Train> deliveredCargoList = new ArrayList<Train>();
 	List<Train> cargoGoalList = new ArrayList<Train>();
-	public int trackColor = 0xff816647;
 
 	private LinkedList<UITrain> currentTrains = new LinkedList<UITrain>();
-	private LevelFinishedListener mListener;
+	private LevelFinishedListener mListener = new LevelFinishedListener.Null();
 
 	public UIGoalComponent(List<Train> goal) {
 		mWidth = 0;
@@ -74,7 +71,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		mBackLayer = graphics().createGroupLayer();
 		mBackLayer.add(mCheckerLayer);
 		mBackLayer.add(mTrackLayer);
-		updateTracks();
+		updateTracks(DEFCOLOR);
 		xpadding(ComponentHelper.RAIL_EXTRA);
 
 		float x = UITrain.PADDING;
@@ -89,7 +86,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		}
 	}
 
-	private void updateTracks() {
+	private void updateTracks(int trackColor) {
 		int imageWidth = mWidth
 				+ (int) Math.ceil(2 * ComponentHelper.RAIL_EXTRA);
 		CanvasImage image = graphics().createImage(imageWidth, HEIGHT);
@@ -99,6 +96,8 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 
 	public void setListener(LevelFinishedListener l) {
 		mListener = l;
+		if (l == null)
+			mListener = new LevelFinishedListener.Null();
 	}
 
 	@Override
@@ -122,7 +121,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	 * 
 	 * @return true on match, false on mismatch.
 	 */
-	public boolean checkDelivered() {
+	public boolean checkDeliveredPrefix() {
 		return cargoGoalString.endsWith(deliveredCargoString);
 	}
 
@@ -157,7 +156,7 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	 * if you find a bug let me know,
 	 * Matt
 	 */
-	public boolean trainsCompleted(){
+	public boolean trainsStoppedMoving(){
 		int widthFull =0;
 		for(UITrain t:currentTrains){
 			widthFull += t.getSize().width + UITrain.PADDING;
@@ -171,54 +170,44 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 	}
 	@Override
 	public void update(float delta) {
+		assert mListener != null;
 		if (paused())
 			return;
-
+		
 		moveTrains(currentTrains, delta);
 		
-		// TODO Tidy up this code.
-		if (deliveredCargoList.size() == cargoGoalList.size()) {
-			if (checkDelivered()){
-				gameOver = true;
-				gameWon = true;
-				trackColor = GREEN;
-			} else {
-				gameOver = true;
-				gameWon = false;
-				trackColor=RED;
-				failMsg = "Close... but not quite."; // the last train must be the mismatch.
+		int trackColor = DEFCOLOR;
+		
+		if (deliveredCargoList.size() < cargoGoalList.size()) {
+			if (checkDeliveredPrefix()) {
+				trackColor = LIGHT_GREEN;
 			}
-		} else if (deliveredCargoList.size() < cargoGoalList.size()) {
-			//log().debug("Goal: " + cargoGoalString);
-			//log().debug("Current: " + deliveredCargoString);
-			if (!checkDelivered()) {
-				gameOver = true;
-				gameWon = false;
+			else {
 				trackColor = RED;
-				failMsg ="Trains don't match! ";
-				//"You sent in "+deliveredCargoString+", but we wanted "+cargoGoalString; This message is too long for the display.
+				if (trainsStoppedMoving())
+					mListener.levelFailed("The trains don't match :/");
 			}
-		} else { // deliveredCargoList.size() > cargoGoalList.size()
-			log().debug("Too many trains");
-			gameOver = true;
-			gameWon = false;
+		}
+		if (deliveredCargoList.size() == cargoGoalList.size()) {
+			if (checkDeliveredPrefix()) {
+				trackColor = GREEN;
+				if (trainsStoppedMoving())
+					mListener.levelCleared();
+			}
+			else {
+				trackColor = RED;
+				// the last train must be the mismatch.
+				if (trainsStoppedMoving())
+					mListener.levelFailed("Close... but not quite.");
+			}
+		}
+		if (deliveredCargoList.size() > cargoGoalList.size()) {
 			trackColor = RED;
-			// LEVEL FAILED
-			failMsg="Too many trains!";
+			if (trainsStoppedMoving())
+				mListener.levelFailed("You sent too many trains!");
 		}
 		
-		if(gameOver && trainsCompleted()){
-			if(gameWon){
-				if (mListener != null ) {
-					mListener.levelCleared();
-				}
-			}else{
-				if (mListener != null ) {
-					mListener.levelFailed(failMsg);
-				}
-			}
-		}
-		updateTracks();
+		updateTracks(trackColor);
 	}
 
 	@Override
