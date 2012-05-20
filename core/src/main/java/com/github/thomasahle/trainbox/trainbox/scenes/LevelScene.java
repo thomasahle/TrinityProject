@@ -464,7 +464,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			return;
 		
 		if (!isPaused() && autoScroll) {
-			Point p = mLevel.getFrontTrainPosition();
+			Point p = mLevel.getFarthestTrainPosition();
 			float x = graphics().width()*0.618f-p.x;
 			setLevelTranslation(x, p.y, false);
 		}

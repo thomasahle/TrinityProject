@@ -24,6 +24,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
+	private Point farthestPointReachedByTrains = new Point(0,0);
+
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -82,13 +84,17 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 		return mTrack.paused();
 	}
 	
-	public Point getFrontTrainPosition(){
-		Point res = new Point(Float.MIN_VALUE,0);
+	/**
+	 * 
+	 * @return The farthest position a train has been to the right.
+	 * This is because we don't want the auto-scroll to jump back when a train is taken from the track by a component.
+	 */
+	public Point getFarthestTrainPosition(){
 		for (UITrain train : mTrack.getTrains())
 			for (UICarriage car : train.getCarriages())
-				if (car.getPosition().x+train.getPosition().x > res.x)
-					res = car.getPosition().add(train.getPosition().x, train.getPosition().y);
-		return res;
+				if (car.getPosition().x+train.getPosition().x > farthestPointReachedByTrains.x)
+					farthestPointReachedByTrains = car.getPosition().add(train.getPosition().x, train.getPosition().y);
+		return farthestPointReachedByTrains;
 	}
 	
 	public void paused(boolean paused) {
