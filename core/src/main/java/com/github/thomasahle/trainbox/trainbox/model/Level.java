@@ -112,7 +112,7 @@ public class Level {
 			2,2,0,0,0
 		));
 		mLevels.add(new Level(
-			5, "Break it up",
+			5, "New component: split",
 			"7 6-5 4 3-2-1", "7 6 5 4 3 2 1",
 			0,0,1,0,0
 		));
@@ -122,24 +122,24 @@ public class Level {
 			1,1,1,0,0
 		));
 		mLevels.add(new Level(
-			7, "Warm-up (flip)",
+			7, "New component: flip",
 			"2 1 4 3", "1 2 3 4",
 			0,0,0,1,0
 		));
 		mLevels.add(new Level(
-			8, "Even one out",
+			8, "A half reverse",
+			"1 2 3 4", "3 4 1 2",
+			0,1,1,1,0
+		));
+		mLevels.add(new Level(
+			9, "New component: track-split",
 			"1 2", "1 2 1",
 			1,0,0,0,1
 		));
 		mLevels.add(new Level(
-			9, "But, it's odd? (track-split)",
+			10, "But, it's odd?",
 			"1", "1 1 1",
 			2,0,0,0,1
-		));
-		mLevels.add(new Level(
-			10, "Reflection",
-			"2 1", "1 2 2 1",
-			1,0,0,1,1
 		));
 		mLevels.add(new Level(
 			11, "A new train order",
@@ -147,38 +147,37 @@ public class Level {
 			0,0,0,1,1
 		));
 		mLevels.add(new Level(
-			12, "There is no cow matrix",
+			12, "Reflection",
+			"2 1", "1 2 2 1",
+			1,0,0,1,1
+		));
+		mLevels.add(new Level(
+			13, "There is no cow matrix",
 			"1-2 3-4", "1-3 2-4",
 			0,2,1,0,1,
 			0,1,2,0,1
 		));
 		mLevels.add(new Level(
-			13, "Reverse Express",
+			14, "Reverse Express",
 			"4 3 2 1", "1 2 3 4",
 			0,0,0,3,1,
 			0,1,1,2,0
 		));
 		mLevels.add(new Level(
-			14, "The small difference",
+			15, "More, more, more!",
+			"1", "1 1 1 1 1 1",
+			3,0,0,0,1, // dup dup (dup||id)
+			5,0,0,0,3 // dup (dup (dup||id) || dup (dup||id))
+		));
+		mLevels.add(new Level(
+			16, "The small difference",
 			"0 1", "0-0-1-1 0-1-0-1",
 			3,4,0,0,1
 		));
 		mLevels.add(new Level(
-			15, "Reverse Mega-Freight",
-			"8 7 6 5 4 3 2 1", "1 2 3 4 5 6 7 8",
-			0,2,1,3,0,
-			0,0,0,7,3
-		));
-		mLevels.add(new Level(
-			16, "Not just random",
-			"1 2 3 4 5 6 7 8", "1 5 2 6 3 7 4 8",
-			0,2,2,0,1
-		));
-		mLevels.add(new Level(
-			17, "Overtaking",
-			"2 3 4 1", "1 2 3 4",
-			0,0,0,2,1, // flip (flip||id)
-			0,1,1,3,1
+			17, "Back to front",
+			"2 3 1", "1 2 3",
+			0,1,1,1,1 // (flip box||) cat
 		));
 		mLevels.add(new Level(
 			18, "Montgomery Reshuffle",
@@ -187,42 +186,42 @@ public class Level {
 			0,3,2,0,3
 		));
 		mLevels.add(new Level(
-			19, "Bigger, Better",
-			"1", "1 1 1 1 1",
-			3,0,0,0,2, // dup dup ((dup||id)||id)
-			3,1,1,0,1
+			19, "Reverse Mega-Freight",
+			"8 7 6 5 4 3 2 1", "1 2 3 4 5 6 7 8",
+			0,2,1,3,0,
+			0,0,0,7,3
 		));
 		mLevels.add(new Level(
-			20, "Mirror Reshuffle",
+			20, "Overtaking",
+			"2 3 4 1", "1 2 3 4",
+			0,0,0,2,1, // flip (flip||id)
+			0,1,1,3,1
+		));
+		mLevels.add(new Level(
+			21, "Mirror Reshuffle",
 			"1-2-3-4", "1-4 2-3 3-2 4-1",
 			1,2,3,2,1 // dup (cat||cat flip box flip cat) box
 		));
 		mLevels.add(new Level(
-			21, "There are seven",
-			"1", "1 1 1 1 1 1 1",
-			4,0,0,0,2, // dup dup (dup||(dup||id))
-			5,0,0,0,2
-		));
-		mLevels.add(new Level(
-			22, "Rotate Small-Train",
-			"3 2 1", "1 3 2",
-			0,1,1,1,1
+			22, "There are nine",
+			"1", "1 1 1 1 1 1 1 1 1",
+			4,0,0,0,3, // dup dup dup (((dup||)||)||)
+			7,0,0,0,3 // dup (dup (dup(dup||)||dup) || dup dup)
 		));
 		mLevels.add(new Level(
 			23, "Triple Team",
-			"3 2 1", "3-2-1",
-			0,3,1,0,2
+			"1 2 3", "1-2-3",
+			0,3,1,0,2 // (box||) cat (box||) box
 		));
 		mLevels.add(new Level(
-			24, "Lame Octopus",
+			24, "Isolation",
+			"1 2 3", "1 2-3",
+			0,2,1,2,2 // (box||) flip cat (box||) flip
+		));
+		mLevels.add(new Level(
+			25, "Lame Octopus",
 			"7 6 5 4 3 2 1", "1 2 3 4 5 6 7",
 			0,1,1,3,2
-		));
-		mLevels.add(new Level(
-			25, "Rotate Mega-Freight",
-			"2 3 4 5 6 7 8 1", "1 2 3 4 5 6 7 8",
-			0,0,0,3,2, // flip (flip (flip||id)||id)
-			0,3,2,6,2
 		));
 		mLevels.add(new Level(
 			26, "Mafia Gang",
@@ -245,19 +244,20 @@ public class Level {
 			"1-2-3-4-5-6", "1-2-3 4-5-6",
 			0,4,3,1,3
 		));
-		// The following might not be solvable
+		// Some reserve levels of different difficulty
 		/*
-		 * mLevels.add(new Level(
-			29, "Autsch! Meine Schwänze!",
-			"1-2-3-4", "1 1-2 1-2-3-4",
-			10,8,10,10,10
+		mLevels.add(new Level(
+			25, "Rotate Mega-Freight",
+			"2 3 4 5 6 7 8 1", "1 2 3 4 5 6 7 8",
+			0,0,0,3,2, // flip (flip (flip||id)||id)
+			0,3,2,6,2
 		));
 		mLevels.add(new Level(
-			30, "Call me with the solution",
-			"1-4-7 2-5-8 3-6-9", "1-2-3 4-5-6 7-8-9",
-			10,8,10,10,10
-		));*/
-		/*
+			23, "Flip most",
+			"1 2 3 4 5 6 7", "1 3 2 5 4 7 6",
+			0,6,2,0,6 // ((||box)||) cat (box||(box||)) box (||cat(box||)box) cat
+		));
+		 * 
 		 * mLevels.add(new Level(
 			30, "Thomas's testing",
 			"1-2-3-4 1-2-3-4", "1 1 2 2 3 3 4 4",
