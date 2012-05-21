@@ -133,7 +133,6 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			currPauseGoButtonImageIndex = 0;
 		}
 		pauseButtonImageLayer.setVisible(!paused);
-		mResetButton.setVisible(paused);
 	}
 	private boolean isPaused(){
 		return mLevel.paused();
@@ -198,7 +197,6 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	}
 
 	private void initLevelController() {
-		// TODO Change the line below to the new reset button image
 		Image resetButtonImage = assets().getImage("images/pngs/resetButton.png");
 		mResetButton = graphics().createImageLayer(resetButtonImage);
 		
