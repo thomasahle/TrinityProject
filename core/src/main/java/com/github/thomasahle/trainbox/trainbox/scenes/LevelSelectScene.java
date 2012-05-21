@@ -106,15 +106,15 @@ public class LevelSelectScene implements Scene, Keyboard.Listener {
 		glayer.add(ilayer);
 		
 		CanvasImage textImage = graphics().createImage(image.width(), image.height());
-		Font font = graphics().createFont("Sans", Font.Style.BOLD, 16);
+		Font font = graphics().createFont("Sans", Font.Style.BOLD, 28);
 		TextFormat format = new TextFormat().withFont(font)
 				.withEffect(TextFormat.Effect.outline(0x887f501d))
 				.withTextColor(0xffca7829)
 				.withAlignment(Alignment.RIGHT);
 		TextLayout layout = graphics().layoutText(""+level, format);
 		if (level <= 9)
-			textImage.canvas().drawText(layout, 80, 17);
-		else textImage.canvas().drawText(layout, 75, 17);
+			textImage.canvas().drawText(layout, 40, 9);
+		else textImage.canvas().drawText(layout, 32, 9);
 		Layer tlayer = graphics().createImageLayer(textImage);
 		glayer.add(tlayer);
 		
