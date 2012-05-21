@@ -21,6 +21,7 @@ import playn.core.TextLayout;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
+import com.github.thomasahle.trainbox.trainbox.uimodel.ComponentHelper;
 import com.github.thomasahle.trainbox.trainbox.util.LevelTracker;
 
 public class LevelSelectScene implements Scene, Keyboard.Listener {
@@ -28,21 +29,17 @@ public class LevelSelectScene implements Scene, Keyboard.Listener {
 	private final TrainBox trainBox;
 	int width = graphics().width();
 	int height = graphics().height();
-	CanvasImage bgImage = graphics().createImage(graphics().width(),graphics().height());
     ImageLayer bgLayer;
     GroupLayer demoLayer;
     final ImageLayer demoPageImageLayer;
 	private GroupLayer demoLayerLevels;
 	private boolean tPressed;
+	private static CanvasImage bgImage = ComponentHelper.drawMoonCraters(graphics().width(), graphics().height(), 80, LevelSelectScene.class.hashCode());
 	
 	public LevelSelectScene(final TrainBox trainBox ){
 		this.trainBox = trainBox;
 		
 		bgLayer = graphics().createImageLayer(bgImage);
-		Canvas canvas = bgImage.canvas();
-        final Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
-		canvas.drawImage(backgroundImage, 0, 0);
-		
 		
 		// Create the demoLayer that contains the level select pages
         demoLayer = graphics().createGroupLayer();

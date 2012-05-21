@@ -26,6 +26,7 @@ import pythagoras.f.Point;
 
 import com.github.thomasahle.trainbox.trainbox.core.TrainBox;
 import com.github.thomasahle.trainbox.trainbox.model.Level;
+import com.github.thomasahle.trainbox.trainbox.uimodel.ComponentHelper;
 import com.github.thomasahle.trainbox.trainbox.uimodel.LevelFinishedListener;
 import com.github.thomasahle.trainbox.trainbox.uimodel.ToolManager;
 import com.github.thomasahle.trainbox.trainbox.uimodel.UIComponentFactory;
@@ -71,11 +72,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		mLevel = new UILevel(level);
 		
 		// A background image. This should be really nice.
-		CanvasImage bgImage = graphics().createImage(WIDTH, HEIGHT);
-		Image backgroundImage = assets().getImage("images/pngs/standardBackground.png");
-		bgImage.canvas().setFillColor(0xffe9b96e);
-		bgImage.canvas().fillRect(0, 0, WIDTH, HEIGHT);
-		bgImage.canvas().drawImage(backgroundImage, 0, 0);
+		CanvasImage bgImage = ComponentHelper.drawMoonCraters(WIDTH, HEIGHT, level.title.hashCode());
 		mBgLayer = graphics().createImageLayer(bgImage);
 		
 		// initialise the level controller buttons
@@ -89,7 +86,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	private void initLevelText() {
 		CanvasImage textImage = graphics().createImage(graphics().width(), 400);
 		Font font = graphics().createFont("Tahoma", Font.Style.BOLD, 35);
-		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff000000)).withTextColor(0xffca7829);
+		TextFormat format = new TextFormat().withFont(font).withEffect(TextFormat.Effect.outline(0xff8f5902)).withTextColor(0xffca7829);
 		textImage.canvas().drawText(graphics().layoutText(mLevel.getLevel().title, format), 0, 0);
 		titleLayer = graphics().createImageLayer(textImage);
 		titleLayer.setTranslation(50, 35);

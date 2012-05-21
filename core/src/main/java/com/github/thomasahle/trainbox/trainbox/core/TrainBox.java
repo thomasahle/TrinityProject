@@ -3,10 +3,7 @@ package com.github.thomasahle.trainbox.trainbox.core;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import playn.core.AssetWatcher;
-import playn.core.CanvasImage;
-import playn.core.CanvasLayer;
 import playn.core.Game;
-import playn.core.ImageLayer;
 import playn.core.PlayN;
 
 import com.github.thomasahle.trainbox.trainbox.model.Level;
@@ -14,7 +11,6 @@ import com.github.thomasahle.trainbox.trainbox.scenes.DemoScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LevelSelectScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.LoadingScene;
-import com.github.thomasahle.trainbox.trainbox.scenes.MoveScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.NullScene;
 import com.github.thomasahle.trainbox.trainbox.scenes.Scene;
 import com.github.thomasahle.trainbox.trainbox.scenes.StartScene;
@@ -145,21 +141,19 @@ public class TrainBox implements Game{
 	}
 	
 	public Scene getDemoScene() {
-		demoScene = new DemoScene(this);
+		if (demoScene == null)
+			demoScene = new DemoScene(this);
 		return demoScene;
 	}
 	
 	public Scene getStartScene() {
-		startScene = new StartScene(this);
+		if (startScene == null)
+			startScene = new StartScene(this);
 		return startScene;
 	}
 
-	public Scene getMoveScene() {
-		moveScene = new MoveScene(this);
-		return moveScene;
-	}
-	
 	public Scene getLevelSelectScene() {
+		// We need to create a new scene here, to update our progress
 		levelSelectScene = new LevelSelectScene(this);
 		return levelSelectScene;
 	}
