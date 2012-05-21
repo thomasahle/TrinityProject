@@ -24,8 +24,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	private UIComposite mTrack;
 	private Level mLevel;	
 	private LevelFinishedListener mListener;
+	
 	private Point farthestPointReachedByTrains = new Point(0,0);
-
 	
 	public UILevel(Level level) {
 		mLevel = level;
@@ -132,10 +132,7 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 
 	@Override
 	public Layer hitTest(Layer layer, Point p) {
-		Layer res = mTrack.getBackLayer().hitTest(p);
-		if (res != null)
-			return layer;
-		return res;
+		return layer;
 	}
 	
 	public void setTrainSpeed(float s){
