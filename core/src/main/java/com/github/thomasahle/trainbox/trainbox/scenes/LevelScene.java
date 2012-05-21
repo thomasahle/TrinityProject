@@ -335,6 +335,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 				String comment = used == needed ? "You found the perfect solution!" : "Your solution used " + (used-needed) + " more\ncomponents than needed";
 				levelStatusText.setImage(createCommentImage(comment));
 				levelStatusText.setTranslation(100, 425);
+				trainBox.levelComplete();
 			}
 			@Override public void levelFailed(String message) {
 				levelStatusLayer.setVisible(true);

@@ -27,6 +27,7 @@ public class TrainBox implements Game{
 	public final static int WIDTH = 1024;
 	public final static int HEIGHT = 640;
 	Scene mScene = new NullScene();
+	int currentLevel =0;
 	
 	@Override
 	public void init() {
@@ -171,9 +172,12 @@ public class TrainBox implements Game{
 	public void setLevel(int index){
 		LevelTracker.updateLevel(index);
 		setScene(new LevelScene(this,Level.levels.get(index)));
+		currentLevel = index;
 		PlayN.log().debug("Setting Level "+index);
 	}
-
+	public void levelComplete(){
+		LevelTracker.setCurrentProgress(currentLevel+1);
+	}
 
 	
 
