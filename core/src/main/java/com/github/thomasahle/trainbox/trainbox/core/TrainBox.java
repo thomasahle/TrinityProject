@@ -176,7 +176,7 @@ public class TrainBox implements Game{
 		PlayN.log().debug("Setting Level "+index);
 	}
 	public void levelComplete(){
-		LevelTracker.setCurrentProgress(currentLevel+1);
+		LevelTracker.setCurrentProgress(Math.max((currentLevel+1),LevelTracker.getCurrentProgress()));
 	}
 
 	
