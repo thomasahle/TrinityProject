@@ -225,6 +225,6 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		deliveredCargoList.clear();
 		mostRecentTrain = null;	
 		currentTrains.clear();
-		
+		updateTracks(DEFCOLOR);
 	}
 }

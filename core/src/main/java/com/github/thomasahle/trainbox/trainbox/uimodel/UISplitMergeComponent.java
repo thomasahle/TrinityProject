@@ -430,4 +430,17 @@ public class UISplitMergeComponent extends AbstractComposite {
 		}
 	};
 	private TrainTaker mNextTaker;
+	
+	@Override
+	public void reset(){
+		super.reset(); // do everything as before (recursively reset child components)
+		// and more...
+		mUpgoing.clear();
+		mDowngoing.clear();
+		mNextDirection = mUpgoing; //next direction in?
+		mNextTaker = mTopTaker; //next direction out?
+		mIngoing.clear();
+		mOutgoing.clear();
+		served.clear();
+	}
 }
