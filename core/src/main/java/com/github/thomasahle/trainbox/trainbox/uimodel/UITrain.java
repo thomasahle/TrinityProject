@@ -21,7 +21,7 @@ import com.github.thomasahle.trainbox.trainbox.model.Train;
 public class UITrain {
 	
 	public final static float PADDING = 20.f;
-	
+	public final float defaultSpeed = 0.1f;
 	public float speed = 0.1f; // pixels/s
 	private List<UICarriage> mCarriages;
 	private GroupLayer mLayer;

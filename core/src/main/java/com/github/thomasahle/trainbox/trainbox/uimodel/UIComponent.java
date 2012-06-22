@@ -100,4 +100,9 @@ t used to own us
 	 */
 	public void setSizeChangedListener(SizeChangedListener listener);
 	
+	/**
+	 * Flushes the trains in the component, emptying the component. Used on Track reset.
+	 */
+	public void reset();
+	
 }

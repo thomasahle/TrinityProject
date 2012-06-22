@@ -65,4 +65,7 @@ public class UINoGoComponent extends AbstractComponent implements UIComponent, T
 	public float leftBlock() {
 		return getDeepPosition().x;
 	}
+	public void reset(){
+		//has no trains, so nothing to reset.
+	}
 }

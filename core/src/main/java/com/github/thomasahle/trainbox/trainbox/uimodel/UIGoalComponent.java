@@ -151,11 +151,6 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		return currentTrains;
 	}
 
-	/*
-	 * This isn't an exact science but it works for all levels so far,
-	 * if you find a bug let me know,
-	 * Matt
-	 */
 	public boolean trainsStoppedMoving(){
 		int widthFull =0;
 		for(UITrain t:currentTrains){
@@ -221,5 +216,15 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 			res = Math.min(res, currentTrains.getLast().getPosition().x
 					- UITrain.PADDING);
 		return res;
+	}
+
+	@Override
+	public void reset() {
+		deliveredCargoString = "";
+		deliveredCount = 0;
+		deliveredCargoList.clear();
+		mostRecentTrain = null;	
+		currentTrains.clear();
+		
 	}
 }

@@ -154,4 +154,6 @@ public abstract class AbstractComponent implements UIComponent {
 		}
 		return rightBorder;
 	}
+	public abstract void reset();
+	
 }

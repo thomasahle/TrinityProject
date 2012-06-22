@@ -66,6 +66,19 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 		mTrack.update(delta);
 	}
 	
+	public void reset(){
+	//reset position of all trains
+		//recursively remove trains from all components
+		mTrack.reset();
+		//clear the trainLayer
+		mTrainLayer.clear();
+		//recreated the original trains in the start component as part of StartComponent.reset(), so we add these to the trainLayer
+		for(UITrain uitrain: mStart.getTrains()){
+			mTrainLayer.add(uitrain.getLayer());
+		}
+		//keep components where they are (don't modify track)
+	}
+	
 	
 	public Layer layer() {
 		return mLayer;

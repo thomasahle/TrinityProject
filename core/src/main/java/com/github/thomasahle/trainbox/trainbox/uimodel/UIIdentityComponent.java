@@ -96,4 +96,9 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 			res = Math.min(res, mTrains.getLast().getPosition().x - UITrain.PADDING);
 		return res;
 	}
+
+	@Override
+	public void reset() {
+		mTrains.clear();
+	}
 }

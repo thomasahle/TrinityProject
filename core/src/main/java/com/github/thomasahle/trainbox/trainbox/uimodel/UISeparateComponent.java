@@ -208,4 +208,10 @@ public class UISeparateComponent extends AbstractComponent {
 			res = Math.min(res, mLeftSide.getLast().getPosition().x - UITrain.PADDING);
 		return res;
 	}
+
+	@Override
+	public void reset() {
+		mLeftSide.clear();
+		mRightSide.clear();
+	}
 }

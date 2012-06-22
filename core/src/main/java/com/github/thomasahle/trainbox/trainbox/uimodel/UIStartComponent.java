@@ -20,6 +20,7 @@ public class UIStartComponent extends AbstractComponent {
 	private final static int HEIGHT = 100;
 	private int mWidth;
 
+	private final List<UITrain> initialTrains; // not editied
 	private Queue<UITrain> mTrains;
 	private Layer mFrontLayer;
 	private Layer mBackLayer;
@@ -35,6 +36,10 @@ public class UIStartComponent extends AbstractComponent {
 	
 	public UIStartComponent(List<UITrain> trains) {
 		mWidth = calcWidth(trains);
+		initialTrains = new LinkedList<UITrain>();
+		for(UITrain uitrain:trains){
+			initialTrains.add(new UITrain(uitrain));
+		}
 		mTrains = new LinkedList<UITrain>(trains);
 		
 		float right = mWidth;
@@ -93,5 +98,24 @@ public class UIStartComponent extends AbstractComponent {
 	@Override
 	public float leftBlock() {
 		return 0;
+	}
+
+	@Override
+	public void reset() {
+		mTrains.clear();
+		//copy back the original trains
+		for(UITrain uitrain:initialTrains){
+			mTrains.add(new UITrain(uitrain));
+		}
+		//similar to constructor
+
+		float right = mWidth;
+		for (UITrain train : mTrains) {
+			float left = right - train.getSize().width;
+			train.vertCenterOn(this);
+			train.setPosition(new Point(left, train.getPosition().y));
+			right = left - UITrain.PADDING;
+		}
+		
 	}
 }

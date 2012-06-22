@@ -46,4 +46,10 @@ public abstract class AbstractComposite extends AbstractComponent implements
 		for (UIComponent comp : getChildren())
 			comp.paused(paused);
 	}
+	
+	public void reset(){
+		for(UIComponent child : getChildren()){
+			child.reset();
+		}
+	}
 }

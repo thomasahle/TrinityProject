@@ -202,7 +202,10 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		
 		mResetButton.addListener(new Pointer.Adapter(){
 			@Override public void onPointerStart(Event event) {
-				trainBox.setLevel(mLevel.getLevel().levelNumber);
+				setPaused(true);
+				mLevel.reset();
+				
+				//trainBox.setLevel(mLevel.getLevel().levelNumber);
 			}
 		});
 		

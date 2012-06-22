@@ -133,4 +133,10 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	 * @param currentTrains A queue of the next trains the component will output
 	 */
 	public abstract void onTrainEntered(UITrain train, Queue<UITrain> currentTrains);
+	
+	public void reset(){
+		mIncomming = null;
+		mSent = null;
+		mCurrent.clear();
+	}
 }
