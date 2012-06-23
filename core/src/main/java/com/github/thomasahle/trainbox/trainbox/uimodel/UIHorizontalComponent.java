@@ -57,7 +57,8 @@ public class UIHorizontalComponent extends AbstractComposite {
 					// Insert the new component before the identity clicked on
 					insert(child, p);
 					// And insert a new identity before the new component
-					insert(new UIIdentityComponent(padding), p);
+					UIIdentityComponent newIDComp = new UIIdentityComponent(padding);
+					insert(newIDComp, p);
 					// TODO: Do we also need to shift the trains, or do we assume
 					// that this is only called when trains are stopped?
 					return true;
@@ -84,6 +85,8 @@ public class UIHorizontalComponent extends AbstractComposite {
 				if (c instanceof UIComposite) {
 					if(!c.locked()){ // composites are locked while they have children.
 						delete(p);
+					
+						delete(p-1); // also delete the leadin ID Component
 						return true;
 					}else{
 						Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
@@ -94,6 +97,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 				else{ // child not a composite
 					if(!c.locked()){
 						delete(p);
+						delete(p-1); // also delete the leading ID Component
 						return true;
 					}
 				}
@@ -215,5 +219,11 @@ public class UIHorizontalComponent extends AbstractComposite {
 	@Override
 	public float leftBlock() {
 		return mComponents.get(0).leftBlock();
+	}
+	
+	@Override
+	public boolean locked(){
+		return (locked || getChildren().size()>1);
+		//locked if it has more than it's initial identity child or it is manually locked using locked variable.
 	}
 }

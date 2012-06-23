@@ -398,6 +398,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			didInsertSomething = mLevel.insertChildAt(UIComponentFactory.fromTok(toolMan.getCurrentTool()), p);
 		}else{
 			if(mLevel.paused()){
+				//TODO change these controls to be something more intuitive
 				// if no tool is selected then we delete, better controls than this are needed, this is just for testing
 				Point p = new Point(event.localX(), event.localY());
 				didDeleteSomething = mLevel.deleteChildAt(p);

@@ -212,12 +212,14 @@ public class UISplitMergeComponent extends AbstractComposite {
 		}
 		// We could also check if a identity component has been clicked, which
 		// is a direct child of ours, but let's just assume that we only have
-		// horizontal components as children
+		// composite components as children
 		return false;
 	}
 
 	@Override
 	public boolean deleteChildAt(Point position) {
+		boolean somethingDeleted = false;
+		Dimension oldSize = this.getSize();
 		// find the component at the point passed.
 				for (int p = 0; p < getChildren().size(); p++) {
 					UIComponent c = getChildren().get(p);
@@ -225,55 +227,22 @@ public class UISplitMergeComponent extends AbstractComposite {
 							&& position.x < c.getPosition().x+c.getSize().width
 							&& c.getPosition().y <= position.y
 							&& position.y < c.getPosition().y+c.getSize().height) {
-				// got the component (c) at the point passed
+				// got the component (c) at the point passed (i.e which of top or bottom components) the above can be tidied.
 						
-						// Okay, this is not terribly object oriented. But it works for now.
-						// if the child-Component is a composite component, call same method on child. 
-						// OR if the composite is empty, delete the composite
-						if (c instanceof UIComposite) {
-							if(!c.locked()){ // composites are locked while they have children.
-								delete(p);
-								return true;
-							}else{
-								Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
-								boolean res = ((UIComposite)c).deleteChildAt(recursivePoint);
-								return res;
-							}
-						}
-						else{ // child not a composite
-							if(!c.locked()){
-								delete(p);
-								return true;
-							}
+						// SplitMerge Components should only have Composite components as children
+						assert(c instanceof UIComposite);
+												
+						Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
+						somethingDeleted = ((UIComposite)c).deleteChildAt(recursivePoint);
+						
+						if(somethingDeleted){
+							this.onSizeChanged(getParent(), oldSize); // resize this component
 						}
 					}
 				}
-				// point doesn't correspond to any child component or the component is locked and can't be deleted
-				return false;
-	}
-	
-	private void delete(int pos) {
-		Dimension oldSize = getSize();
-		UIComponent comp = getChildren().get(pos);
-		
-		// Remove component correctly in the 'TrainTaker' chain
-		if (pos+1 == getChildren().size())
-			getChildren().get(pos-1).setTrainTaker(getTrainTaker());
-		if (pos > 0 && pos+1 < getChildren().size())
-			getChildren().get(pos-1).setTrainTaker(getChildren().get(pos+1));
-		
-		// Remove the layers
-		mBackLayer.remove(comp.getBackLayer());
-		mFrontLayer.remove(comp.getFrontLayer());
-		
-		// Install in data structures
-		getChildren().remove(pos);
-		super.uninstall(comp);
-		
-		// Update size
-		onSizeChanged(comp, new Dimension(0,0));
-		fireSizeChanged(oldSize);
-	}
+				// ELSE point doesn't correspond to any child component or the component is locked and can't be deleted
+			return somethingDeleted;
+	}	
 	
 	@Override
 	public Dimension getSize() {
@@ -495,5 +464,11 @@ public class UISplitMergeComponent extends AbstractComposite {
 		mIngoing.clear();
 		mOutgoing.clear();
 		served.clear();
+	}
+	
+	@Override
+	public boolean locked(){
+		// a SplitMerge component is locked if either of it's top or bottom horizontal components are locked.
+		return(mTopComp.locked() || mBotComp.locked());
 	}
 }
