@@ -227,4 +227,9 @@ public class UIGoalComponent extends AbstractComponent implements TrainTaker,
 		currentTrains.clear();
 		updateTracks(DEFCOLOR);
 	}
+	
+	@Override
+	public boolean locked(){
+		return true;
+	}
 }

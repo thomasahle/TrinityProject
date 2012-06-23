@@ -69,31 +69,37 @@ public class UIHorizontalComponent extends AbstractComposite {
 	
 	@Override
 	public boolean deleteChildAt(Point position) {
+		// find the component at the point passed.
 		for (int p = 0; p < mComponents.size(); p++) {
 			UIComponent c = mComponents.get(p);
 			if (c.getPosition().x <= position.x
 					&& position.x < c.getPosition().x+c.getSize().width
 					&& c.getPosition().y <= position.y
 					&& position.y < c.getPosition().y+c.getSize().height) {
+		// got the component (c) at the point passed
+				
 				// Okay, this is not terribly object oriented. But it works for now.
+				// if the child-Component is a composite component, call same method on child. 
+				// OR if the composite is empty, delete the composite
 				if (c instanceof UIComposite) {
-					Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
-					boolean res = ((UIComposite)c).deleteChildAt(recursivePoint);
-					if (c instanceof UIHorizontalComponent && ((UIComposite)c).shouldBeDeleted()) {
+					if(!c.locked()){ // composites are locked while they have children.
 						delete(p);
-						if (mComponents.size() > 0)
-							delete(p);
+						return true;
+					}else{
+						Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
+						boolean res = ((UIComposite)c).deleteChildAt(recursivePoint);						
+						return res;
 					}
-					return res;
 				}
-				else if (!(c instanceof UIIdentityComponent)) {
-					delete(p);
-					if (mComponents.size() > 0)
+				else{ // child not a composite
+					if(!c.locked()){
 						delete(p);
-					return true;
+						return true;
+					}
 				}
 			}
 		}
+		// point doesn't correspond to any child component or the component is locked and can't be deleted
 		return false;
 	}
 	
@@ -129,11 +135,6 @@ public class UIHorizontalComponent extends AbstractComposite {
 	}
 	
 	private void delete(int pos) {
-		if (pos == 0 && mComponents.size() == 1) {
-			mComponents.remove(0);
-			// Now we're fucked
-			return;
-		}
 		
 		Dimension oldSize = getSize();
 		UIComponent comp = mComponents.get(pos);
@@ -144,9 +145,9 @@ public class UIHorizontalComponent extends AbstractComposite {
 		if (pos > 0 && pos+1 < mComponents.size())
 			mComponents.get(pos-1).setTrainTaker(mComponents.get(pos+1));
 		
-		// Remove the layer
-		mBackLayer.add(comp.getBackLayer());
-		mFrontLayer.add(comp.getFrontLayer());
+		// Remove the layers
+		mBackLayer.remove(comp.getBackLayer());
+		mFrontLayer.remove(comp.getFrontLayer());
 		
 		// Install in data structures
 		mComponents.remove(pos);

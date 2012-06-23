@@ -16,6 +16,7 @@ public abstract class BlackBoxComponent extends AbstractComponent {
 	private Queue<UITrain> mCurrent = new LinkedList<UITrain>();
 	private UITrain mSent = null;
 	
+	
 	@Override
 	public List<UITrain> getTrains() {
 		List<UITrain> carriages = new ArrayList<UITrain>(mCurrent);

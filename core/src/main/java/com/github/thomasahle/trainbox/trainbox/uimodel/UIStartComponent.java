@@ -118,4 +118,8 @@ public class UIStartComponent extends AbstractComponent {
 		}
 		
 	}
+	@Override
+	public boolean locked(){
+		return true;
+	}
 }

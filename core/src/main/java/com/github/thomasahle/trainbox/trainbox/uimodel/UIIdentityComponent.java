@@ -36,6 +36,7 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 		mBackLayer = graphics().createImageLayer();
 		updateTracks();
 		xpadding(ComponentHelper.RAIL_EXTRA);
+		this.locked = true; // UI components are locked by default.
 	}
 
 	private void updateTracks() {

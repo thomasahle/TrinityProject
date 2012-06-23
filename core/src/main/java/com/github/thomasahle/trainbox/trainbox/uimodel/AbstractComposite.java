@@ -9,10 +9,10 @@ import java.util.List;
 public abstract class AbstractComposite extends AbstractComponent implements
 		UIComposite, TrainsChangedListener, SizeChangedListener {
 	public List<UITrain> getTrains() {
-		List<UITrain> carriages = new ArrayList<UITrain>();
+		List<UITrain> mTrains = new ArrayList<UITrain>();
 		for (UIComponent comp : getChildren())
-			carriages.addAll(comp.getTrains());
-		return carriages;
+			mTrains.addAll(comp.getTrains());
+		return mTrains;
 	}
 
 	@Override
@@ -52,4 +52,11 @@ public abstract class AbstractComposite extends AbstractComponent implements
 			child.reset();
 		}
 	}
+	public boolean locked(){ //returns true if the composite has children or is manually locked via the locked variable.
+		Boolean res = false;
+		if(getChildren().size()>0) res = true;
+		res = res || locked;
+		return res;
+	}
+	
 }

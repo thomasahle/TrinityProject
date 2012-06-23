@@ -7,7 +7,8 @@ import pythagoras.f.Dimension;
 import pythagoras.f.Point;
 
 public abstract class AbstractComponent implements UIComponent {
-	private UIComposite mParent;
+	protected UIComposite mParent;
+	protected boolean locked = false;
 	private Point mPosition = new Point();
 	private TrainTaker mTrainTaker = new NullTrainTaker();
 	private TrainsChangedListener mTrainsChangedListener;
@@ -155,5 +156,12 @@ public abstract class AbstractComponent implements UIComponent {
 		return rightBorder;
 	}
 	public abstract void reset();
+	
+	public boolean locked() {
+		return locked;
+	}
+	public void setLock(Boolean lock){
+		locked = lock;
+	}
 	
 }

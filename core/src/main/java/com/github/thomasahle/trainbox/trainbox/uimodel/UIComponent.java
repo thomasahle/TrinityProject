@@ -71,8 +71,7 @@ public interface UIComponent extends TrainTaker {
 	public void onAdded(UIComposite parent);
 	/**
 	 * Called when the component is removed from another one.
-	 * @param parent The parent tha	public static void getImage();
-t used to own us
+	 * @param parent The parent that used to own us
 	 */
 	public void onRemoved(UIComposite parent);
 	/**
@@ -104,5 +103,6 @@ t used to own us
 	 * Flushes the trains in the component, emptying the component. Used on Track reset.
 	 */
 	public void reset();
+	public boolean locked();
 	
 }

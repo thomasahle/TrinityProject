@@ -392,9 +392,19 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	@Override
 	public void onPointerStart(Event event) {
 		boolean didInsertSomething = false;
+		boolean didDeleteSomething = false;
 		if (toolMan.isSelected() && mLevel.paused()) {
 			Point p = new Point(event.localX(), event.localY());
 			didInsertSomething = mLevel.insertChildAt(UIComponentFactory.fromTok(toolMan.getCurrentTool()), p);
+		}else{
+			if(mLevel.paused()){
+				// if no tool is selected then we delete, better controls than this are needed, this is just for testing
+				Point p = new Point(event.localX(), event.localY());
+				didDeleteSomething = mLevel.deleteChildAt(p);
+			}
+		}
+		if (didDeleteSomething){
+			log().debug("DELETED A COMPONENT");
 		}
 		if (didInsertSomething) {
 			mIsDragging = false;
