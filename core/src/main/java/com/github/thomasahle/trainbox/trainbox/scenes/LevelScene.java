@@ -98,6 +98,11 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		updateScroll(delta);
 	}
 	
+	public void resetLevel(){
+		mLevel.reset();
+		autoScroll =true;
+	}
+	
 	@Override
 	public void onAttach() {
 		graphics().rootLayer().add(mBgLayer);
@@ -203,9 +208,9 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		mResetButton.addListener(new Pointer.Adapter(){
 			@Override public void onPointerStart(Event event) {
 				setPaused(true);
-				mLevel.reset();
+				resetLevel();;
 				
-				//trainBox.setLevel(mLevel.getLevel().levelNumber);
+				//trainBox(mLevel.getLevel().levelNumber);
 			}
 		});
 		
@@ -319,7 +324,8 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 				levelCompletedBlurbImageLayer.setVisible(false);
 				levelStatusText.setVisible(false);
 				levelStatusLayer.setVisible(false);
-				trainBox.setLevel(mLevel.getLevel().levelNumber);
+				resetLevel();
+				//trainBox.setLevel(mLevel.getLevel().levelNumber);
 			}
 		});
 	
