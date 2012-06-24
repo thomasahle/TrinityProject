@@ -44,6 +44,11 @@ public class UIComponentTest {
 		public float leftBlock() {
 			return Float.MAX_VALUE;
 		}
+		@Override
+		public void updateMaxLengthTrainExpected(int compNum, int len) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	// ----------- Tests ------------------------------------------------------

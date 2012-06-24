@@ -414,6 +414,9 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 			log().debug("DELETED A COMPONENT");
 		}
 		if (didInsertSomething) {
+			
+			mLevel.startMaxExpectedTrainPropogation();
+			
 			mIsDragging = false;
 			toolMan.unselect();
 			float oldx = event.x() - event.localX();

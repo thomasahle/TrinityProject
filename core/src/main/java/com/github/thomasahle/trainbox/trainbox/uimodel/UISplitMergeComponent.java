@@ -25,12 +25,17 @@ import com.github.thomasahle.trainbox.trainbox.util.QuadPath;
 
 // It's expected that this deadlocks when the output is waiting for the input.
 // This is not a task for the splitmerge to solve, but rather for the player.
+// hmm...
 
 public class UISplitMergeComponent extends AbstractComposite {
 	
 	private static final float BOTTOM_ALPHA = 0.5f;
 
 	private final static float SIDES_WIDTH = 150;
+	private int maxLenOutTop, maxLenOutBot = 0;
+	private int deadlockBufferWidth(){
+		return (this.maxExpectedLength * UICarriage.WIDTH)+100;
+	}
 	
 	private LinkedList<UITrain> mIngoing = new LinkedList<UITrain>();
 	private LinkedList<UITrain> mOutgoing= new LinkedList<UITrain>();
@@ -140,49 +145,51 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
-		
-		
-			
-			// Scale
-			int diff = (int)(mTopComp.getSize().width - mBotComp.getSize().width);
-			if (Math.abs(diff) > 1) {
-				UIComposite biggest = (UIComposite)(diff > 0 ? mTopComp : mBotComp);
-				UIComposite smallest = (UIComposite)(diff < 0 ? mTopComp : mBotComp);
-				diff = Math.abs(diff);
-				// See how small we can make the biggest
-				for (UIComponent comp : biggest.getChildren())
-					if (comp instanceof UIIdentityComponent) {
-						UIIdentityComponent icomp = (UIIdentityComponent)comp;
-						int take = Math.max((int)icomp.getSize().width-100, 0);
-						take = Math.min(take, diff);
-						icomp.setWidth((int)icomp.getSize().width - take);
-						diff -= take;
-					}
-				// Scale the smallest one up
-				for (UIComponent comp : smallest.getChildren())
-					if (comp instanceof UIIdentityComponent) {
-						UIIdentityComponent icomp = (UIIdentityComponent)comp;
-						icomp.setWidth((int)icomp.getSize().width + diff);
-						break;
-					}
+					
+		// Scale - BEWARE of an infinite loop here, scaling our children here will cause this method to be called again
+		log().debug("ONSIZECHANGED CALLED");
+		int diff = (int)(mTopComp.getSize().width - mBotComp.getSize().width);
+		if (Math.abs(diff) > 1) {
+			UIComposite biggest = (UIComposite)(diff > 0 ? mTopComp : mBotComp);
+			UIComposite smallest = (UIComposite)(diff < 0 ? mTopComp : mBotComp);
+			diff = Math.abs(diff);
+			// See how small we can make the biggest
+			for (UIComponent comp : biggest.getChildren()){
+				if (comp instanceof UIIdentityComponent) {
+					UIIdentityComponent icomp = (UIIdentityComponent)comp;
+					int take = Math.max((int)icomp.getSize().width-100, 0);
+					take = Math.min(take, diff);
+					icomp.setWidth((int)icomp.getSize().width - take);
+					diff -= take;
+				}
 			}
+			// Scale the smallest one up
+			for (UIComponent comp : smallest.getChildren())
+				if (comp instanceof UIIdentityComponent) {
+					UIIdentityComponent icomp = (UIIdentityComponent)comp;
+					icomp.setWidth((int)icomp.getSize().width + diff);
+					break;
+				}
 			
-			Dimension newSize = new Dimension(
+		}
+		
+		Dimension newSize = new Dimension(
 					Math.max(mTopComp.getSize().width, mBotComp.getSize().width) + 2*SIDES_WIDTH,
 					mTopComp.getSize().height + mBotComp.getSize().height);
 			
-			if (!newSize.equals(mSize)) {
-				mTopComp.setPosition(new Point(SIDES_WIDTH, 0));
-				mBotComp.setPosition(new Point(SIDES_WIDTH, mTopComp.getSize().height));
-				mRightLayer.setTranslation(newSize.width-SIDES_WIDTH, 0);
-				
-				Dimension ourOldSize = mSize;
-				mSize = newSize;
-				fireSizeChanged(ourOldSize);
+		if (!newSize.equals(mSize)) {
+			mTopComp.setPosition(new Point(SIDES_WIDTH, 0));
+			mBotComp.setPosition(new Point(SIDES_WIDTH, mTopComp.getSize().height));
+			mRightLayer.setTranslation(newSize.width-SIDES_WIDTH, 0);
 			
+			Dimension ourOldSize = mSize;
+			mSize = newSize;
+			fireSizeChanged(ourOldSize);
+		
 			updatePaths();
 			updateImages();
 		}
+		
 	}
 	
 	@Override
@@ -435,6 +442,10 @@ public class UISplitMergeComponent extends AbstractComposite {
 				return Math.max(getTrainTaker().leftBlock(), end);
 			return end;
 		}
+		@Override
+		public void updateMaxLengthTrainExpected(int compNum, int len) {
+			maxLenOutTop = len;
+		}
 	};
 	
 	private TrainTaker mBotTaker = new TrainTaker() {
@@ -453,6 +464,10 @@ public class UISplitMergeComponent extends AbstractComposite {
 				return Math.max(getTrainTaker().leftBlock(), end);
 			return end;
 		}
+		@Override
+		public void updateMaxLengthTrainExpected(int compNum, int len) {
+			maxLenOutBot = len;			
+		}
 	};
 	private TrainTaker mNextTaker;
 	
@@ -462,16 +477,32 @@ public class UISplitMergeComponent extends AbstractComposite {
 		// and more...
 		mUpgoing.clear();
 		mDowngoing.clear();
-		mNextDirection = mUpgoing; //next direction in?
-		mNextTaker = mTopTaker; //next direction out?
+		mNextDirection = mUpgoing;
+		mNextTaker = mTopTaker; 
 		mIngoing.clear();
 		mOutgoing.clear();
 		served.clear();
 	}
+	
+
 	
 	@Override
 	public boolean locked(){
 		// a SplitMerge component is locked if either of it's top or bottom horizontal components are locked.
 		return(mTopComp.locked() || mBotComp.locked());
 	}
+		
+	@Override	
+	public void updateMaxLengthTrainExpected(int compNum, int len){
+		this.maxExpectedLength = len;
+		log().debug("Max length of train expected for component " + compNum + ":   " + len);
+		log().debug("TOP");
+		mTopComp.updateMaxLengthTrainExpected(0, len);
+		log().debug("END TOP");
+		log().debug("BOTTOM");
+		mBotComp.updateMaxLengthTrainExpected(0, len);
+		log().debug("END BOTTOM");
+		mTrainTaker.updateMaxLengthTrainExpected(compNum+1, Math.max(maxLenOutTop,maxLenOutBot));
+	}
+	
 }

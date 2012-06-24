@@ -2,6 +2,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.Queue;
 
@@ -14,8 +15,7 @@ import pythagoras.f.Dimension;
 
 public class UIDupComponent extends BlackBoxComponent{
 
-	private int mWidth, mHeight;
-	
+	private int mWidth, mHeight;	
 	private Layer mBackLayer, mFrontLayer;
 	
 
@@ -56,4 +56,5 @@ public class UIDupComponent extends BlackBoxComponent{
 		fireTrainCreated(clone);
 		clone.getLayer().setVisible(false);
 	}
+
 }

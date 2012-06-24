@@ -1,5 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
+import static playn.core.PlayN.log;
+
 import java.util.Iterator;
 import java.util.Queue;
 
@@ -10,11 +12,13 @@ public abstract class AbstractComponent implements UIComponent {
 	protected UIComposite mParent;
 	protected boolean locked = false;
 	private Point mPosition = new Point();
-	private TrainTaker mTrainTaker = new NullTrainTaker();
+	protected TrainTaker mTrainTaker = new NullTrainTaker();
+	protected int maxExpectedLength =0;
 	private TrainsChangedListener mTrainsChangedListener;
 	private boolean mPaused;
 	private SizeChangedListener mSizeChangedListener;
 	private float mPadding;
+	
 	
 	@Override
 	public void onAdded(UIComposite parent) {
@@ -162,6 +166,13 @@ public abstract class AbstractComponent implements UIComponent {
 	}
 	public void setLock(Boolean lock){
 		locked = lock;
+	}
+	
+	@Override
+	public void updateMaxLengthTrainExpected(int compNum, int len){
+		this.maxExpectedLength=len;
+		log().debug("Max length of train expected for component " + compNum + ":   " + len);
+		mTrainTaker.updateMaxLengthTrainExpected((compNum+1), len);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,5 +102,13 @@ public class UIIdentityComponent extends AbstractComponent implements UIComponen
 	@Override
 	public void reset() {
 		mTrains.clear();
+	}
+	
+	@Override
+	public void updateMaxLengthTrainExpected(int compNum, int len){
+		this.maxExpectedLength=len;
+		//no different, but don't log output
+		//log().debug("Max length of train expected for component " + compNum + ":   " + len);
+		mTrainTaker.updateMaxLengthTrainExpected((compNum), len); // and don't take up a component number
 	}
 }

@@ -185,6 +185,10 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 		return mTrack.deleteChildAt(position);
 	}
 	
+	public void startMaxExpectedTrainPropogation(){
+		mTrack.getChildren().get(0).updateMaxLengthTrainExpected(0, 0);
+	}
+	
 	public int countUserComponents() {
 		return countChildrenRecursively(mTrack);
 	}

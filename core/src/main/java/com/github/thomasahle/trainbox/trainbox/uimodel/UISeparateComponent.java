@@ -214,4 +214,10 @@ public class UISeparateComponent extends AbstractComponent {
 		mLeftSide.clear();
 		mRightSide.clear();
 	}
+	
+	@Override
+	public void updateMaxLengthTrainExpected(int compNum, int len){
+		this.maxExpectedLength = len;
+		mTrainTaker.updateMaxLengthTrainExpected(compNum+1, 1);
+	}
 }

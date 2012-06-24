@@ -62,4 +62,5 @@ public class UIFlipComponent extends BlackBoxComponent {
 			unpairedTrain = train;
 		}
 	}
+
 }

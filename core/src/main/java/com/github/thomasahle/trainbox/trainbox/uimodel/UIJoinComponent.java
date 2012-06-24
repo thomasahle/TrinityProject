@@ -2,6 +2,7 @@ package com.github.thomasahle.trainbox.trainbox.uimodel;
 
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,5 +81,12 @@ public class UIJoinComponent extends BlackBoxComponent{
 	public void reset(){
 		super.reset();
 		frontTrain=null;
+	}
+	
+	@Override
+	public void updateMaxLengthTrainExpected(int compNum, int len) {
+		this.maxExpectedLength=len;
+		log().debug("Max length of train expected for component " + compNum + ":   " + len);
+		mTrainTaker.updateMaxLengthTrainExpected(compNum +1,len*2);
 	}
 }

@@ -122,4 +122,18 @@ public class UIStartComponent extends AbstractComponent {
 	public boolean locked(){
 		return true;
 	}
+	@Override
+	public void updateMaxLengthTrainExpected(int compNum, int len){
+		//don't care about the values passed
+		int maxLen =0;
+		for(UITrain t : initialTrains){
+			maxLen = Math.max(maxLen, t.getCarriages().size());
+		}
+		len =maxLen;
+		compNum =0;
+		log().debug("Max length of train expected for component " + compNum + ":   " + len);
+		
+		mTrainTaker.updateMaxLengthTrainExpected(1, maxLen);
+		
+	}
 }

@@ -15,4 +15,6 @@ public interface TrainTaker {
 	 * @return
 	 */
 	public float leftBlock();
+	
+	public void updateMaxLengthTrainExpected(int compNum, int len);
 }

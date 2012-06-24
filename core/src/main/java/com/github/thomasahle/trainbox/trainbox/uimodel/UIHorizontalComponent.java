@@ -54,11 +54,13 @@ public class UIHorizontalComponent extends AbstractComposite {
 				}
 				else if (c instanceof UIIdentityComponent) {
 					log().debug("Inserting at position "+p);
-					// Insert the new component before the identity clicked on
-					insert(child, p);
-					// And insert a new identity before the new component
+					// Insert a new identity before the new component
+					// this must be done first to maintain the first component of a Horizontal component
+					// being a ID component.
 					UIIdentityComponent newIDComp = new UIIdentityComponent(padding);
 					insert(newIDComp, p);
+					// Insert the new component before the identity clicked on
+					insert(child, p+1);
 					// TODO: Do we also need to shift the trains, or do we assume
 					// that this is only called when trains are stopped?
 					return true;
@@ -225,5 +227,12 @@ public class UIHorizontalComponent extends AbstractComposite {
 	public boolean locked(){
 		return (locked || getChildren().size()>1);
 		//locked if it has more than it's initial identity child or it is manually locked using locked variable.
+	}
+	
+	@Override
+	public void updateMaxLengthTrainExpected(int compNum, int len){
+		this.maxExpectedLength = len;
+		log().debug("Max length of train expected for component " + compNum + ":   " + len);
+		this.getChildren().get(0).updateMaxLengthTrainExpected(compNum +1,len);
 	}
 }
