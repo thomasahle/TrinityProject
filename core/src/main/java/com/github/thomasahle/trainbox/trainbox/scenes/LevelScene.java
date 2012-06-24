@@ -537,6 +537,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		}
 	}
 	private void setInsertable(boolean b){
+		k=b;
 		if(!b){
 			mPallet.setAlpha(0.1f);
 		}else{
