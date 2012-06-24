@@ -141,18 +141,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 	@Override
 	public void onSizeChanged(UIComponent source, Dimension oldSize) {
 		
-		Dimension newSize = new Dimension(
-				Math.max(mTopComp.getSize().width, mBotComp.getSize().width) + 2*SIDES_WIDTH,
-				mTopComp.getSize().height + mBotComp.getSize().height);
 		
-		if (!newSize.equals(mSize)) {
-			mTopComp.setPosition(new Point(SIDES_WIDTH, 0));
-			mBotComp.setPosition(new Point(SIDES_WIDTH, mTopComp.getSize().height));
-			mRightLayer.setTranslation(newSize.width-SIDES_WIDTH, 0);
-			
-			Dimension ourOldSize = mSize;
-			mSize = newSize;
-			fireSizeChanged(ourOldSize);
 			
 			// Scale
 			int diff = (int)(mTopComp.getSize().width - mBotComp.getSize().width);
@@ -178,6 +167,19 @@ public class UISplitMergeComponent extends AbstractComposite {
 					}
 			}
 			
+			Dimension newSize = new Dimension(
+					Math.max(mTopComp.getSize().width, mBotComp.getSize().width) + 2*SIDES_WIDTH,
+					mTopComp.getSize().height + mBotComp.getSize().height);
+			
+			if (!newSize.equals(mSize)) {
+				mTopComp.setPosition(new Point(SIDES_WIDTH, 0));
+				mBotComp.setPosition(new Point(SIDES_WIDTH, mTopComp.getSize().height));
+				mRightLayer.setTranslation(newSize.width-SIDES_WIDTH, 0);
+				
+				Dimension ourOldSize = mSize;
+				mSize = newSize;
+				fireSizeChanged(ourOldSize);
+			
 			updatePaths();
 			updateImages();
 		}
@@ -196,24 +198,25 @@ public class UISplitMergeComponent extends AbstractComposite {
 	
 	@Override
 	public boolean insertChildAt(UIComponent child, Point position) {
+		boolean somethingInserted = false;
 		if (position.y < mTopComp.getSize().height
 				&& SIDES_WIDTH < position.x
 				&& position.x <= SIDES_WIDTH + mTopComp.getSize().width
 				&& mTopComp instanceof UIComposite) {
 			Point newPoint = new Point(position.x-SIDES_WIDTH, position.y);
-			return ((UIComposite)mTopComp).insertChildAt(child, newPoint);
+			somethingInserted = ((UIComposite)mTopComp).insertChildAt(child, newPoint);
 		}
 		else if (position.y >= mTopComp.getSize().height
 				&& SIDES_WIDTH < position.x
 				&& position.x <= SIDES_WIDTH + mBotComp.getSize().width
 				&& mBotComp instanceof UIComposite) {
 			Point newPoint = new Point(position.x-SIDES_WIDTH, position.y - mTopComp.getSize().height);
-			return ((UIComposite)mBotComp).insertChildAt(child, newPoint);
+			somethingInserted = ((UIComposite)mBotComp).insertChildAt(child, newPoint);
 		}
 		// We could also check if a identity component has been clicked, which
 		// is a direct child of ours, but let's just assume that we only have
 		// composite components as children
-		return false;
+		return somethingInserted;
 	}
 
 	@Override
