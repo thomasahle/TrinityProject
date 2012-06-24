@@ -76,4 +76,9 @@ public class UIJoinComponent extends BlackBoxComponent{
 			frontTrain = train;
 		}
 	}
+	@Override
+	public void reset(){
+		super.reset();
+		frontTrain=null;
+	}
 }
