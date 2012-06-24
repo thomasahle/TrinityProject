@@ -77,6 +77,10 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 			mTrainLayer.add(uitrain.getLayer());
 		}
 		//keep components where they are (don't modify track)
+		
+		//reset other stuff
+			//farthestPoint
+			this.farthestPointReachedByTrains = new Point(0,0);
 	}
 	
 	
