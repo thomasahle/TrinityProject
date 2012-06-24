@@ -66,6 +66,8 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	private float scrollTargetX = 0;
 	private float scrollTargetY = 0;
 	private boolean autoScroll = true;
+	private boolean deleting = false;
+	private boolean k =true; // called k to avoid editing directly
 	
 	public LevelScene(TrainBox trainBox, Level level) {
 		this.trainBox = trainBox;
@@ -99,6 +101,8 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	}
 	
 	public void resetLevel(){
+		setPaused(true);
+		setInsertable(true);
 		mLevel.reset();
 		autoScroll =true;
 	}
@@ -132,6 +136,7 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		mLevel.paused(paused);
 		if (!paused) {
 			autoScroll = true;
+			setInsertable(false);
 			currPauseGoButtonImageIndex = 1;
 		}
 		else {
@@ -207,7 +212,6 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		
 		mResetButton.addListener(new Pointer.Adapter(){
 			@Override public void onPointerStart(Event event) {
-				setPaused(true);
 				resetLevel();;
 				
 				//trainBox(mLevel.getLevel().levelNumber);
@@ -399,11 +403,11 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 	public void onPointerStart(Event event) {
 		boolean didInsertSomething = false;
 		boolean didDeleteSomething = false;
-		if (toolMan.isSelected() && mLevel.paused()) {
+		if (toolMan.isSelected() && insertable()) {
 			Point p = new Point(event.localX(), event.localY());
 			didInsertSomething = mLevel.insertChildAt(UIComponentFactory.fromTok(toolMan.getCurrentTool()), p);
 		}else{
-			if(mLevel.paused()){
+			if(insertable() && deleting){
 				//TODO change these controls to be something more intuitive
 				// if no tool is selected then we delete, better controls than this are needed, this is just for testing
 				Point p = new Point(event.localX(), event.localY());
@@ -519,7 +523,27 @@ public class LevelScene implements Scene, Pointer.Listener, Keyboard.Listener {
 		if(event.key() == Key.ESCAPE){
 			toolMan.unselect();
 		}
+		if(event.key() == Key.CONTROL){
+			deleting=true;
+		}
+		if(event.key() == Key.ESCAPE){//toggle pallet visibility
+			mPallet.setVisible(!mPallet.isVisible());
+		}
 	}
 	@Override public void onKeyTyped(TypedEvent event) {}
-	@Override public void onKeyUp(playn.core.Keyboard.Event event) {}
+	@Override public void onKeyUp(playn.core.Keyboard.Event event) {
+		if(event.key() == Key.CONTROL){
+			deleting =false;
+		}
+	}
+	private void setInsertable(boolean b){
+		if(!b){
+			mPallet.setAlpha(0.1f);
+		}else{
+			mPallet.setAlpha(1);
+		}
+	}
+	private boolean insertable(){
+		return k;
+	}
 }

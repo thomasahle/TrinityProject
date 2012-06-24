@@ -93,5 +93,19 @@ public class UIPallet implements HitTester{
 	public Layer getLayer() {
 		return mLayer;
 	}
+	public boolean isVisible(){
+		return mLayer.visible();
+	}
+	public void setVisible(boolean b){
+		mLayer.setVisible(b);
+	}
+	
+	public float alpha(){
+		return mLayer.alpha();
+	}
+	public void setAlpha(float a){
+		mLayer.setAlpha(a);
+	}
+	
 
 }
