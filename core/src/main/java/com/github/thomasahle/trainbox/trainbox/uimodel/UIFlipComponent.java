@@ -62,5 +62,10 @@ public class UIFlipComponent extends BlackBoxComponent {
 			unpairedTrain = train;
 		}
 	}
+	@Override
+	public void reset(){
+		super.reset();
+		unpairedTrain= null;
+	}
 
 }
