@@ -71,7 +71,7 @@ public class UIHorizontalComponent extends AbstractComposite {
 	}
 	
 	@Override
-	public boolean deleteChildAt(Point position) {
+	public UIComponent deleteChildAt(Point position) {
 		// find the component at the point passed.
 		for (int p = 0; p < mComponents.size(); p++) {
 			UIComponent c = mComponents.get(p);
@@ -88,25 +88,24 @@ public class UIHorizontalComponent extends AbstractComposite {
 					if(!c.locked()){ // composites are locked while they have children.
 						delete(p);
 					
-						delete(p-1); // also delete the leadin ID Component
-						return true;
+						delete(p-1); // also delete the leading ID Component
+						return c;
 					}else{
 						Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
-						boolean res = ((UIComposite)c).deleteChildAt(recursivePoint);						
-						return res;
+						return ((UIComposite)c).deleteChildAt(recursivePoint);						
 					}
 				}
 				else{ // child not a composite
 					if(!c.locked()){
 						delete(p);
 						delete(p-1); // also delete the leading ID Component
-						return true;
+						return c;
 					}
 				}
 			}
 		}
 		// point doesn't correspond to any child component or the component is locked and can't be deleted
-		return false;
+		return null;
 	}
 	
 	@Override

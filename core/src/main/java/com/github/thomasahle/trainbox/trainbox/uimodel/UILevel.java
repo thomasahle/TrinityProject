@@ -181,8 +181,8 @@ public class UILevel implements TrainsChangedListener, LevelFinishedListener, Hi
 	public boolean insertChildAt(UIComponent child, Point position) {
 		return mTrack.insertChildAt(child, position);
 	}
-	public boolean deleteChildAt(Point position){
-		return mTrack.deleteChildAt(position);
+	public Boolean deleteChildAt(Point position){
+		return mTrack.deleteChildAt(position) != null;
 	}
 	
 	public void startMaxExpectedTrainPropogation(){

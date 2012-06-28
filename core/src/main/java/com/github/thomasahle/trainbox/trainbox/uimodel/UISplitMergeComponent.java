@@ -227,8 +227,9 @@ public class UISplitMergeComponent extends AbstractComposite {
 	}
 
 	@Override
-	public boolean deleteChildAt(Point position) {
+	public UIComponent deleteChildAt(Point position) {
 		boolean somethingDeleted = false;
+		UIComponent deletedComponent = null;
 		Dimension oldSize = this.getSize();
 		// find the component at the point passed.
 				for (int p = 0; p < getChildren().size(); p++) {
@@ -243,7 +244,8 @@ public class UISplitMergeComponent extends AbstractComposite {
 						assert(c instanceof UIComposite);
 												
 						Point recursivePoint = new Point(position.x-c.getPosition().x, position.y-c.getPosition().y);
-						somethingDeleted = ((UIComposite)c).deleteChildAt(recursivePoint);
+						deletedComponent = ((UIComposite)c).deleteChildAt(recursivePoint);
+						somethingDeleted = (deletedComponent != null);
 						
 						if(somethingDeleted){
 							this.onSizeChanged(getParent(), oldSize); // resize this component
@@ -251,7 +253,7 @@ public class UISplitMergeComponent extends AbstractComposite {
 					}
 				}
 				// ELSE point doesn't correspond to any child component or the component is locked and can't be deleted
-			return somethingDeleted;
+			return deletedComponent;
 	}	
 	
 	@Override
